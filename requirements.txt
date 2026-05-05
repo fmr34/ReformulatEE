@@ -1,0 +1,25 @@
+# Core
+gradio>=4.0.0
+python-dotenv>=1.0.0
+numpy>=1.21.0
+
+# HuggingFace ecosystem
+transformers>=4.30.0
+huggingface-hub>=0.16.0
+datasets>=2.10.0
+sentence-transformers>=2.2.0
+
+# Translation (Helsinki-NLP MarianMT)
+sentencepiece>=0.1.99
+sacremoses>=0.0.53
+
+# Search & ML
+rank-bm25>=0.2.0
+scikit-learn>=1.0.0
+scipy>=1.9.0
+
+# Anthropic (optional fallback)
+anthropic>=0.7.0
+
+# PyTorch (CPU — HF Spaces usa versão com CUDA automaticamente)
+torch>=2.0.0

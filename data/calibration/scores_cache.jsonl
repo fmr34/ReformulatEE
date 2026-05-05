@@ -1,0 +1,326 @@
+{"question": "Are data-driven explanations robust against out-of-distribution data?", "resp": 0.014037, "tract": 0.6396, "trajectory": "rising", "confidence": 0.82}
+{"question": "Are high natriuretic peptide levels associated with poor outcomes in chronic heart failure?", "resp": 1.5e-05, "tract": 0.874, "trajectory": "plateau", "confidence": 0.92}
+{"question": "Are militarized approaches to conservation counter-productive?", "resp": 1.4e-05, "tract": 0.5616, "trajectory": "rising", "confidence": 0.78}
+{"question": "Are quantum or classical methods better for biomolecules?", "resp": 0.002151, "tract": 0.5616, "trajectory": "rising", "confidence": 0.78}
+{"question": "Are species natural kinds, individuals, or sets? And does the term 'species' refer to a real category in nature?", "resp": 0.000162, "tract": 0.3375, "trajectory": "plateau", "confidence": 0.75}
+{"question": "Are these interpretations reliable?", "resp": 0.001644, "tract": 0.18, "trajectory": "absent", "confidence": 0.6}
+{"question": "Are these interpretations stable?", "resp": 0.003362, "tract": 0.12, "trajectory": "absent", "confidence": 0.4}
+{"question": "At what time horizons and under what conditions are return predictability patterns statistically robust?", "resp": 6.3e-05, "tract": 0.5616, "trajectory": "rising", "confidence": 0.78}
+{"question": "Can ChatGPT replace traditional KBQA models?", "resp": 3e-05, "tract": 0.748, "trajectory": "rising", "confidence": 0.88}
+{"question": "Can LSTMs learn hierarchical structures?", "resp": 0.077254, "tract": 0.748, "trajectory": "plateau", "confidence": 0.88}
+{"question": "Can LSTMs learn to predict well-formed brackets and context-free grammars through a bracket prediction task?", "resp": 0.000424, "tract": 0.748, "trajectory": "plateau", "confidence": 0.88}
+{"question": "Can a machine be linguistically indistinguishable from a human?", "resp": 0.00024, "tract": 0.612, "trajectory": "rising", "confidence": 0.85}
+{"question": "Can a machine think?", "resp": 0.003049, "tract": 0.2975, "trajectory": "plateau", "confidence": 0.85}
+{"question": "Can a misfolded protein alone, without nucleic acid, transmit a neurodegenerative disease?", "resp": 0.000149, "tract": 0.615, "trajectory": "rising", "confidence": 0.82}
+{"question": "Can an LLM identify a professional scenario and recognize the governing structure of the situation from raw inputs alone, before attempting to solve it?", "resp": 7.2e-05, "tract": 0.5616, "trajectory": "rising", "confidence": 0.78}
+{"question": "Can an orchestration system increase collaborative, productive struggle in teaching-by-eliciting classrooms?", "resp": 1.3e-05, "tract": 0.4896, "trajectory": "rising", "confidence": 0.68}
+{"question": "Can animal models of sepsis successfully predict clinical outcomes and validate therapeutic targets?", "resp": 0.001742, "tract": 0.5976, "trajectory": "rising", "confidence": 0.83}
+{"question": "Can annotators click on the four extreme points (top, bottom, left, right-most) of objects instead of drawing tight bounding boxes, and will this method be faster while maintaining annotation quality?", "resp": 2e-05, "tract": 0.6396, "trajectory": "rising", "confidence": 0.78}
+{"question": "Can asset prices be predicted?", "resp": 0.000393, "tract": 0.612, "trajectory": "rising", "confidence": 0.85}
+{"question": "Can current agents close the discovery-to-application gap?", "resp": 0.000812, "tract": 0.4216, "trajectory": "rising", "confidence": 0.68}
+{"question": "Can foundation models transform AI in healthcare by providing modular components for downstream tasks?", "resp": 0.105484, "tract": 0.6396, "trajectory": "rising", "confidence": 0.82}
+{"question": "Can generic pre-trained features combined with a particle filter and renderable scene representation achieve state-of-the-art pose refinement results without task-specific training?", "resp": 0.011426, "tract": 0.5256, "trajectory": "rising", "confidence": 0.73}
+{"question": "Can idealism contribute substantially to solving philosophical puzzles like the hard problem of consciousness?", "resp": 1.8e-05, "tract": 0.252, "trajectory": "plateau", "confidence": 0.72}
+{"question": "Can large language models apply transformations bidirectionally without explicit reverse training, demonstrating genuine understanding through reversibility?", "resp": 0.038244, "tract": 0.5616, "trajectory": "rising", "confidence": 0.78}
+{"question": "Can large language models produce submission-ready prior authorization letters?", "resp": 0.008086, "tract": 0.585, "trajectory": "rising", "confidence": 0.78}
+{"question": "Can machine learning models be used to predict poverty?", "resp": 0.101223, "tract": 0.782, "trajectory": "rising", "confidence": 0.92}
+{"question": "Can manipulation still benefit from Transformers with the right problem formulation?", "resp": 0.000185, "tract": 0.54, "trajectory": "rising", "confidence": 0.75}
+{"question": "Can space-time possess both the differentiability properties of manifolds and the ultraviolet finiteness properties of lattices, with fields determinable from a sufficiently dense set of discrete sampling points?", "resp": 2.1e-05, "tract": 0.4526, "trajectory": "rising", "confidence": 0.73}
+{"question": "Can the human-AI system reason?", "resp": 0.08378, "tract": 0.4526, "trajectory": "rising", "confidence": 0.73}
+{"question": "Can the model think?", "resp": 0.001185, "tract": 0.252, "trajectory": "rising", "confidence": 0.72}
+{"question": "Can the perception of a stimulus as speech versus song shift based on the context surrounding a stimulus?", "resp": 3.8e-05, "tract": 0.697, "trajectory": "rising", "confidence": 0.85}
+{"question": "Can the smoothing length approach still be used to quantify not only the dust self-gravity but also its gravitational interaction with gas?", "resp": 1.6e-05, "tract": 0.4896, "trajectory": "rising", "confidence": 0.68}
+{"question": "Can the systems built around LLMs supply the administrative precision that payer workflows require?", "resp": 0.000582, "tract": 0.5616, "trajectory": "rising", "confidence": 0.78}
+{"question": "Can tutoring technology somehow make teaching-by-eliciting more effective?", "resp": 8.9e-05, "tract": 0.5256, "trajectory": "rising", "confidence": 0.73}
+{"question": "Can we bypass explicit disentanglement by learning to merge style and content invertibly, allowing separation to emerge naturally?", "resp": 3e-05, "tract": 0.4896, "trajectory": "rising", "confidence": 0.68}
+{"question": "Can we detect radio emission from celestial sources?", "resp": 2.6e-05, "tract": 0.9702, "trajectory": "rising", "confidence": 0.98}
+{"question": "Can we establish a uniform L∞ estimate for the potential function in the quaternionic Gauduchon problem with prescribed volume form by reframing it as a fully nonlinear elliptic equation?", "resp": 1.5e-05, "tract": 0.4896, "trajectory": "rising", "confidence": 0.68}
+{"question": "Can we exponentially amplify specific DNA sequences using repeated thermal cycling?", "resp": 1.7e-05, "tract": 0.9702, "trajectory": "plateau", "confidence": 0.99}
+{"question": "Can we formulate knowledge graph characterization as unsupervised summarization with inductive, soft rules that identify both what is normal and what is abnormal (strange or missing)?", "resp": 6.7e-05, "tract": 0.4896, "trajectory": "rising", "confidence": 0.68}
+{"question": "Can we identify a transmissible agent with measurable physical properties?", "resp": 6.2e-05, "tract": 0.874, "trajectory": "rising", "confidence": 0.92}
+{"question": "Can we predict suicide?", "resp": 0.000188, "tract": 0.612, "trajectory": "rising", "confidence": 0.85}
+{"question": "Can we use special refusal tokens prepended during training to steer a single model's refusal behavior at inference time without retraining?", "resp": 0.000239, "tract": 0.5616, "trajectory": "rising", "confidence": 0.78}
+{"question": "Could the iron-based high-Tc superconductors be viewed as doped Mott insulators like the cuprates?", "resp": 2.7e-05, "tract": 0.615, "trajectory": "plateau", "confidence": 0.82}
+{"question": "Do AI systems instantiate interface representations that facilitate consciousness-like properties as measured by SLP-tests (subjective-linguistic, latent-emergent, and phenomenological-structural criteria)?", "resp": 0.000381, "tract": 0.0875, "trajectory": "rising", "confidence": 0.35}
+{"question": "Do Mollino's polymathic practices stem from self-discipline exercises shaped by early twentieth-century paradigms of athleticism and modernity?", "resp": 1.6e-05, "tract": 0.217, "trajectory": "absent", "confidence": 0.62}
+{"question": "Do audiovisual cues need to be predictable and win-paired to drive risky choice, or do they work through general arousal and outcome differentiation?", "resp": 1.2e-05, "tract": 0.5256, "trajectory": "rising", "confidence": 0.73}
+{"question": "Do commons inevitably collapse without privatization or state control?", "resp": 1.1e-05, "tract": 0.5616, "trajectory": "rising", "confidence": 0.78}
+{"question": "Do participants shift their risk and ambiguity preferences differently when observing risk-averse versus risk-seeking or ambiguity-averse versus ambiguity-seeking observees, and do these patterns differ between risk and ambiguity contexts?", "resp": 0.000839, "tract": 0.54, "trajectory": "rising", "confidence": 0.75}
+{"question": "Do people behave rationally in markets?", "resp": 1.7e-05, "tract": 0.782, "trajectory": "plateau", "confidence": 0.92}
+{"question": "Do spider silks have antimicrobial properties?", "resp": 3.3e-05, "tract": 0.748, "trajectory": "rising", "confidence": 0.88}
+{"question": "Does a journal meet acceptable standards of transparency, editorial rigor, and academic integrity?", "resp": 6.7e-05, "tract": 0.5616, "trajectory": "rising", "confidence": 0.78}
+{"question": "Does disrupted MSCI contribute to the preferential sterility of heterogametic hybrid males?", "resp": 1.2e-05, "tract": 0.4896, "trajectory": "rising", "confidence": 0.68}
+{"question": "Does existence of a sums-of-squares formula depend on the base field?", "resp": 2e-05, "tract": 0.54, "trajectory": "plateau", "confidence": 0.72}
+{"question": "Does ovariectomy in young animals faithfully replicate postmenopausal osteoarthritis in humans?", "resp": 1.3e-05, "tract": 0.5616, "trajectory": "rising", "confidence": 0.78}
+{"question": "Does podcast-based patient preparation enhance efficiency in respiratory consultations?", "resp": 2.5e-05, "tract": 0.54, "trajectory": "rising", "confidence": 0.75}
+{"question": "Does proximal femoral valgus osteotomy improve outcomes in Perthes disease?", "resp": 1.2e-05, "tract": 0.585, "trajectory": "plateau", "confidence": 0.78}
+{"question": "Does reasoning SFT generalize?", "resp": 0.011118, "tract": 0.5256, "trajectory": "rising", "confidence": 0.73}
+{"question": "Does the Pegadaian Sharia KUR comply with the specific requirements of Fatwa DSN-MUI No. 68/DSN-MUI/III/2008 concerning Rahn Tasjily?", "resp": 1.1e-05, "tract": 0.1575, "trajectory": "absent", "confidence": 0.45}
+{"question": "Does the amino acid sequence alone specify the three-dimensional folding?", "resp": 0.381748, "tract": 0.782, "trajectory": "plateau", "confidence": 0.92}
+{"question": "Does the quaternionic Monge-Ampère equation always have solutions on compact HKT manifolds?", "resp": 1.2e-05, "tract": 0.5616, "trajectory": "rising", "confidence": 0.78}
+{"question": "For which binary systems with measurable orbital parameters does light deflection exceed the microarcsecond detection threshold of current astrometry?", "resp": 2.2e-05, "tract": 0.697, "trajectory": "rising", "confidence": 0.82}
+{"question": "How and why might militarized conservation contribute to, rather than prevent, environmental harms?", "resp": 1.9e-05, "tract": 0.5616, "trajectory": "rising", "confidence": 0.78}
+{"question": "How are chromosomes protected?", "resp": 0.000691, "tract": 0.874, "trajectory": "rising", "confidence": 0.92}
+{"question": "How are genes turned off?", "resp": 9.8e-05, "tract": 0.931, "trajectory": "rising", "confidence": 0.98}
+{"question": "How are stimulus characteristics mapped onto the boundary between speech and song domains?", "resp": 1.3e-05, "tract": 0.5256, "trajectory": "rising", "confidence": 0.73}
+{"question": "How can Connell's theory of hegemonic masculinity be applied to the Chinese context?", "resp": 1.4e-05, "tract": 0.5616, "trajectory": "rising", "confidence": 0.78}
+{"question": "How can Deep Learning models be developed for medical image analysis applications?", "resp": 0.240156, "tract": 0.931, "trajectory": "rising", "confidence": 0.98}
+{"question": "How can Deep Learning models effectively handle domain shift in medical image classification?", "resp": 0.044993, "tract": 0.782, "trajectory": "rising", "confidence": 0.92}
+{"question": "How can Transformers be effectively applied to robotic manipulation by using voxelized 3D observation and action spaces instead of unstructured 2D images?", "resp": 0.002987, "tract": 0.6396, "trajectory": "rising", "confidence": 0.82}
+{"question": "How can cognitive distance between evaluators and evaluees be quantitatively measured based on journal publication patterns?", "resp": 3e-05, "tract": 0.4402, "trajectory": "rising", "confidence": 0.71}
+{"question": "How can different Explanatory Model Analysis methods complement each other through interactive and sequential analysis?", "resp": 0.000382, "tract": 0.4896, "trajectory": "rising", "confidence": 0.68}
+{"question": "How can emerging agricultural technologies (cover crops, field flooding, riparian strips, denitrification bioreactors) be designed and implemented to restore wetland soil pathways while maintaining farm profitability and supporting soil health and water quality?", "resp": 0.000219, "tract": 0.5616, "trajectory": "rising", "confidence": 0.78}
+{"question": "How can evidential reasoning handle difficult problems in full-text document retrieval systems?", "resp": 0.000263, "tract": 0.54, "trajectory": "rising", "confidence": 0.75}
+{"question": "How can excitation reach the RC against an energy gradient?", "resp": 1.2e-05, "tract": 0.697, "trajectory": "rising", "confidence": 0.82}
+{"question": "How can fitness be defined in a way that protects evolutionary theory from the charges of tautology, triviality, unfalsifiability, and consequent explanatory infirmity?", "resp": 4.4e-05, "tract": 0.5616, "trajectory": "plateau", "confidence": 0.78}
+{"question": "How can idealism be formulated to provide a mathematically consistent reinterpretation of the physical world that makes idealistic considerations accessible to scientific investigation?", "resp": 3.7e-05, "tract": 0.18, "trajectory": "absent", "confidence": 0.72}
+{"question": "How can intended dialogue be reconceptualized as a reflective space for exploring irreducible differences rather than as consensus-seeking, and what ethical and theoretical frameworks support dialogical responsibility in organizational contexts?", "resp": 3e-05, "tract": 0.4526, "trajectory": "rising", "confidence": 0.73}
+{"question": "How can learning analytics research from formal education be directly applied to support professional learning?", "resp": 6.1e-05, "tract": 0.5616, "trajectory": "rising", "confidence": 0.78}
+{"question": "How can observations and empirical data provide reality-based, objective epistemic constraints on scientific reasoning if they are all theory laden?", "resp": 0.00353, "tract": 0.5616, "trajectory": "plateau", "confidence": 0.78}
+{"question": "How can one determine the match between panel and research groups?", "resp": 1.5e-05, "tract": 0.39, "trajectory": "rising", "confidence": 0.6}
+{"question": "How can one reach herd immunity in due time while minimizing the (subjectively perceived) offense to the dignity of vaccine-hesitant citizens?", "resp": 0.00155, "tract": 0.252, "trajectory": "rising", "confidence": 0.72}
+{"question": "How can placebo effects be harnessed for the benefit of patients?", "resp": 0.000134, "tract": 0.7216, "trajectory": "rising", "confidence": 0.88}
+{"question": "How can repositories align to the CARE Principles?", "resp": 0.000372, "tract": 0.5616, "trajectory": "rising", "confidence": 0.78}
+{"question": "How can retreat be reconceptualized as strategic and managed to expand possible futures and articulate societal values while addressing tensions about acceptable losses?", "resp": 1.6e-05, "tract": 0.4216, "trajectory": "rising", "confidence": 0.68}
+{"question": "How can retrieval methods be optimized to provide documents covering a wide range of relevant information nuggets rather than just ranking by relevance?", "resp": 0.000543, "tract": 0.6396, "trajectory": "rising", "confidence": 0.82}
+{"question": "How can retrieval methods provide documents for long-form generation tasks?", "resp": 0.034975, "tract": 0.748, "trajectory": "rising", "confidence": 0.88}
+{"question": "How can socio-hydrology be framed to integrate sustainable development, risk assessment, hazard management, resilience, adaptation, and knowledge mobilization alongside traditional hydrological systems modeling?", "resp": 0.00032, "tract": 0.5616, "trajectory": "rising", "confidence": 0.78}
+{"question": "How can systems thinking in practice (STiP) and innovation in ways of knowing and doing address the constraints imposed by outdated explanations, institutions, and governance systems to enable human flourishing in the Anthropocene?", "resp": 0.000127, "tract": 0.279, "trajectory": "rising", "confidence": 0.62}
+{"question": "How can the measurement problem in quantum mechanics be resolved through theoretical means?", "resp": 0.030095, "tract": 0.2625, "trajectory": "plateau", "confidence": 0.75}
+{"question": "How can vaccine hesitancy be overcome as a (bothersome) hindrance toward reaching herd immunity?", "resp": 0.009473, "tract": 0.663, "trajectory": "rising", "confidence": 0.85}
+{"question": "How can verbal probability expressions like 'a chance', 'possible', and 'certain' be placed on 0-1 numerical probability scales?", "resp": 2.1e-05, "tract": 0.612, "trajectory": "rising", "confidence": 0.85}
+{"question": "How can we analyze disposition ascriptions in an extensional-logical language with observational terms?", "resp": 4.5e-05, "tract": 0.4896, "trajectory": "plateau", "confidence": 0.68}
+{"question": "How can we ask relevant questions from natural language text?", "resp": 0.005486, "tract": 0.5616, "trajectory": "rising", "confidence": 0.78}
+{"question": "How can we automatically induce latent document-level graphs to capture rich non-local interactions for multi-hop relational reasoning across sentences?", "resp": 4.1e-05, "tract": 0.615, "trajectory": "rising", "confidence": 0.82}
+{"question": "How can we better assess pain in children given the limitations of current methods?", "resp": 0.00017, "tract": 0.7134, "trajectory": "rising", "confidence": 0.87}
+{"question": "How can we build safe language models that refuse to answer harmful queries while accommodating varying user preferences for refusal rates without computational overhead?", "resp": 0.000292, "tract": 0.5616, "trajectory": "rising", "confidence": 0.78}
+{"question": "How can we combine quantum and classical computations to model enzyme active sites?", "resp": 2.3e-05, "tract": 0.615, "trajectory": "rising", "confidence": 0.82}
+{"question": "How can we create benchmarks that are both difficult and realistic for assessing language models?", "resp": 0.012619, "tract": 0.663, "trajectory": "rising", "confidence": 0.85}
+{"question": "How can we detect specific types of errors in knowledge graphs and complete missing information?", "resp": 5.5e-05, "tract": 0.748, "trajectory": "rising", "confidence": 0.88}
+{"question": "How can we detect vanishingly small amounts of DNA?", "resp": 1.2e-05, "tract": 0.931, "trajectory": "rising", "confidence": 0.98}
+{"question": "How can we determine the optimal subset of data for effective training?", "resp": 0.000428, "tract": 0.748, "trajectory": "rising", "confidence": 0.88}
+{"question": "How can we effectively aggregate relevant information in documents for relation extraction?", "resp": 0.002654, "tract": 0.748, "trajectory": "rising", "confidence": 0.88}
+{"question": "How can we efficiently annotate object bounding boxes while maintaining high quality?", "resp": 2.3e-05, "tract": 0.748, "trajectory": "rising", "confidence": 0.88}
+{"question": "How can we evaluate sycophantic behavior in LLMs within the context of natural language theorem proving using well-posed false statements from advanced competition problems?", "resp": 0.016863, "tract": 0.4896, "trajectory": "rising", "confidence": 0.68}
+{"question": "How can we evaluate whether large language models possess genuine mathematical reasoning ability rather than superficial pattern matching?", "resp": 0.026548, "tract": 0.612, "trajectory": "rising", "confidence": 0.85}
+{"question": "How can we explicitly disentangle style and content in vision models?", "resp": 2.9e-05, "tract": 0.5616, "trajectory": "rising", "confidence": 0.78}
+{"question": "How can we generate complex, semantically relevant questions that require multi-hop reasoning over multiple entities and their semantic relations across documents?", "resp": 0.000487, "tract": 0.697, "trajectory": "rising", "confidence": 0.85}
+{"question": "How can we measure meaningful participation and dialogue quality in digitally prepared clinical encounters, and what mechanisms prevent digital preparation tools from inadvertently reducing collaborative dialogue or amplifying participation gaps across different patient populations?", "resp": 9e-05, "tract": 0.54, "trajectory": "rising", "confidence": 0.75}
+{"question": "How can we measure sycophancy in LLMs across mathematical domains?", "resp": 0.002981, "tract": 0.5616, "trajectory": "rising", "confidence": 0.78}
+{"question": "How can we organize meaningful assessments for STEAM learning that go beyond traditional knowledge and skills evaluation?", "resp": 4.8e-05, "tract": 0.54, "trajectory": "rising", "confidence": 0.75}
+{"question": "How can we select an optimal data subset by prioritizing global data diversity through clustering and iterative refinement rather than local instance quality criteria?", "resp": 1.3e-05, "tract": 0.6396, "trajectory": "rising", "confidence": 0.82}
+{"question": "How can we shift focus beyond prediction and risk reduction to foster understanding and more nuanced approaches to suicide prevention?", "resp": 0.000278, "tract": 0.54, "trajectory": "rising", "confidence": 0.75}
+{"question": "How can we systematically alter the architecture of a given CNN using stretching and symmetrical splitting operations to enhance accuracy while reducing model size?", "resp": 0.002937, "tract": 0.6396, "trajectory": "rising", "confidence": 0.82}
+{"question": "How can we systematically generate well-posed, difficulty-calibrated adversarial perturbations of mathematical problems to measure true reasoning robustness across LLMs?", "resp": 0.00111, "tract": 0.5616, "trajectory": "rising", "confidence": 0.78}
+{"question": "How did the circadian shift from crepuscular activity in gray wolves to predominantly diurnal patterns in dogs facilitate synchronization with human daily cycles, and what genetic and neurophysiological mechanisms underlie this adaptation?", "resp": 3.1e-05, "tract": 0.5616, "trajectory": "rising", "confidence": 0.78}
+{"question": "How did the concept of competition evolve from the eighteenth century through the combined rise of modernity's core institutions (capitalism, democracy, adversarial law, science, and civil society), and what are its effects across economy, politics, culture and beliefs?", "resp": 2.3e-05, "tract": 0.468, "trajectory": "rising", "confidence": 0.72}
+{"question": "How do Anglocentric assumptions in the penal exceptionalism versus punitiveness formulation act as barriers to developing new innovative comparative frameworks and concepts in comparative penology?", "resp": 7e-05, "tract": 0.4216, "trajectory": "rising", "confidence": 0.68}
+{"question": "How do Chinese women on social media construct and critique masculinities in the context of domestic violence, and what undesirable masculine traits do they identify?", "resp": 3e-05, "tract": 0.6396, "trajectory": "rising", "confidence": 0.82}
+{"question": "How do actual humans make decisions under uncertainty, and what systematic biases appear?", "resp": 5.4e-05, "tract": 0.931, "trajectory": "rising", "confidence": 0.98}
+{"question": "How do age-driven biophysical changes in nucleolar condensation (shifts in size, dynamics, viscoelasticity, and state transitions) influence nucleolar function and longevity?", "resp": 1.8e-05, "tract": 0.4896, "trajectory": "rising", "confidence": 0.68}
+{"question": "How do biological and evolutionary constraints arising from genotype-phenotype maps shape evolutionary dynamics?", "resp": 0.00038, "tract": 0.615, "trajectory": "rising", "confidence": 0.82}
+{"question": "How do block-induced complex structures in sunspot configurations lead to flare productivity, and what specific mechanisms trigger major flares like the X9.3?", "resp": 1.8e-05, "tract": 0.5616, "trajectory": "rising", "confidence": 0.78}
+{"question": "How do cells extract energy from nutrients?", "resp": 2.3e-05, "tract": 0.931, "trajectory": "rising", "confidence": 0.98}
+{"question": "How do firms maximize profit?", "resp": 4.3e-05, "tract": 0.595, "trajectory": "plateau", "confidence": 0.85}
+{"question": "How do genes control traits?", "resp": 0.005061, "tract": 0.931, "trajectory": "rising", "confidence": 0.98}
+{"question": "How do glycosyltransferases control glycan composition in the brain?", "resp": 5.4e-05, "tract": 0.663, "trajectory": "rising", "confidence": 0.85}
+{"question": "How do human-water dynamics interact within water resource systems?", "resp": 0.000102, "tract": 0.615, "trajectory": "rising", "confidence": 0.82}
+{"question": "How do individuals perceive gentrification-related neighborhood change, and how can these perceptions be measured in a valid and reliable way relevant to health?", "resp": 6.4e-05, "tract": 0.5616, "trajectory": "rising", "confidence": 0.78}
+{"question": "How do language models perform on unsolved questions from real-world sources, and can we validate their answers through community verification?", "resp": 0.000761, "tract": 0.5616, "trajectory": "rising", "confidence": 0.78}
+{"question": "How do markets reach equilibrium?", "resp": 2.7e-05, "tract": 0.612, "trajectory": "rising", "confidence": 0.85}
+{"question": "How do nerves work?", "resp": 1.4e-05, "tract": 0.931, "trajectory": "rising", "confidence": 0.98}
+{"question": "How do organisms develop?", "resp": 0.001548, "tract": 0.931, "trajectory": "rising", "confidence": 0.98}
+{"question": "How do polygenic versus monogenic architectures affect evolutionary rescue probability across different magnitudes of environmental change?", "resp": 2.1e-05, "tract": 0.6396, "trajectory": "rising", "confidence": 0.82}
+{"question": "How do proteins fold into their functional shape?", "resp": 0.307505, "tract": 0.931, "trajectory": "rising", "confidence": 0.98}
+{"question": "How do rational agents maximize expected utility?", "resp": 0.007318, "tract": 0.782, "trajectory": "plateau", "confidence": 0.92}
+{"question": "How do rational agents maximize individual payoffs?", "resp": 0.000452, "tract": 0.748, "trajectory": "plateau", "confidence": 0.88}
+{"question": "How do real decision-makers satisfice under bounded rationality?", "resp": 1.7e-05, "tract": 0.782, "trajectory": "rising", "confidence": 0.92}
+{"question": "How do roughness, microstructure refinement, and chemical composition differentially affect cell adhesion and proliferation across different time stages?", "resp": 1.6e-05, "tract": 0.748, "trajectory": "rising", "confidence": 0.88}
+{"question": "How do spatial variations in predation risk by arctic foxes impact daily nest survival rates and start of incubation dates of sandpipers?", "resp": 1.3e-05, "tract": 0.5616, "trajectory": "rising", "confidence": 0.78}
+{"question": "How do specific dimensions of time (duration, timing, context) in digital media use differentially affect specific domains of children and adolescents' physical and psychological well-being?", "resp": 2e-05, "tract": 0.5616, "trajectory": "rising", "confidence": 0.78}
+{"question": "How do specific lipid-NLRP3 interactions and lipid-driven post-translational modifications orchestrate inflammasome priming and activation across cellular membranes?", "resp": 1.3e-05, "tract": 0.6396, "trajectory": "rising", "confidence": 0.82}
+{"question": "How do structures arise from basic constituents and how do they evolve and organize in cosmological systems?", "resp": 4e-05, "tract": 0.748, "trajectory": "rising", "confidence": 0.88}
+{"question": "How do such diverse triggers funnel into a single molecular switch within NLRP3?", "resp": 1.5e-05, "tract": 0.615, "trajectory": "rising", "confidence": 0.82}
+{"question": "How do the properties of semantic structure in problem representation reduce difficult evidential reasoning problems to more tractable questions?", "resp": 5.1e-05, "tract": 0.4402, "trajectory": "rising", "confidence": 0.71}
+{"question": "How do we evaluate large language model agents for interactive optimization?", "resp": 0.087959, "tract": 0.54, "trajectory": "rising", "confidence": 0.75}
+{"question": "How do we renormalize the infinite self-energy of the electron?", "resp": 1.2e-05, "tract": 0.874, "trajectory": "plateau", "confidence": 0.92}
+{"question": "How does Kant's concept of Selbständigkeit as interdependent independence—the independent possession and use of citizens' interdependent rightful powers—function within his theory of citizenship alongside freedom and equality?", "resp": 2.2e-05, "tract": 0.165, "trajectory": "rising", "confidence": 0.55}
+{"question": "How does chronic stress alter ensemble recruitment within the BLA and its downstream circuit dynamics to shape fear and extinction learning?", "resp": 1.5e-05, "tract": 0.6396, "trajectory": "rising", "confidence": 0.82}
+{"question": "How does chronic unpredictable stress alter the activity of the BLA and its projections to the nucleus accumbens or bed nucleus of the stria terminalis following fear extinction?", "resp": 1.4e-05, "tract": 0.697, "trajectory": "rising", "confidence": 0.85}
+{"question": "How does each B-cell clone produce a single specific antibody?", "resp": 0.000224, "tract": 0.748, "trajectory": "rising", "confidence": 0.88}
+{"question": "How does intended dialogue contribute to pluralism?", "resp": 5.5e-05, "tract": 0.3596, "trajectory": "rising", "confidence": 0.58}
+{"question": "How does isolated proximal femoral valgus osteotomy influence acetabular development and lower limb alignment over time in patients with hinge abduction?", "resp": 1.4e-05, "tract": 0.54, "trajectory": "rising", "confidence": 0.75}
+{"question": "How does light interact with matter?", "resp": 1.4e-05, "tract": 0.931, "trajectory": "rising", "confidence": 0.98}
+{"question": "How does predation risk impact ground-nesting birds?", "resp": 1.3e-05, "tract": 0.782, "trajectory": "rising", "confidence": 0.92}
+{"question": "How does the immune system recognize foreign substances?", "resp": 0.012743, "tract": 0.931, "trajectory": "rising", "confidence": 0.98}
+{"question": "How easy is it to reconnect nodes after damage?", "resp": 2.8e-05, "tract": 0.4896, "trajectory": "rising", "confidence": 0.68}
+{"question": "How far can astronomical correction be carried in reforming the Tibetan lunisolar calendar without discarding the Tibetan calendrical identity embodied in the structural rules for month and day labeling?", "resp": 1.2e-05, "tract": 0.217, "trajectory": "absent", "confidence": 0.62}
+{"question": "How hard is it to disconnect nodes through damage?", "resp": 2e-05, "tract": 0.697, "trajectory": "rising", "confidence": 0.82}
+{"question": "How have disputes been diverted to alternative venues of dispute resolution and governance across different branches?", "resp": 1.3e-05, "tract": 0.5256, "trajectory": "rising", "confidence": 0.73}
+{"question": "How is formal written Italian currently used by university students and can systematic patterns of competence and heterogeneity be identified?", "resp": 0.001468, "tract": 0.6396, "trajectory": "rising", "confidence": 0.82}
+{"question": "How is the social contagion effect in behavioral preferences influenced by disparate others and modulated by different forms of uncertainty?", "resp": 6.8e-05, "tract": 0.5616, "trajectory": "rising", "confidence": 0.78}
+{"question": "How knowledgeable are LLMs?", "resp": 7.5e-05, "tract": 0.612, "trajectory": "rising", "confidence": 0.85}
+{"question": "How many bits of the parameter can we recover in quantum estimation?", "resp": 1.9e-05, "tract": 0.697, "trajectory": "rising", "confidence": 0.82}
+{"question": "How much milkweed restoration is needed across different land-use sectors (protected areas, CRP lands, urban/suburban lands, right of ways, and agricultural lands) to achieve specific overwintering population targets, and what adoption rates are feasible?", "resp": 1.5e-05, "tract": 0.5616, "trajectory": "rising", "confidence": 0.78}
+{"question": "How much of the node cost function information should come from protein sequence data compared to network topology data, and how large should the size of the neighborhoods of compared nodes be?", "resp": 3.9e-05, "tract": 0.4896, "trajectory": "rising", "confidence": 0.68}
+{"question": "How should Mollino's diverse range of personal proficiencies be understood?", "resp": 1.1e-05, "tract": 0.21, "trajectory": "plateau", "confidence": 0.6}
+{"question": "How should harm–benefit analysis in biomedical research be conducted while explicitly including direct and indirect harm to humans, not just harm to animals?", "resp": 3.6e-05, "tract": 0.5616, "trajectory": "rising", "confidence": 0.78}
+{"question": "How should harm–benefit analysis in biomedical research be conducted?", "resp": 3.8e-05, "tract": 0.5616, "trajectory": "rising", "confidence": 0.78}
+{"question": "How should learning analytics be adapted to support informal, work-integrated learning that is experiential, social, situated, and practice-bound?", "resp": 5.7e-05, "tract": 0.4896, "trajectory": "rising", "confidence": 0.72}
+{"question": "How should machine learning models be properly conceived when applied to measurement tasks—as prediction models or as measurement models?", "resp": 0.112522, "tract": 0.468, "trajectory": "rising", "confidence": 0.72}
+{"question": "How should mechanical angular momentum be separated from the Bondi angular momentum to obtain a supertranslation-invariant balance law?", "resp": 1.7e-05, "tract": 0.468, "trajectory": "rising", "confidence": 0.65}
+{"question": "How should personhood and dignity be understood when cognition deteriorates, considering relationships, lived dignity, and the moral texture of care?", "resp": 4.6e-05, "tract": 0.4526, "trajectory": "rising", "confidence": 0.73}
+{"question": "How should personhood be understood in terms of memory and decisional autonomy?", "resp": 4.2e-05, "tract": 0.324, "trajectory": "plateau", "confidence": 0.72}
+{"question": "How should placebo effects be minimised in clinical trials?", "resp": 6.2e-05, "tract": 0.748, "trajectory": "rising", "confidence": 0.88}
+{"question": "How should prediction models be used to inform medical intervention decisions?", "resp": 0.00134, "tract": 0.663, "trajectory": "rising", "confidence": 0.85}
+{"question": "How should the Tibetan lunisolar calendar be reformed?", "resp": 1.1e-05, "tract": 0.18, "trajectory": "absent", "confidence": 0.72}
+{"question": "How should we allocate a given sample across regions and domains to meet precision targets?", "resp": 2e-05, "tract": 0.697, "trajectory": "rising", "confidence": 0.82}
+{"question": "How small can the sample be made while still meeting pre-defined precision targets for all target variables across all geographic domains at once?", "resp": 2.3e-05, "tract": 0.585, "trajectory": "rising", "confidence": 0.78}
+{"question": "How to develop robust explanations against out-of-distribution data?", "resp": 0.012326, "tract": 0.6375, "trajectory": "rising", "confidence": 0.85}
+{"question": "How well can LLMs perform knowledge work tasks and extract information or complete tasks against a specification?", "resp": 0.093331, "tract": 0.9025, "trajectory": "rising", "confidence": 0.95}
+{"question": "How well can a shared structured EHR foundation model trained at one institution be adapted for clinical prediction tasks at different hospitals with minimal additional labeled data?", "resp": 0.002059, "tract": 0.6396, "trajectory": "rising", "confidence": 0.82}
+{"question": "How well do groups of professionals work together and how could they be organised to work together more effectively?", "resp": 2e-05, "tract": 0.6375, "trajectory": "rising", "confidence": 0.85}
+{"question": "In the setting of families of submanifolds and their infinitesimal neighborhoods, is the germ determined by its infinitesimal neighborhood, and is it sufficient to consider only first-order neighborhoods?", "resp": 8.6e-05, "tract": 0.663, "trajectory": "plateau", "confidence": 0.78}
+{"question": "In what sense (if any) does natural selection cumulatively improve the design of organisms?", "resp": 0.000664, "tract": 0.5616, "trajectory": "rising", "confidence": 0.78}
+{"question": "Is ASEAN relevant?", "resp": 1.3e-05, "tract": 0.468, "trajectory": "rising", "confidence": 0.72}
+{"question": "Is X overexpression in sterile F1 males specifically a result of disrupted MSCI, and which loci control this overexpression?", "resp": 1.1e-05, "tract": 0.54, "trajectory": "rising", "confidence": 0.72}
+{"question": "Is a journal predatory?", "resp": 1.4e-05, "tract": 0.5616, "trajectory": "rising", "confidence": 0.78}
+{"question": "Is a specific bacterium colonizing the gastric mucosa causally responsible for ulcer disease?", "resp": 1.4e-05, "tract": 0.931, "trajectory": "plateau", "confidence": 0.98}
+{"question": "Is cell differentiation irreversible?", "resp": 0.005281, "tract": 0.782, "trajectory": "rising", "confidence": 0.92}
+{"question": "Is cervical cancer caused by herpes simplex virus?", "resp": 1.5e-05, "tract": 0.874, "trajectory": "plateau", "confidence": 0.92}
+{"question": "Is it possible to embed n-vertex graphs (representing the neighborhood structure of the input points) into metric spaces of low doubling dimension d in such a way that keeps neighbors close and non-neighbors far?", "resp": 1.6e-05, "tract": 0.6396, "trajectory": "rising", "confidence": 0.82}
+{"question": "Is mobile pastoralism backward, environmentally destructive and economically unsustainable?", "resp": 1.3e-05, "tract": 0.5616, "trajectory": "rising", "confidence": 0.78}
+{"question": "Is nucleolar expansion a correlate of aging or a driver of cellular aging?", "resp": 2e-05, "tract": 0.54, "trajectory": "rising", "confidence": 0.75}
+{"question": "Is sedentary livestock keeping more productive and utilizes fewer resources and less space than the mobile pastoral system?", "resp": 1.5e-05, "tract": 0.697, "trajectory": "rising", "confidence": 0.85}
+{"question": "Is space-time discrete or continuous?", "resp": 0.000121, "tract": 0.2625, "trajectory": "rising", "confidence": 0.75}
+{"question": "Is the O(G^2) part of the flux physically meaningful?", "resp": 1.5e-05, "tract": 0.1575, "trajectory": "plateau", "confidence": 0.45}
+{"question": "Is the Proto-instrument a tool defined as a physical object manipulated by an intentional agent to affect a change in another individual or object, and does this definition capture the core prototypical Instrument across English, Dutch, and German?", "resp": 0.000301, "tract": 0.54, "trajectory": "rising", "confidence": 0.75}
+{"question": "Is the Sharia People's Business Credit procedure in accordance with the provisions of rahn tasjily?", "resp": 1.2e-05, "tract": 0.403, "trajectory": "rising", "confidence": 0.62}
+{"question": "Is the expansion of the universe slowing down?", "resp": 1.6e-05, "tract": 0.931, "trajectory": "rising", "confidence": 0.98}
+{"question": "Is the germ of a compact complex submanifold in a complex manifold determined by its infinitesimal neighborhood of finite order when the normal bundle is sufficiently positive?", "resp": 1.3e-05, "tract": 0.4896, "trajectory": "rising", "confidence": 0.68}
+{"question": "Is the selected CNN optimal for the dataset in terms of accuracy and model size?", "resp": 3.2e-05, "tract": 0.748, "trajectory": "rising", "confidence": 0.88}
+{"question": "Is there an alleged decline of language skills among younger generations?", "resp": 0.000108, "tract": 0.615, "trajectory": "rising", "confidence": 0.82}
+{"question": "Is training specific features / representations truly necessary for pose refinement?", "resp": 1.4e-05, "tract": 0.5616, "trajectory": "rising", "confidence": 0.78}
+{"question": "Out of a range of outcomes, which outcome does a verbal probability expression suggest?", "resp": 6e-05, "tract": 0.615, "trajectory": "rising", "confidence": 0.82}
+{"question": "Should one train a small model from the beginning, or first train a large model and then prune?", "resp": 4e-05, "tract": 0.748, "trajectory": "rising", "confidence": 0.88}
+{"question": "To what extent is it possible to visualize high-dimensional data in two- or three-dimensional plots?", "resp": 0.000107, "tract": 0.782, "trajectory": "rising", "confidence": 0.92}
+{"question": "Under what conditions are quality educational experiences possible for all learners?", "resp": 0.003801, "tract": 0.4526, "trajectory": "rising", "confidence": 0.73}
+{"question": "Under what institutional design conditions do communities successfully govern shared resources themselves?", "resp": 1.7e-05, "tract": 0.7216, "trajectory": "rising", "confidence": 0.88}
+{"question": "What actions are now possible to restore key wetland soil pathways to support soil health and water quality?", "resp": 3.4e-05, "tract": 0.6396, "trajectory": "rising", "confidence": 0.82}
+{"question": "What antimicrobial factors are present in spider cocoons, and how do they interact with eggs, microorganisms, and environmental elements to protect offspring?", "resp": 2.8e-05, "tract": 0.5616, "trajectory": "rising", "confidence": 0.78}
+{"question": "What are biological species?", "resp": 0.000221, "tract": 0.5525, "trajectory": "plateau", "confidence": 0.85}
+{"question": "What are negative probabilities for?", "resp": 0.000504, "tract": 0.5616, "trajectory": "rising", "confidence": 0.78}
+{"question": "What are negative probabilities?", "resp": 0.00069, "tract": 0.5616, "trajectory": "rising", "confidence": 0.78}
+{"question": "What are the actual mechanisms of gene reproduction, mutation and expression, and what are the fundamental properties of genes and their actions?", "resp": 0.033443, "tract": 0.782, "trajectory": "rising", "confidence": 0.92}
+{"question": "What are the appropriate estimands for sequential prediction under interventions that can inform intervention decisions reconsidered at multiple decision moments?", "resp": 0.000851, "tract": 0.4896, "trajectory": "rising", "confidence": 0.68}
+{"question": "What are the direct and mediated causal effects of supply chain complexity drivers (upstream, operational, downstream, and external) on supply chain performance?", "resp": 0.015422, "tract": 0.615, "trajectory": "rising", "confidence": 0.82}
+{"question": "What are the evolutionary collective modes (linear combinations of genes with high, constant selective pressure) that organize long-term metabolic evolution dynamics?", "resp": 0.003816, "tract": 0.4216, "trajectory": "rising", "confidence": 0.68}
+{"question": "What are the fundamental constituents and forces that underlie cosmology?", "resp": 4.3e-05, "tract": 0.6375, "trajectory": "rising", "confidence": 0.85}
+{"question": "What are the limitations of ChatGPT and other LLMs on complex question answering tasks across diverse datasets and question types?", "resp": 0.002384, "tract": 0.782, "trajectory": "rising", "confidence": 0.92}
+{"question": "What are the long-term effects of ovary removal on motor performance, nociceptive response, and joint morphology in adult mice?", "resp": 0.000833, "tract": 0.697, "trajectory": "rising", "confidence": 0.82}
+{"question": "What are the markers of phonologization of handshape in sign languages, and how do they emerge in gesture systems without a linguistic community?", "resp": 1.9e-05, "tract": 0.54, "trajectory": "rising", "confidence": 0.75}
+{"question": "What are the measurable returns to investment in human capital in agricultural economies?", "resp": 4.7e-05, "tract": 0.7134, "trajectory": "rising", "confidence": 0.87}
+{"question": "What are the network topology-dependent upper bounds on the number of solutions to algebraic load flow equations?", "resp": 1.6e-05, "tract": 0.5616, "trajectory": "rising", "confidence": 0.78}
+{"question": "What are the observable quantities and their statistical distributions?", "resp": 0.000479, "tract": 0.54, "trajectory": "plateau", "confidence": 0.72}
+{"question": "What are the pathways linking neighborhood change and gentrification to health?", "resp": 1.3e-05, "tract": 0.5904, "trajectory": "rising", "confidence": 0.82}
+{"question": "What are the prevalent coordination environments and structural isomer families of chemical species in molecular dynamics data, and what are their relative populations?", "resp": 8.5e-05, "tract": 0.5616, "trajectory": "rising", "confidence": 0.72}
+{"question": "What are the specific cognitive engagement patterns and self-regulated learning processes that students exhibit during gaming versus non-gaming periods in digital learning systems?", "resp": 0.000599, "tract": 0.6396, "trajectory": "rising", "confidence": 0.82}
+{"question": "What are the stable outcome conditions when each player's strategy is the best response to others?", "resp": 2e-05, "tract": 0.931, "trajectory": "plateau", "confidence": 0.98}
+{"question": "What are the technology-based models and efficacy of digital-based pain facial expression assessment tools among children?", "resp": 6.1e-05, "tract": 0.5616, "trajectory": "rising", "confidence": 0.78}
+{"question": "What are the transformation laws that make the laws of physics identical for all inertial observers?", "resp": 1.9e-05, "tract": 0.874, "trajectory": "plateau", "confidence": 0.92}
+{"question": "What are the ultimate foundations that ground scientific explanations?", "resp": 0.001847, "tract": 0.252, "trajectory": "plateau", "confidence": 0.72}
+{"question": "What caused my model to predict a person has cancer?", "resp": 0.049686, "tract": 0.615, "trajectory": "rising", "confidence": 0.82}
+{"question": "What causes these mysterious slow infections?", "resp": 1.5e-05, "tract": 0.1575, "trajectory": "absent", "confidence": 0.45}
+{"question": "What combination of network centrality measures best predicts a specific measurable outcome in a given domain?", "resp": 2.7e-05, "tract": 0.7216, "trajectory": "rising", "confidence": 0.88}
+{"question": "What determines protein shape?", "resp": 0.059042, "tract": 0.931, "trajectory": "rising", "confidence": 0.98}
+{"question": "What discrete energy levels are allowed for bound electrons, and when does a transition between levels emit or absorb radiation?", "resp": 2.4e-05, "tract": 0.931, "trajectory": "plateau", "confidence": 0.98}
+{"question": "What does it mean for retreat to be strategic and managed?", "resp": 1.6e-05, "tract": 0.432, "trajectory": "rising", "confidence": 0.72}
+{"question": "What does it mean to learn in a STEAM context?", "resp": 0.000228, "tract": 0.5616, "trajectory": "rising", "confidence": 0.78}
+{"question": "What does self-sufficiency add to free consent by juridical equals?", "resp": 1.2e-05, "tract": 0.1925, "trajectory": "absent", "confidence": 0.55}
+{"question": "What drives curiosity?", "resp": 0.000126, "tract": 0.5832, "trajectory": "rising", "confidence": 0.81}
+{"question": "What exactly is meant by quality education?", "resp": 6.4e-05, "tract": 0.252, "trajectory": "plateau", "confidence": 0.72}
+{"question": "What explains the design choices of international institutions like ASEAN?", "resp": 1.4e-05, "tract": 0.51, "trajectory": "rising", "confidence": 0.75}
+{"question": "What happens to market outcomes when buyers and sellers have different information?", "resp": 3.4e-05, "tract": 0.931, "trajectory": "rising", "confidence": 0.98}
+{"question": "What happens when double-stranded RNA complementary to a gene is introduced into a cell?", "resp": 5.3e-05, "tract": 0.931, "trajectory": "plateau", "confidence": 0.98}
+{"question": "What if light energy comes in discrete quanta proportional to frequency?", "resp": 1.5e-05, "tract": 0.95, "trajectory": "plateau", "confidence": 0.95}
+{"question": "What information is hidden within molecular dynamics simulation data?", "resp": 0.001567, "tract": 0.5616, "trajectory": "rising", "confidence": 0.78}
+{"question": "What is a scalable and replicable methodology for evaluating optimization agents through conversations, and how does conversation-based interaction compare to one-shot evaluation approaches?", "resp": 0.000204, "tract": 0.54, "trajectory": "rising", "confidence": 0.75}
+{"question": "What is an effective evaluation framework and methodology for assessing the performance and outcomes of communities of practice and social-professional networks?", "resp": 0.000892, "tract": 0.5616, "trajectory": "rising", "confidence": 0.78}
+{"question": "What is fitness and how can one tell when a trait enhances fitness, or more to the point, when one organism is fitter than another?", "resp": 4.6e-05, "tract": 0.6375, "trajectory": "plateau", "confidence": 0.85}
+{"question": "What is the absolute motion of bodies through the ether?", "resp": 1.2e-05, "tract": 0.0, "trajectory": "absent", "confidence": 0.95}
+{"question": "What is the connection between disposition ascriptions and counterfactual or subjunctive conditionals?", "resp": 1.2e-05, "tract": 0.5616, "trajectory": "plateau", "confidence": 0.78}
+{"question": "What is the electronic structure of the parent phase of KxFe2-ySe2, and is superconductivity developed by doping an insulating Mott phase or a semiconducting phase?", "resp": 1.6e-05, "tract": 0.615, "trajectory": "plateau", "confidence": 0.82}
+{"question": "What is the energy density of the vacuum that drives accelerating expansion?", "resp": 1.8e-05, "tract": 0.66, "trajectory": "rising", "confidence": 0.88}
+{"question": "What is the evolutionary transition of proto-domestic canids into human-associated niches?", "resp": 1.8e-05, "tract": 0.615, "trajectory": "rising", "confidence": 0.82}
+{"question": "What is the exact nucleotide sequence of a specific gene or genome?", "resp": 0.000107, "tract": 0.931, "trajectory": "plateau", "confidence": 0.98}
+{"question": "What is the genetic code in general?", "resp": 7.4e-05, "tract": 0.15, "trajectory": "absent", "confidence": 0.75}
+{"question": "What is the impact of particular actions under an uncertain regional climate change?", "resp": 0.057754, "tract": 0.5616, "trajectory": "rising", "confidence": 0.78}
+{"question": "What is the incremented prediction accuracy of multivariable prognostic models after adding BNP and/or NT-proBNP?", "resp": 0.005484, "tract": 0.697, "trajectory": "plateau", "confidence": 0.85}
+{"question": "What is the maximum number of solutions to load flow equations?", "resp": 3.5e-05, "tract": 0.54, "trajectory": "plateau", "confidence": 0.72}
+{"question": "What is the microscopic mechanism by which spin-orbit coupling enhances superconductivity in rhombohedral trilayer graphene?", "resp": 1.7e-05, "tract": 0.5616, "trajectory": "rising", "confidence": 0.78}
+{"question": "What is the nature of the gene?", "resp": 0.000169, "tract": 0.6375, "trajectory": "plateau", "confidence": 0.85}
+{"question": "What is the physical mechanism by which thermal energy fluctuations in the chlorophyll environment enable uphill excitation energy transfer from low-energy chlorophylls to the reaction center?", "resp": 0.000868, "tract": 0.615, "trajectory": "rising", "confidence": 0.82}
+{"question": "What is the precise three-dimensional atomic arrangement of haemoglobin at X-ray resolution?", "resp": 3.7e-05, "tract": 0.931, "trajectory": "rising", "confidence": 0.98}
+{"question": "What is the psychosomatic cause of peptic ulcers?", "resp": 1.4e-05, "tract": 0.273, "trajectory": "declining", "confidence": 0.78}
+{"question": "What is the relationship between nerve fiber diameter and the speed of electrical signal conduction?", "resp": 1.3e-05, "tract": 0.931, "trajectory": "plateau", "confidence": 0.98}
+{"question": "What is the relationship between sums-of-squares formulas and algebraic geometry, and is the existence of such formulas independent of characteristic for sufficiently large p?", "resp": 1.9e-05, "tract": 0.54, "trajectory": "rising", "confidence": 0.75}
+{"question": "What is the role of competition in modern life?", "resp": 6.8e-05, "tract": 0.468, "trajectory": "rising", "confidence": 0.72}
+{"question": "What is the specific cyclic chemical pathway by which acetyl groups are oxidized to CO2?", "resp": 1.2e-05, "tract": 0.874, "trajectory": "plateau", "confidence": 0.92}
+{"question": "What is the trajectory of an electron?", "resp": 0.000972, "tract": 0.1275, "trajectory": "plateau", "confidence": 0.85}
+{"question": "What is the tunneling exponent for vortices compared to Coleman-de Luccia bubbles, and what does this imply about their decay rates and cosmological significance?", "resp": 1.6e-05, "tract": 0.3968, "trajectory": "plateau", "confidence": 0.64}
+{"question": "What is the ultimate precision of all estimation strategies?", "resp": 0.000118, "tract": 0.5616, "trajectory": "rising", "confidence": 0.78}
+{"question": "What land-use sectors and levels of adoption would be required by stakeholders to replace the estimated 1.3 billion milkweed stems lost from Midwestern US croplands and reach the 6 ha goal?", "resp": 1.5e-05, "tract": 0.5616, "trajectory": "rising", "confidence": 0.78}
+{"question": "What molecular mechanism prevents chromosomes from shortening after each cell division?", "resp": 0.002501, "tract": 0.874, "trajectory": "rising", "confidence": 0.95}
+{"question": "What natural compound might treat disease?", "resp": 1.4e-05, "tract": 0.6375, "trajectory": "rising", "confidence": 0.85}
+{"question": "What nucleic acid carries the scrapie infectious agent?", "resp": 1.2e-05, "tract": 0.874, "trajectory": "plateau", "confidence": 0.92}
+{"question": "What operational prescriptions allow us to specify and perform measurements of sufficient precision?", "resp": 1.5e-05, "tract": 0.54, "trajectory": "rising", "confidence": 0.72}
+{"question": "What physical mechanism produces the extremely regular periodic pulses from rotating neutron stars?", "resp": 1.3e-05, "tract": 0.874, "trajectory": "plateau", "confidence": 0.95}
+{"question": "What purposeful action will aid human flourishing, create and sustain a viable space for humanity, in our ongoing co-evolution with the Anthropocene-Biosphere?", "resp": 1.6e-05, "tract": 0.217, "trajectory": "rising", "confidence": 0.62}
+{"question": "What role do glycosidases and their selective cellular deployment play in remodeling brain glycans across specific cell types and regions?", "resp": 3e-05, "tract": 0.6396, "trajectory": "rising", "confidence": 0.82}
+{"question": "What space-varying smoothing length formalism accurately captures both dust self-gravity and gas-dust gravitational interactions in bi-fluid protoplanetary disc simulations?", "resp": 2.2e-05, "tract": 0.4896, "trajectory": "rising", "confidence": 0.68}
+{"question": "What specific cognitive biases and mental accounting rules predict real economic choices?", "resp": 2.8e-05, "tract": 0.663, "trajectory": "rising", "confidence": 0.85}
+{"question": "What specific enzyme does each gene produce?", "resp": 6.8e-05, "tract": 0.931, "trajectory": "rising", "confidence": 0.98}
+{"question": "What specific enzyme or receptor, if blocked by a rationally designed molecule, would interrupt a disease-causing biochemical pathway?", "resp": 1.2e-05, "tract": 0.748, "trajectory": "rising", "confidence": 0.88}
+{"question": "What specific mechanistic questions can be answered using construct validity models to identify therapeutic targets, rather than attempting to fully model sepsis itself?", "resp": 0.000785, "tract": 0.4896, "trajectory": "rising", "confidence": 0.68}
+{"question": "What specific set of activities can Earth and Environmental repositories prioritize to better adhere to CARE Principles in their policies, architecture, service offerings, and collaboration models?", "resp": 4e-05, "tract": 0.54, "trajectory": "rising", "confidence": 0.75}
+{"question": "What theoretical properties should the concept of fitness possess to encapsulate the improvement criterion required to talk meaningfully about adaptive evolution?", "resp": 0.000143, "tract": 0.4526, "trajectory": "plateau", "confidence": 0.73}
+{"question": "What will happen?", "resp": 0.000243, "tract": 0.0, "trajectory": "absent", "confidence": 0.95}
+{"question": "When do explanatory relations remain adequate under model updates, perturbations, and theory change?", "resp": 7.1e-05, "tract": 0.4526, "trajectory": "rising", "confidence": 0.73}
+{"question": "When does a system become phonological?", "resp": 1.7e-05, "tract": 0.4526, "trajectory": "rising", "confidence": 0.73}
+{"question": "Where have trials gone?", "resp": 4.1e-05, "tract": 0.54, "trajectory": "rising", "confidence": 0.72}
+{"question": "Whether and when the use of digital media positively and negatively affects children and adolescents' physical and psychological well-being?", "resp": 3.8e-05, "tract": 0.612, "trajectory": "rising", "confidence": 0.85}
+{"question": "Whether artificial intelligence (AI) systems can possess consciousness?", "resp": 0.018955, "tract": 0.273, "trajectory": "rising", "confidence": 0.78}
+{"question": "Whether cooperative behavior is further promoted in a small cooperative society in which social penalty is devised?", "resp": 1.3e-05, "tract": 0.6396, "trajectory": "rising", "confidence": 0.82}
+{"question": "Whether entities such as the knife are represented in terms of an abstract category (Instrument) and, if so, whether this category has a prototype structure?", "resp": 1.5e-05, "tract": 0.5616, "trajectory": "plateau", "confidence": 0.78}
+{"question": "Whether large language models truly understand concepts or simply recognize patterns?", "resp": 0.126215, "tract": 0.396, "trajectory": "rising", "confidence": 0.72}
+{"question": "Whether magnetic ordering competes with superconductivity or facilitates pairing?", "resp": 4.2e-05, "tract": 0.748, "trajectory": "rising", "confidence": 0.88}
+{"question": "Whether many small-effect mutations or a few large-effect mutations underlie rapid adaptation, and how this knowledge can predict population survival or extinction?", "resp": 0.002164, "tract": 0.6396, "trajectory": "rising", "confidence": 0.82}
+{"question": "Whether recent events represent a regime change or a local manifestation of longer term effects?", "resp": 1.8e-05, "tract": 0.27, "trajectory": "plateau", "confidence": 0.6}
+{"question": "Whether students are cognitively disengaged or whether they engage in different self-regulated learning (SRL) strategies when gaming?", "resp": 1.9e-05, "tract": 0.6396, "trajectory": "rising", "confidence": 0.82}
+{"question": "Whether the light deflection effect becomes detectable in view of today's high-precision astrometry?", "resp": 1.4e-05, "tract": 0.8096, "trajectory": "rising", "confidence": 0.88}
+{"question": "Whether the property of being symmetric extends to Hecke algebras?", "resp": 7.6e-05, "tract": 0.54, "trajectory": "rising", "confidence": 0.72}
+{"question": "Whether the superiority of a network alignment method comes from its node cost function, its alignment strategy, or both?", "resp": 3.1e-05, "tract": 0.54, "trajectory": "rising", "confidence": 0.75}
+{"question": "Whether the underlying stochastic process exhibits memory, and if so whether the memory is long in a precise sense?", "resp": 0.000296, "tract": 0.697, "trajectory": "rising", "confidence": 0.82}
+{"question": "Whether, and if so, under which circumstances, the presence of vortices has a significant catalyzing effect on vacuum decay?", "resp": 1.3e-05, "tract": 0.217, "trajectory": "rising", "confidence": 0.62}
+{"question": "Which aspects of the cue-reward contingencies drive the effect of audiovisual cues on risky choice?", "resp": 1.2e-05, "tract": 0.5616, "trajectory": "rising", "confidence": 0.78}
+{"question": "Which is the most important parameter between roughness, chemistry and microstructure modification on biocompatibility?", "resp": 1.9e-05, "tract": 0.5616, "trajectory": "rising", "confidence": 0.78}
+{"question": "Which of these methods is the best?", "resp": 0.061534, "tract": 0.1275, "trajectory": "absent", "confidence": 0.85}
+{"question": "Which specific capacities in the discovery-to-application loop (knowledge gap identification, experimental discovery, knowledge consolidation, or knowledge application) represent the primary bottlenecks limiting agent performance?", "resp": 0.000113, "tract": 0.3596, "trajectory": "rising", "confidence": 0.58}
+{"question": "Which specific genes regulate when and how individual cells live or die?", "resp": 0.000267, "tract": 0.874, "trajectory": "rising", "confidence": 0.95}
+{"question": "Which specific human papillomavirus types are consistently present in cervical carcinoma cells?", "resp": 1.3e-05, "tract": 0.874, "trajectory": "plateau", "confidence": 0.92}
+{"question": "Which specific transcription factors, when introduced into a somatic cell, reprogram it to a pluripotent stem cell state?", "resp": 1.8e-05, "tract": 0.874, "trajectory": "plateau", "confidence": 0.92}
+{"question": "Which supply chain complexity drivers severely impact the supply chain performance?", "resp": 0.000592, "tract": 0.6396, "trajectory": "rising", "confidence": 0.82}
+{"question": "Who are the most influential actors in a social network?", "resp": 0.00918, "tract": 0.874, "trajectory": "rising", "confidence": 0.92}
+{"question": "Why are some countries rich?", "resp": 2.5e-05, "tract": 0.782, "trajectory": "plateau", "confidence": 0.92}
+{"question": "Why cooperation is well developed in human society?", "resp": 0.000105, "tract": 0.612, "trajectory": "rising", "confidence": 0.85}
+{"question": "Why did my model predict a person has cancer?", "resp": 5.4e-05, "tract": 0.6375, "trajectory": "rising", "confidence": 0.85}
+{"question": "Why does light behave as a wave?", "resp": 1.4e-05, "tract": 0.6375, "trajectory": "plateau", "confidence": 0.85}
+{"question": "Why does the classical electron spiral into the nucleus?", "resp": 1.6e-05, "tract": 0.874, "trajectory": "plateau", "confidence": 0.92}
+{"question": "Why is this relative lack of comparative refinement still the case?", "resp": 2.2e-05, "tract": 0.0525, "trajectory": "absent", "confidence": 0.35}
+{"question": "Why think that theory ladenness of empirical results would be problematic in the first place?", "resp": 0.00017, "tract": 0.468, "trajectory": "plateau", "confidence": 0.72}
+{"question": "Why was this AR so flare-productive and how did the X9.3 flare take place?", "resp": 1.6e-05, "tract": 0.54, "trajectory": "rising", "confidence": 0.72}
+{"question": "Will LLMs replace Knowledge Graphs?", "resp": 0.017893, "tract": 0.5616, "trajectory": "rising", "confidence": 0.78}
+{"question": "Will children forego hard-earned rewards to obtain information, and what factors shape their willingness to engage in costly curiosity?", "resp": 1.4e-05, "tract": 0.6396, "trajectory": "rising", "confidence": 0.82}
+{"question": "In what high-dimensional regimes does training a large overparameterized model followed by pruning outperform training a small model directly, even with known informative features?", "resp": 0.000855, "tract": 0.5616, "trajectory": "active and expanding", "confidence": 0.78}
+{"question": "Under what conditions does reasoning SFT generalize, and at what cost?", "resp": 0.000234, "tract": 0.5616, "trajectory": "ascending", "confidence": 0.78}
+{"question": "Which transitive permutation groups have associated Hecke algebras that are symmetric over every field of characteristic p (or over all primes p)?", "resp": 0.000227, "tract": 0.434, "trajectory": "steady_research_momentum", "confidence": 0.7}

@@ -1,0 +1,17 @@
+# Normaliza line endings para LF em todos os arquivos de texto
+* text=auto eol=lf
+
+# Binários — sem conversão
+*.pkl    binary
+*.pt     binary
+*.pth    binary
+*.bin    binary
+*.safetensors binary
+*.gguf   binary
+*.npy    binary
+*.db     binary
+*.png    binary
+*.jpg    binary
+*.jpeg   binary
+*.gif    binary
+*.ico    binary

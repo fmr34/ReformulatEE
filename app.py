@@ -1,5 +1,5 @@
-"""
-LLM Quest — Gradio standalone app.
+﻿"""
+ReformulatEE — Gradio standalone app.
 Equivalente à interface do notebook, mas sem precisar do Jupyter.
 
 Uso:
@@ -160,8 +160,8 @@ def dar_feedback(record_id, valor: int):
     )
 
 
-with gr.Blocks(title='LLM Quest', theme=gr.themes.Soft()) as app:
-    gr.Markdown("## 🔬 LLM Quest — Reformulação Epistêmica")
+with gr.Blocks(title='ReformulatEE', theme=gr.themes.Soft()) as app:
+    gr.Markdown("## 🔬 ReformulatEE — Reformulação Epistêmica")
 
     with gr.Row():
         with gr.Column(scale=3):

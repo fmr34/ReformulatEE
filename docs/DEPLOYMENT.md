@@ -1,4 +1,4 @@
-# LLM Quest — Deployment Guide
+﻿# ReformulatEE — Deployment Guide
 
 ## 🚀 Quick Deploy to HuggingFace Spaces
 
@@ -7,8 +7,8 @@
 ```bash
 git init
 git add .
-git commit -m "Initial commit: LLM Quest open source"
-git remote add origin https://github.com/yourusername/llm-quest.git
+git commit -m "Initial commit: ReformulatEE open source"
+git remote add origin https://github.com/yourusername/reformulatee.git
 git branch -M main
 git push -u origin main
 ```
@@ -73,8 +73,8 @@ CMD ["python", "app.py"]
 
 Build & run:
 ```bash
-docker build -t llm-quest .
-docker run -p 7860:7860 llm-quest
+docker build -t reformulatee .
+docker run -p 7860:7860 reformulatee
 ```
 
 ### Docker Compose (with PostgreSQL)
@@ -89,7 +89,7 @@ services:
     ports:
       - "7860:7860"
     environment:
-      DATABASE_URL: postgresql://user:password@db:5432/llm_quest
+      DATABASE_URL: postgresql://user:password@db:5432/reformulatee
       INFERENCE_BACKEND: hf_inference
     depends_on:
       - db
@@ -97,7 +97,7 @@ services:
   db:
     image: postgres:15-alpine
     environment:
-      POSTGRES_DB: llm_quest
+      POSTGRES_DB: reformulatee
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
     volumes:
@@ -136,7 +136,7 @@ serverless deploy
 ### Google Cloud Run
 
 ```bash
-gcloud run deploy llm-quest \
+gcloud run deploy reformulatee \
   --source . \
   --platform managed \
   --region us-central1 \
@@ -149,8 +149,8 @@ gcloud run deploy llm-quest \
 ```bash
 az container create \
   --resource-group mygroup \
-  --name llm-quest \
-  --image yourusername/llm-quest:latest \
+  --name reformulatee \
+  --image yourusername/reformulatee:latest \
   --ports 7860 \
   --environment-variables INFERENCE_BACKEND=hf_inference
 ```
@@ -223,7 +223,7 @@ def reformular_ui(...):
 ```bash
 # View logs in dashboard
 # Or via HF CLI:
-huggingface-cli get-space-logs yourusername/llm-quest
+huggingface-cli get-space-logs yourusername/reformulatee
 ```
 
 ### Custom Logging
@@ -282,7 +282,7 @@ jobs:
         run: |
           git config user.email "ci@example.com"
           git config user.name "CI Bot"
-          git remote add huggingface https://huggingface.co/spaces/yourusername/llm-quest
+          git remote add huggingface https://huggingface.co/spaces/yourusername/reformulatee
           git push huggingface main
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}

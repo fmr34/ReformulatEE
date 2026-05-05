@@ -188,7 +188,7 @@ def prepare(stats_only: bool = False) -> None:
             all_pairs.extend(loaded)
             print(f"  {tag:<25} {len(loaded):>4} pares")
 
-    # 2. Batch API pairs
+    # 2. Batch API pairs (curated questions → variações)
     batch_path = _RL_DIR / "batch_pairs.jsonl"
     batch = _load_batch_pairs(batch_path)
     if batch:
@@ -198,7 +198,27 @@ def prepare(stats_only: bool = False) -> None:
     else:
         print(f"  {'batch_pairs':<25}    0 pares  (execute expand_via_batch primeiro)")
 
-    # 3. Feedback positivo do usuário
+    # 3. Batch domínios (novos domínios sub-representados)
+    domains_path = _RL_DIR / "batch_domains.jsonl"
+    domains = _load_batch_pairs(domains_path)
+    if domains:
+        source_counts["batch_domains"] = len(domains)
+        all_pairs.extend(domains)
+        print(f"  {'batch_domains':<25} {len(domains):>4} pares")
+    else:
+        print(f"  {'batch_domains':<25}    0 pares  (execute expand_domains primeiro)")
+
+    # 4. Batch large (novos domínios + arquétipos de questão-ruim)
+    large_path = _RL_DIR / "batch_large.jsonl"
+    large = _load_batch_pairs(large_path)
+    if large:
+        source_counts["batch_large"] = len(large)
+        all_pairs.extend(large)
+        print(f"  {'batch_large':<25} {len(large):>4} pares")
+    else:
+        print(f"  {'batch_large':<25}    0 pares  (execute expand_large primeiro)")
+
+    # 5. Feedback positivo do usuário
     feedback = _load_feedback_pairs()
     if feedback:
         source_counts["feedback_positive"] = len(feedback)

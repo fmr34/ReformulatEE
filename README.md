@@ -1,5 +1,5 @@
----
-title: LLM Quest
+﻿---
+title: ReformulatEE
 emoji: 🔬
 colorFrom: blue
 colorTo: green
@@ -11,7 +11,7 @@ license: mit
 short_description: Reformulate research questions with maximum epistemic effectiveness
 ---
 
-# 🔬 LLM Quest — Epistemic Effectiveness Reformulation
+# 🔬 ReformulatEE — Epistemic Effectiveness Reformulation
 
 [![Spaces](https://huggingface.co/datasets/huggingface/badges/raw/main/run-on-spaces-sm.svg)](https://huggingface.co/spaces)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
@@ -21,7 +21,7 @@ A machine learning system that **reformulates research questions** to maximize t
 
 ## 🎯 What is Epistemic Effectiveness?
 
-Research questions vary in their tractability. A question is **epistemically tractable** if it can be answered using existing methodologies and tools. LLM Quest learns to transform vague, philosophical questions into concrete, testable ones.
+Research questions vary in their tractability. A question is **epistemically tractable** if it can be answered using existing methodologies and tools. ReformulatEE learns to transform vague, philosophical questions into concrete, testable ones.
 
 **EE(Q) = 0.05·Respondibilidade + 0.05·Tratabilidade + 0.90·Não-trivialidade**
 
@@ -45,8 +45,8 @@ Research questions vary in their tractability. A question is **epistemically tra
 ### Local Installation
 
 ```bash
-git clone https://github.com/yourusername/llm-quest.git
-cd llm-quest
+git clone https://github.com/yourusername/reformulatee.git
+cd reformulatee
 python -m venv .venv
 source .venv/bin/activate  # Windows: .venv\Scripts\activate
 pip install -e .
@@ -164,7 +164,7 @@ python -m src.dataset.prepare_dpo
 # 2. Open notebooks/dpo_finetune_colab.ipynb in Colab
 # 3. Upload dpo_final.jsonl, train Qwen2.5-1.5B with DPO
 # 4. Publish to HF Hub
-# 5. Update .env: HF_MODEL=yourusername/llm-quest-reformulator
+# 5. Update .env: HF_MODEL=yourusername/reformulatee-reformulator
 ```
 
 **Cost:** ~$0.003 (100 × Haiku calls for dataset generation) + free Colab GPU
@@ -204,8 +204,8 @@ Push this repo to GitHub, then connect to HF Spaces:
 ### Docker
 
 ```bash
-docker build -t llm-quest .
-docker run -p 7860:7860 llm-quest
+docker build -t reformulatee .
+docker run -p 7860:7860 reformulatee
 ```
 
 ### Local Server
@@ -240,14 +240,14 @@ MIT License — see [LICENSE](LICENSE)
 
 ## 🔗 Citation
 
-If you use LLM Quest in research:
+If you use ReformulatEE in research:
 
 ```bibtex
-@software{llm_quest_2025,
-  title={LLM Quest: Epistemic Effectiveness Reformulation},
+@software{reformulatee_2025,
+  title={ReformulatEE: Epistemic Effectiveness Reformulation},
   author={Your Name},
   year={2025},
-  url={https://github.com/yourusername/llm-quest},
+  url={https://github.com/yourusername/reformulatee},
   note={Open source portfolio project}
 }
 ```

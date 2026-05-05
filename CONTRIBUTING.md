@@ -1,6 +1,6 @@
-# Contributing to LLM Quest
+﻿# Contributing to ReformulatEE
 
-Thank you for your interest in contributing! This document provides guidelines and instructions for contributing to LLM Quest.
+Thank you for your interest in contributing! This document provides guidelines and instructions for contributing to ReformulatEE.
 
 ## 🤝 Ways to Contribute
 
@@ -27,9 +27,9 @@ Thank you for your interest in contributing! This document provides guidelines a
 ### 1. Fork & Clone
 
 ```bash
-git clone https://github.com/yourusername/llm-quest.git
-cd llm-quest
-git remote add upstream https://github.com/original-author/llm-quest.git
+git clone https://github.com/yourusername/reformulatee.git
+cd reformulatee
+git remote add upstream https://github.com/original-author/reformulatee.git
 ```
 
 ### 2. Setup Development Environment
@@ -306,4 +306,4 @@ Maintainers will handle:
 
 ---
 
-Thank you for contributing to LLM Quest! 🙏
+Thank you for contributing to ReformulatEE! 🙏

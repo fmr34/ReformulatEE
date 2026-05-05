@@ -1,4 +1,4 @@
-# LLM Quest — Guia de Uso
+﻿# ReformulatEE — Guia de Uso
 
 Sistema de reformulação de perguntas de pesquisa para maior **Efetividade Epistêmica (EE)**.  
 Transforma perguntas vagas em perguntas operacionalizáveis, metodologicamente fundamentadas e respondíveis.
@@ -20,14 +20,14 @@ Transforma perguntas vagas em perguntas operacionalizáveis, metodologicamente f
 No terminal, dentro da pasta do projeto:
 
 ```powershell
-.venv\Scripts\jupyter.exe notebook llm_quest_interface.ipynb
+.venv\Scripts\jupyter.exe notebook reformulatee_interface.ipynb
 ```
 
 O navegador abrirá automaticamente. Caso não abra, acesse `http://localhost:8888`.
 
 ### 2. Selecionar o kernel correto
 
-No menu do notebook: **Kernel → Change Kernel → LLM Quest (.venv)**
+No menu do notebook: **Kernel → Change Kernel → ReformulatEE (.venv)**
 
 ### 3. Executar as células
 
@@ -148,8 +148,8 @@ Normal na primeira chamada — os modelos de scoring estão carregando. Tente no
 **Resultado em inglês mesmo com idioma Português**  
 Verifique se `ANTHROPIC_API_KEY` está no `.env` e se há conexão com a internet.
 
-**Kernel "LLM Quest (.venv)" não aparece**  
+**Kernel "ReformulatEE (.venv)" não aparece**  
 Execute no terminal:
 ```powershell
-.venv\Scripts\python -m ipykernel install --user --name llm_quest_venv --display-name "LLM Quest (.venv)"
+.venv\Scripts\python -m ipykernel install --user --name reformulatee_venv --display-name "ReformulatEE (.venv)"
 ```

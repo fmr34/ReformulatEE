@@ -1,4 +1,4 @@
-"""
+﻿"""
 Smoke test rapido — verifica imports e componentes isolados sem API e sem corpus.
 Nao faz chamadas externas.
 """
@@ -17,7 +17,7 @@ def check(label: str, fn):
     return True
 
 
-print("\n=== Smoke Test — LLM Quest Fase 0 ===\n")
+print("\n=== Smoke Test — ReformulatEE Fase 0 ===\n")
 
 ok = True
 

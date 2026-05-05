@@ -1,4 +1,4 @@
-# LLM Quest — System Architecture
+﻿# ReformulatEE — System Architecture
 
 ## 🏗️ High-Level Architecture
 

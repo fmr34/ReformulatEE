@@ -1,9 +1,9 @@
-[build-system]
+﻿[build-system]
 requires = ["setuptools>=65.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "llm-quest"
+name = "reformulatee"
 version = "1.0.0"
 description = "Reformulate research questions with maximum epistemic effectiveness via LLM fine-tuning"
 readme = "README.md"
@@ -69,10 +69,10 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/yourusername/llm-quest"
-Repository = "https://github.com/yourusername/llm-quest.git"
-Documentation = "https://github.com/yourusername/llm-quest#-documentation"
-Issues = "https://github.com/yourusername/llm-quest/issues"
+Homepage = "https://github.com/yourusername/reformulatee"
+Repository = "https://github.com/yourusername/reformulatee.git"
+Documentation = "https://github.com/yourusername/reformulatee#-documentation"
+Issues = "https://github.com/yourusername/reformulatee/issues"
 
 [tool.setuptools]
 packages = ["src"]

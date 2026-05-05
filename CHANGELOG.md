@@ -1,6 +1,6 @@
-# Changelog
+﻿# Changelog
 
-All notable changes to LLM Quest will be documented in this file.
+All notable changes to ReformulatEE will be documented in this file.
 
 ## [1.0.0] — 2025-05-05
 

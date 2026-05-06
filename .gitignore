@@ -39,6 +39,7 @@ data/historico.db
 data/historico.db-*
 
 # ── Artefatos de modelo ──────────────────────────────────────────────────────
+*.pkl
 *.pt
 *.pth
 *.bin

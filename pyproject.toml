@@ -74,8 +74,9 @@ Repository = "https://github.com/fmr34/reformulatee.git"
 Documentation = "https://github.com/fmr34/reformulatee#-documentation"
 Issues = "https://github.com/fmr34/reformulatee/issues"
 
-[tool.setuptools]
-packages = ["src"]
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*"]
 
 [tool.black]
 line-length = 100

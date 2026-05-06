@@ -265,7 +265,7 @@ If you use ReformulatEE in research:
 
 - **Issues** — GitHub Issues for bugs / feature requests
 - **Discussions** — GitHub Discussions for Q&A
-- **Email** — https://github.com/fmr34
+- **GitHub** — https://github.com/fmr34
 
 ---
 

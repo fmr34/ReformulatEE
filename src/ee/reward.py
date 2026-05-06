@@ -37,6 +37,23 @@ _EPSILON = float(os.getenv("EPSILON", "0.05"))
 _BELL_CENTER = float(os.getenv("BELL_CENTER", "0.50"))
 _BELL_WIDTH = float(os.getenv("BELL_WIDTH", "0.25"))
 
+# Aliases publicos para testes e uso externo
+BETA1 = _B1
+BETA2 = _B2
+BETA3 = _B3
+ALPHA = _ALPHA
+EPSILON = _EPSILON
+
+
+class _NullIndex:
+    """Corpus index stub para testes — retorna scores zero sem precisar de corpus."""
+
+    def search(self, query: str, top_k: int = 10):  # noqa: ARG002
+        return []
+
+    def __len__(self):
+        return 0
+
 
 @dataclass
 class EEResult:

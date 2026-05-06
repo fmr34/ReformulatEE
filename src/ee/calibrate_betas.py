@@ -37,7 +37,8 @@ from itertools import product
 from pathlib import Path
 
 import numpy as np
-from dotenv import load_dotenv, set_key
+from dotenv import load_dotenv
+from dotenv import set_key
 from tqdm import tqdm
 
 load_dotenv(override=True)
@@ -136,7 +137,7 @@ def compute_and_cache_scores(pairs: list[dict]) -> dict[str, dict]:
     index = build_index(corpus_dir)
 
     # Computa componentes
-    pr(f"  Computando resp + tract (Claude Haiku)...")
+    pr("  Computando resp + tract (Claude Haiku)...")
     erros = 0
     for q in tqdm(pendentes, desc="  Cache scores"):
         try:
@@ -214,7 +215,7 @@ def grid_search(
     tract_bad  = np.array([cache.get(p["q_bad"],  {}).get("tract", 0.0) for p in pairs])
     tract_good = np.array([cache.get(p["q_good"], {}).get("tract", 0.0) for p in pairs])
     dists = np.array(distances)
-    nt_bad_dist = np.zeros(len(pairs))  # dist(q_bad, q_bad) = 0 sempre
+    # nt_bad_dist = np.zeros(len(pairs))  # dist(q_bad, q_bad) = 0 sempre (reservado)
 
     results = []
     GRID_PATH.parent.mkdir(parents=True, exist_ok=True)
@@ -293,7 +294,7 @@ def calibrar() -> None:
     top5 = results[:5]
 
     pr(f"\n{'='*60}")
-    pr(f"  MELHOR CONFIGURACAO:")
+    pr("  MELHOR CONFIGURACAO:")
     pr(f"    beta1 (Respondibilidade) : {best['beta1']:.2f}")
     pr(f"    beta2 (Tratabilidade)    : {best['beta2']:.2f}")
     pr(f"    beta3 (Nao-trivialidade) : {best['beta3']:.2f}")
@@ -306,7 +307,7 @@ def calibrar() -> None:
     gate_ok = best["success_rate"] >= SUCCESS_GATE
     pr(f"\n  GATE: {'PASSOU' if gate_ok else 'FALHOU'}")
 
-    pr(f"\n  Top 5 configuracoes:")
+    pr("\n  Top 5 configuracoes:")
     pr(f"  {'b1':>5} {'b2':>5} {'b3':>5} {'center':>7} {'width':>6} {'eps':>5} {'succ':>7} {'margin':>8}")
     for r in top5:
         pr(f"  {r['beta1']:>5.2f} {r['beta2']:>5.2f} {r['beta3']:>5.2f} "
@@ -325,7 +326,7 @@ def calibrar() -> None:
         set_key(str(ENV_PATH), "EPSILON",      str(best["epsilon"]))
         set_key(str(ENV_PATH), "BELL_CENTER",  str(best["bell_center"]))
         set_key(str(ENV_PATH), "BELL_WIDTH",   str(best["bell_width"]))
-        pr(f"  .env atualizado com novos betas.")
+        pr("  .env atualizado com novos betas.")
     pr(f"{'='*60}")
 
     # Distribuicao de margens com a melhor config
@@ -354,7 +355,7 @@ def _print_margin_distribution(
             falhas.append((p["q_bad"], p["q_good"], margin, ee_bad, ee_good))
 
     margins_arr = np.array(margins)
-    pr(f"\n  Distribuicao de margens EE(q_good) - EE(q_bad):")
+    pr("\n  Distribuicao de margens EE(q_good) - EE(q_bad):")
     pr(f"    Media  : {margins_arr.mean():+.4f}")
     pr(f"    Mediana: {np.median(margins_arr):+.4f}")
     pr(f"    P25    : {np.percentile(margins_arr, 25):+.4f}")

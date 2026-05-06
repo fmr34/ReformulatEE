@@ -99,8 +99,6 @@ extend-exclude = '''
 [tool.ruff]
 line-length = 100
 target-version = "py39"
-select = ["E", "F", "I"]
-ignore = ["E501"]  # line too long (black handles this)
 exclude = [
     ".git",
     "__pycache__",
@@ -111,7 +109,15 @@ exclude = [
     "notebooks",
 ]
 
-[tool.ruff.isort]
+[tool.ruff.lint]
+select = ["E", "F", "I"]
+ignore = [
+    "E501",   # line too long (black handles this)
+    "E741",   # ambiguous variable name (l, O, I) — common in ML loops
+    "E402",   # module level import not at top — intentional after load_dotenv()
+]
+
+[tool.ruff.lint.isort]
 known-first-party = ["src"]
 force-single-line = true
 

@@ -12,11 +12,10 @@ import hashlib
 import json
 import os
 import sqlite3
-from datetime import datetime, timezone
+from datetime import datetime
+from datetime import timezone
 
-_DB = os.path.normpath(
-    os.path.join(os.path.dirname(__file__), '..', '..', 'data', 'historico.db')
-)
+_DB = os.path.normpath(os.path.join(os.path.dirname(__file__), "..", "..", "data", "historico.db"))
 
 
 def _conn() -> sqlite3.Connection:
@@ -56,6 +55,7 @@ def init_db() -> None:
 # Histórico
 # ---------------------------------------------------------------------------
 
+
 def salvar(
     idioma: str,
     pergunta_orig: str,
@@ -70,23 +70,26 @@ def salvar(
     """Persiste um resultado. Retorna o ID do registro inserido."""
     try:
         with _conn() as c:
-            cur = c.execute("""
+            cur = c.execute(
+                """
                 INSERT INTO historico
                   (ts, idioma, pergunta_orig, pergunta_en, candidatos,
                    melhor, melhor_pt, ee_antes, ee_depois, stage1_pass)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            """, (
-                datetime.now(timezone.utc).isoformat(),
-                idioma,
-                pergunta_orig,
-                pergunta_en,
-                json.dumps(candidatos, ensure_ascii=False),
-                melhor,
-                melhor_pt,
-                float(ee_antes),
-                float(ee_depois),
-                int(stage1_pass),
-            ))
+            """,
+                (
+                    datetime.now(timezone.utc).isoformat(),
+                    idioma,
+                    pergunta_orig,
+                    pergunta_en,
+                    json.dumps(candidatos, ensure_ascii=False),
+                    melhor,
+                    melhor_pt,
+                    float(ee_antes),
+                    float(ee_depois),
+                    int(stage1_pass),
+                ),
+            )
             return cur.lastrowid
     except Exception as e:
         print(f"[historico] Erro ao salvar: {e}")
@@ -97,10 +100,7 @@ def registrar_feedback(record_id: int, valor: int) -> None:
     """Registra feedback do usuário: valor = 1 (👍) ou -1 (👎)."""
     try:
         with _conn() as c:
-            c.execute(
-                "UPDATE historico SET feedback = ? WHERE id = ?",
-                (valor, record_id)
-            )
+            c.execute("UPDATE historico SET feedback = ? WHERE id = ?", (valor, record_id))
     except Exception as e:
         print(f"[historico] Erro ao salvar feedback: {e}")
 
@@ -109,12 +109,15 @@ def ultimas(n: int = 8) -> list[list[str]]:
     """Retorna as últimas n perguntas como [[pergunta_orig, idioma], ...]."""
     try:
         with _conn() as c:
-            rows = c.execute("""
+            rows = c.execute(
+                """
                 SELECT pergunta_orig, idioma
                 FROM historico
                 ORDER BY id DESC
                 LIMIT ?
-            """, (n,)).fetchall()
+            """,
+                (n,),
+            ).fetchall()
         return [list(r) for r in rows]
     except Exception:
         return []
@@ -131,13 +134,24 @@ def todas() -> list[dict]:
                 FROM historico
                 ORDER BY id DESC
             """).fetchall()
-        cols = ['id', 'ts', 'idioma', 'pergunta_orig', 'pergunta_en',
-                'candidatos', 'melhor', 'melhor_pt',
-                'ee_antes', 'ee_depois', 'stage1_pass', 'feedback']
+        cols = [
+            "id",
+            "ts",
+            "idioma",
+            "pergunta_orig",
+            "pergunta_en",
+            "candidatos",
+            "melhor",
+            "melhor_pt",
+            "ee_antes",
+            "ee_depois",
+            "stage1_pass",
+            "feedback",
+        ]
         result = []
         for row in rows:
             d = dict(zip(cols, row))
-            d['candidatos'] = json.loads(d['candidatos'])
+            d["candidatos"] = json.loads(d["candidatos"])
             result.append(d)
         return result
     except Exception:
@@ -147,6 +161,7 @@ def todas() -> list[dict]:
 # ---------------------------------------------------------------------------
 # Cache de Tratabilidade (cross-session)
 # ---------------------------------------------------------------------------
+
 
 def _hash_query(query: str) -> str:
     return hashlib.sha256(query.strip().lower().encode()).hexdigest()
@@ -172,13 +187,17 @@ def set_trat_cache(query: str, resultado: dict) -> None:
     try:
         h = _hash_query(query)
         with _conn() as c:
-            c.execute("""
+            c.execute(
+                """
                 INSERT OR REPLACE INTO cache_tratabilidade (hash, query, resultado, ts)
                 VALUES (?, ?, ?, ?)
-            """, (
-                h, query,
-                json.dumps(resultado, ensure_ascii=False),
-                datetime.now(timezone.utc).isoformat(),
-            ))
+            """,
+                (
+                    h,
+                    query,
+                    json.dumps(resultado, ensure_ascii=False),
+                    datetime.now(timezone.utc).isoformat(),
+                ),
+            )
     except Exception as e:
         print(f"[historico] Erro ao salvar cache tratabilidade: {e}")

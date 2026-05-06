@@ -67,14 +67,18 @@ def fetch_arxiv_candidates(
     cache = output_path.with_suffix(".jsonl")
 
     if cache.exists() and not force_refresh:
-        candidates = [json.loads(l) for l in cache.read_text(encoding="utf-8").splitlines() if l.strip()]
+        candidates = [
+            json.loads(l) for l in cache.read_text(encoding="utf-8").splitlines() if l.strip()
+        ]
         # Se o número de queries cresceu, re-fetch automático para queries ausentes
         cached_queries = {c.get("query", "") for c in candidates}
         new_queries = [q for q in REFORMULATION_QUERIES if q not in cached_queries]
         if not new_queries:
             print(f"Candidatos arXiv carregados do cache: {len(candidates)}")
             return candidates
-        print(f"Cache existente ({len(candidates)} candidatos). {len(new_queries)} queries novas — buscando incrementalmente.")
+        print(
+            f"Cache existente ({len(candidates)} candidatos). {len(new_queries)} queries novas — buscando incrementalmente."
+        )
     else:
         candidates = []
         new_queries = REFORMULATION_QUERIES

@@ -48,7 +48,9 @@ def respondibilidade(query: str, index: CorpusIndex, top_k: int = 10) -> float:
 if __name__ == "__main__":
     import os
     from pathlib import Path
+
     from dotenv import load_dotenv
+
     from src.corpus.fetch import fetch_corpus
     from src.corpus.index import build_index
 

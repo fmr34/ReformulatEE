@@ -27,7 +27,7 @@ class CorpusIndex:
         self.papers = papers
         docs = [_tokenize(p["title"] + " " + p.get("abstract", "")) for p in papers]
         self.bm25 = BM25Okapi(docs)
-        self._embeddings: np.ndarray | None = None   # lazy / carregado externamente
+        self._embeddings: np.ndarray | None = None  # lazy / carregado externamente
 
     # ── Busca BM25 (base) ────────────────────────────────────────────
 
@@ -43,8 +43,9 @@ class CorpusIndex:
 
     # ── Busca híbrida (BM25 + semântica) ────────────────────────────
 
-    def _search_hybrid(self, query: str, top_k: int,
-                       alpha: float = 0.5, bm25_pool: int = 50) -> list[dict]:
+    def _search_hybrid(
+        self, query: str, top_k: int, alpha: float = 0.5, bm25_pool: int = 50
+    ) -> list[dict]:
         """
         Recupera candidatos via BM25 e re-rankeia com similaridade semântica.
         alpha=1.0 → apenas BM25 · alpha=0.0 → apenas semântica
@@ -54,6 +55,7 @@ class CorpusIndex:
             return pool
 
         from src.ee.nao_trivialidade import embed
+
         q_emb = embed(query)
 
         bm25_max = max(r["bm25_score"] for r in pool) or 1.0
@@ -65,8 +67,7 @@ class CorpusIndex:
                 sem = max(sem, 0.0)
             else:
                 sem = 0.0
-            r["hybrid_score"] = (alpha * r["bm25_score"] / bm25_max
-                                 + (1.0 - alpha) * sem)
+            r["hybrid_score"] = alpha * r["bm25_score"] / bm25_max + (1.0 - alpha) * sem
 
         ranked = sorted(pool, key=lambda x: x["hybrid_score"], reverse=True)[:top_k]
         for r in ranked:
@@ -96,14 +97,9 @@ class CorpusIndex:
         """
         from src.ee.nao_trivialidade import embed
 
-        texts = [
-            p.get("title", "") + " " + p.get("abstract", "")[:300]
-            for p in self.papers
-        ]
+        texts = [p.get("title", "") + " " + p.get("abstract", "")[:300] for p in self.papers]
         print(f"  Computando embeddings para {len(texts)} papers...")
-        self._embeddings = np.array(
-            [embed(t) for t in texts], dtype=np.float32
-        )
+        self._embeddings = np.array([embed(t) for t in texts], dtype=np.float32)
         if save_path is not None:
             np.save(str(save_path), self._embeddings)
             print(f"  Índice semântico salvo em: {save_path}")
@@ -123,7 +119,7 @@ class CorpusIndex:
     def load(cls, path: Path) -> "CorpusIndex":
         with open(path, "rb") as f:
             obj = pickle.load(f)
-        if not hasattr(obj, '_embeddings'):
+        if not hasattr(obj, "_embeddings"):
             obj._embeddings = None
         # Tenta carregar índice semântico se existir
         sem_path = Path(str(path).replace(".pkl", "_semantic.npy"))
@@ -135,6 +131,7 @@ class CorpusIndex:
 
 # ── Builder ──────────────────────────────────────────────────────────────────
 
+
 def build_index(corpus_dir: Path) -> CorpusIndex:
     index_path = corpus_dir / "bm25_index.pkl"
 
@@ -144,14 +141,10 @@ def build_index(corpus_dir: Path) -> CorpusIndex:
 
     papers_file = corpus_dir / "papers.jsonl"
     if not papers_file.exists():
-        raise FileNotFoundError(
-            f"Corpus não encontrado em {papers_file}. Rode fetch.py primeiro."
-        )
+        raise FileNotFoundError(f"Corpus não encontrado em {papers_file}. Rode fetch.py primeiro.")
 
     papers = [
-        json.loads(l)
-        for l in papers_file.read_text(encoding="utf-8").splitlines()
-        if l.strip()
+        json.loads(l) for l in papers_file.read_text(encoding="utf-8").splitlines() if l.strip()
     ]
     print(f"Construindo índice BM25 sobre {len(papers)} papers...")
     index = CorpusIndex(papers)
@@ -162,7 +155,9 @@ def build_index(corpus_dir: Path) -> CorpusIndex:
 
 if __name__ == "__main__":
     import os
+
     from dotenv import load_dotenv
+
     load_dotenv()
     corpus_dir = Path(os.getenv("CORPUS_DIR", "data/corpus"))
     idx = build_index(corpus_dir)

@@ -22,7 +22,8 @@ import os
 import re
 import statistics
 import time
-from dataclasses import dataclass, field
+from dataclasses import dataclass
+from dataclasses import field
 from pathlib import Path
 from typing import Protocol
 
@@ -32,19 +33,20 @@ from tqdm import tqdm
 load_dotenv(override=True)
 
 # Pares com variância de magnitude acima deste threshold vão para divergentes
-VAR_THRESHOLD = 0.04   # stdev < 0.2 entre anotadores
-MIN_ANNOTATORS = 2     # mínimo para considerar um par validado
+VAR_THRESHOLD = 0.04  # stdev < 0.2 entre anotadores
+MIN_ANNOTATORS = 2  # mínimo para considerar um par validado
 
 
 # ---------------------------------------------------------------------------
 # Estruturas de dados
 # ---------------------------------------------------------------------------
 
+
 @dataclass
 class Annotation:
     model: str
-    direction: bool      # True = q_good é genuinamente melhor
-    magnitude: float     # 0-1: quanto melhor
+    direction: bool  # True = q_good é genuinamente melhor
+    magnitude: float  # 0-1: quanto melhor
     reasoning: str
     error: str = ""
 
@@ -171,16 +173,17 @@ def _parse_annotation(raw: str, model: str) -> Annotation:
             reasoning=str(data.get("reasoning", "")),
         )
     except Exception as e:
-        return Annotation(model=model, direction=False, magnitude=0.0,
-                          reasoning="", error=str(e))
+        return Annotation(model=model, direction=False, magnitude=0.0, reasoning="", error=str(e))
 
 
 # ---------------------------------------------------------------------------
 # Anotadores
 # ---------------------------------------------------------------------------
 
+
 class Annotator(Protocol):
     name: str
+
     def annotate(self, pair: dict) -> Annotation: ...
 
 
@@ -189,6 +192,7 @@ class ClaudeAnnotator:
 
     def __init__(self) -> None:
         import anthropic
+
         self._client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
 
     def annotate(self, pair: dict) -> Annotation:
@@ -202,8 +206,9 @@ class ClaudeAnnotator:
             )
             return _parse_annotation(msg.content[0].text, self.name)
         except Exception as e:
-            return Annotation(model=self.name, direction=False, magnitude=0.0,
-                              reasoning="", error=str(e))
+            return Annotation(
+                model=self.name, direction=False, magnitude=0.0, reasoning="", error=str(e)
+            )
 
 
 class GroqAnnotator:
@@ -211,6 +216,7 @@ class GroqAnnotator:
 
     def __init__(self) -> None:
         from groq import Groq
+
         self._client = Groq(api_key=os.environ["GROQ_API_KEY"])
 
     def annotate(self, pair: dict) -> Annotation:
@@ -227,8 +233,9 @@ class GroqAnnotator:
             )
             return _parse_annotation(resp.choices[0].message.content, self.name)
         except Exception as e:
-            return Annotation(model=self.name, direction=False, magnitude=0.0,
-                              reasoning="", error=str(e))
+            return Annotation(
+                model=self.name, direction=False, magnitude=0.0, reasoning="", error=str(e)
+            )
 
 
 class OpenAIAnnotator:
@@ -236,6 +243,7 @@ class OpenAIAnnotator:
 
     def __init__(self) -> None:
         from openai import OpenAI
+
         self._client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
 
     def annotate(self, pair: dict) -> Annotation:
@@ -253,8 +261,9 @@ class OpenAIAnnotator:
             )
             return _parse_annotation(resp.choices[0].message.content, self.name)
         except Exception as e:
-            return Annotation(model=self.name, direction=False, magnitude=0.0,
-                              reasoning="", error=str(e))
+            return Annotation(
+                model=self.name, direction=False, magnitude=0.0, reasoning="", error=str(e)
+            )
 
 
 class GeminiAnnotator:
@@ -262,10 +271,12 @@ class GeminiAnnotator:
 
     def __init__(self) -> None:
         from google import genai
+
         self._client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
 
     def annotate(self, pair: dict) -> Annotation:
         from google.genai import types
+
         prompt = _USER_TEMPLATE.format(**pair)
         for attempt in range(4):
             try:
@@ -284,10 +295,16 @@ class GeminiAnnotator:
                     wait = 15 * (attempt + 1)
                     time.sleep(wait)
                     continue
-                return Annotation(model=self.name, direction=False, magnitude=0.0,
-                                  reasoning="", error=str(e))
-        return Annotation(model=self.name, direction=False, magnitude=0.0,
-                          reasoning="", error="max retries exceeded")
+                return Annotation(
+                    model=self.name, direction=False, magnitude=0.0, reasoning="", error=str(e)
+                )
+        return Annotation(
+            model=self.name,
+            direction=False,
+            magnitude=0.0,
+            reasoning="",
+            error="max retries exceeded",
+        )
 
 
 def _build_annotators() -> list:
@@ -295,27 +312,27 @@ def _build_annotators() -> list:
 
     if os.getenv("ANTHROPIC_API_KEY"):
         annotators.append(ClaudeAnnotator())
-        print(f"  [OK] Claude Haiku (Anthropic)")
+        print("  [OK] Claude Haiku (Anthropic)")
     else:
-        print(f"  [--] Claude — ANTHROPIC_API_KEY nao definida")
+        print("  [--] Claude — ANTHROPIC_API_KEY nao definida")
 
     if os.getenv("GROQ_API_KEY"):
         annotators.append(GroqAnnotator())
-        print(f"  [OK] Llama 3.3 70B (Groq)")
+        print("  [OK] Llama 3.3 70B (Groq)")
     else:
-        print(f"  [--] Llama/Groq — GROQ_API_KEY nao definida (recomendado: console.groq.com)")
+        print("  [--] Llama/Groq — GROQ_API_KEY nao definida (recomendado: console.groq.com)")
 
     if os.getenv("GEMINI_API_KEY"):
         annotators.append(GeminiAnnotator())
-        print(f"  [OK] Gemini 1.5 Flash (Google)")
+        print("  [OK] Gemini 1.5 Flash (Google)")
     else:
-        print(f"  [--] Gemini — GEMINI_API_KEY nao definida (gratuito: aistudio.google.com)")
+        print("  [--] Gemini — GEMINI_API_KEY nao definida (gratuito: aistudio.google.com)")
 
     if os.getenv("OPENAI_API_KEY"):
         annotators.append(OpenAIAnnotator())
-        print(f"  [OK] GPT-4o-mini (OpenAI)")
+        print("  [OK] GPT-4o-mini (OpenAI)")
     else:
-        print(f"  [--] GPT — OPENAI_API_KEY nao definida (opcional)")
+        print("  [--] GPT — OPENAI_API_KEY nao definida (opcional)")
 
     return annotators
 
@@ -323,6 +340,7 @@ def _build_annotators() -> list:
 # ---------------------------------------------------------------------------
 # Pipeline principal
 # ---------------------------------------------------------------------------
+
 
 def annotate_pairs(
     input_path: Path,
@@ -332,14 +350,12 @@ def annotate_pairs(
 ) -> tuple[list[dict], list[dict]]:
 
     pairs_raw = [
-        json.loads(l)
-        for l in input_path.read_text(encoding="utf-8").splitlines()
-        if l.strip()
+        json.loads(l) for l in input_path.read_text(encoding="utf-8").splitlines() if l.strip()
     ]
 
-    print(f"\n=== Layer 2 — Multi-annotator ===")
+    print("\n=== Layer 2 — Multi-annotator ===")
     print(f"Pares de entrada: {len(pairs_raw)}")
-    print(f"\nAnotadores ativos:")
+    print("\nAnotadores ativos:")
     annotators = _build_annotators()
 
     if len(annotators) < MIN_ANNOTATORS:
@@ -362,8 +378,10 @@ def annotate_pairs(
                     bucket.append(rec)
 
     if done_ids:
-        print(f"\nRetomando: {len(done_ids)} pares ja anotados "
-              f"({len(agreed)} concordantes, {len(divergent)} divergentes)")
+        print(
+            f"\nRetomando: {len(done_ids)} pares ja anotados "
+            f"({len(agreed)} concordantes, {len(divergent)} divergentes)"
+        )
 
     pending = [p for p in pairs_raw if p.get("source_id", "") not in done_ids]
     print(f"Pares pendentes: {len(pending)}\n")
@@ -416,24 +434,28 @@ def print_summary(agreed: list[dict], divergent: list[dict]) -> None:
         mags = [p["magnitude_mean"] for p in agreed]
         print(f"  Magnitude media:     {statistics.mean(mags):.3f}")
         from collections import Counter
+
         sources = Counter(p["source"] for p in agreed)
-        print(f"\n  Por fonte (concordantes):")
+        print("\n  Por fonte (concordantes):")
         for s, n in sources.most_common():
             print(f"    {s}: {n}")
 
     # Motivos de divergência
     if divergent:
         no_dir = sum(1 for p in divergent if not p["agreement_direction"])
-        hi_var = sum(1 for p in divergent if p["agreement_direction"]
-                     and p["magnitude_variance"] > VAR_THRESHOLD)
-        print(f"\n  Motivo divergencia:")
+        hi_var = sum(
+            1
+            for p in divergent
+            if p["agreement_direction"] and p["magnitude_variance"] > VAR_THRESHOLD
+        )
+        print("\n  Motivo divergencia:")
         print(f"    Direcao discordante:  {no_dir}")
         print(f"    Variancia alta:       {hi_var}")
     print(f"{'='*55}")
 
 
 if __name__ == "__main__":
-    output_path   = Path("data/pairs/pairs_layer2.jsonl")
+    output_path = Path("data/pairs/pairs_layer2.jsonl")
     divergent_path = Path("data/pairs/pairs_layer2_divergent.jsonl")
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
@@ -447,7 +469,7 @@ if __name__ == "__main__":
     )
     print_summary(agreed, divergent)
 
-    print(f"\n=== Amostra concordantes ===")
+    print("\n=== Amostra concordantes ===")
     for p in agreed[:3]:
         models = [a["model"].split("-")[0] for a in p["annotations"]]
         mags = [a["magnitude"] for a in p["annotations"]]

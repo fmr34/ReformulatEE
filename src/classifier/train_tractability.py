@@ -20,17 +20,18 @@ import io
 import os
 import sys
 
-sys.path.insert(0, os.path.normpath(os.path.join(os.path.dirname(__file__), '..', '..')))
+sys.path.insert(0, os.path.normpath(os.path.join(os.path.dirname(__file__), "..", "..")))
 
 # Força UTF-8 no stdout do Windows
-if sys.stdout.encoding and sys.stdout.encoding.lower() != 'utf-8':
-    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
 
 
 def _get_scores_from_cache(questions: list[str]) -> dict[str, float]:
     """Puxa scores já calculados do cache SQLite (gratuito)."""
     try:
         from src.db.historico import get_trat_cache
+
         result = {}
         for q in questions:
             cached = get_trat_cache(q)
@@ -44,6 +45,7 @@ def _get_scores_from_cache(questions: list[str]) -> dict[str, float]:
 def _get_scores_from_api(questions: list[str]) -> dict[str, float]:
     """Gera scores via Claude API — usa cache automaticamente."""
     from src.ee.tratabilidade import tratabilidade
+
     result = {}
     for i, q in enumerate(questions, 1):
         print(f"  [{i:3d}/{len(questions)}] {q[:70]}")
@@ -54,18 +56,16 @@ def _get_scores_from_api(questions: list[str]) -> dict[str, float]:
 
 def _evaluate(questions: list[str], targets: list[float]) -> None:
     """Avalia o modelo treinado contra os targets."""
-    from src.classifier.tractability_local import predict_local
     import numpy as np
 
-    preds  = [predict_local(q)["prob_tractable"] for q in questions]
+    from src.classifier.tractability_local import predict_local
+
+    preds = [predict_local(q)["prob_tractable"] for q in questions]
     errors = [abs(p - t) for p, t in zip(preds, targets)]
-    mae    = np.mean(errors)
+    mae = np.mean(errors)
 
     # Acurácia binária (threshold 0.4)
-    correct = sum(
-        (p >= 0.4) == (t >= 0.4)
-        for p, t in zip(preds, targets)
-    )
+    correct = sum((p >= 0.4) == (t >= 0.4) for p, t in zip(preds, targets))
     acc = correct / len(questions)
 
     print(f"\n  Avaliação sobre {len(questions)} exemplos:")
@@ -81,19 +81,21 @@ def _evaluate(questions: list[str], targets: list[float]) -> None:
 
 
 def main(use_api: bool = False, only_eval: bool = False) -> None:
-    from src.eval.curated import get_curated
     from src.classifier.tractability_local import is_trained
+    from src.eval.curated import get_curated
 
     print("=" * 65)
     print("  Treino — Classificador Local de Tratabilidade")
     print("=" * 65)
 
-    curated   = get_curated()
-    questions = [q.text  for q in curated]
-    labels    = [q.label for q in curated]
+    curated = get_curated()
+    questions = [q.text for q in curated]
+    labels = [q.label for q in curated]
 
-    print(f"\n  {len(curated)} questões carregadas  "
-          f"({sum(labels)} alta EE / {len(labels)-sum(labels)} baixa EE)")
+    print(
+        f"\n  {len(curated)} questões carregadas  "
+        f"({sum(labels)} alta EE / {len(labels)-sum(labels)} baixa EE)"
+    )
 
     # ── Modo avaliação ──────────────────────────────────────────────
     if only_eval:
@@ -117,8 +119,7 @@ def main(use_api: bool = False, only_eval: bool = False) -> None:
             cached.update(api_scores)
 
         target_scores = [
-            cached.get(q, 0.05 if labels[i] == 0 else 0.80)
-            for i, q in enumerate(questions)
+            cached.get(q, 0.05 if labels[i] == 0 else 0.80) for i, q in enumerate(questions)
         ]
         print(f"  {len(cached)}/{len(questions)} scores obtidos.")
     else:
@@ -129,6 +130,7 @@ def main(use_api: bool = False, only_eval: bool = False) -> None:
     # ── Treina ──────────────────────────────────────────────────────
     print()
     from src.classifier.tractability_local import train_and_save
+
     metrics = train_and_save(questions, target_scores, alpha=50.0)
 
     # ── Resultados ──────────────────────────────────────────────────
@@ -136,7 +138,7 @@ def main(use_api: bool = False, only_eval: bool = False) -> None:
     print(f"  Exemplos     : {metrics['n_train']}")
     print(f"  R²           : {metrics['r2']:.4f}")
     print(f"  RMSE         : {metrics['rmse']:.4f}")
-    if metrics['cv_rmse_mean'] is not None:
+    if metrics["cv_rmse_mean"] is not None:
         print(f"  RMSE CV 5-fold: {metrics['cv_rmse_mean']:.4f} ± {metrics['cv_rmse_std']:.4f}")
     print(f"  Modelo salvo : {metrics['model_path']}")
     print("  ───────────────────────────────────────────────────────")
@@ -144,14 +146,15 @@ def main(use_api: bool = False, only_eval: bool = False) -> None:
     # ── Teste rápido ────────────────────────────────────────────────
     print("\n  Teste rápido (4 questões):")
     from src.classifier.tractability_local import predict_local
+
     test_cases = [
-        ("What are the molecular mechanisms of CRISPR-Cas9 DNA repair?",  "→ ALTO"),
-        ("What is the essence of life?",                                   "→ BAIXO"),
-        ("How does transformer architecture scaling affect performance?",  "→ ALTO"),
-        ("What is the true nature of consciousness?",                      "→ BAIXO"),
+        ("What are the molecular mechanisms of CRISPR-Cas9 DNA repair?", "→ ALTO"),
+        ("What is the essence of life?", "→ BAIXO"),
+        ("How does transformer architecture scaling affect performance?", "→ ALTO"),
+        ("What is the true nature of consciousness?", "→ BAIXO"),
     ]
     for q, expected in test_cases:
-        r     = predict_local(q)
+        r = predict_local(q)
         score = r["prob_tractable"]
         label = "✅" if (score >= 0.4) == (expected == "→ ALTO") else "⚠️"
         print(f"  {label} [{score:.3f}] {expected} | {q[:60]}")
@@ -166,6 +169,6 @@ def main(use_api: bool = False, only_eval: bool = False) -> None:
 if __name__ == "__main__":
     args = sys.argv[1:]
     main(
-        use_api   = "--api"  in args,
-        only_eval = "--eval" in args,
+        use_api="--api" in args,
+        only_eval="--eval" in args,
     )

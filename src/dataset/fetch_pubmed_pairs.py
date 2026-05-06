@@ -19,7 +19,7 @@ import requests
 from tqdm import tqdm
 
 _ESEARCH = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi"
-_EFETCH  = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi"
+_EFETCH = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi"
 _ESUMMARY = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi"
 
 # Queries PubMed — mix de frases exatas e termos livres para maximizar recall
@@ -36,16 +36,16 @@ PUBMED_QUERIES = [
     '"more tractable" question research methodology',
     '"paradigm shift" question replaced research',
     # Termos livres — maior recall, menor precisão (compensado pelo Claude extractor)
-    'research question refinement systematic review methodology',
-    'conceptual clarification question reformulation epistemology',
-    'wrong question right question scientific progress',
-    'question reformulation productivity epistemics',
-    'reframing scientific question tractable operationalization',
+    "research question refinement systematic review methodology",
+    "conceptual clarification question reformulation epistemology",
+    "wrong question right question scientific progress",
+    "question reformulation productivity epistemics",
+    "reframing scientific question tractable operationalization",
 ]
 
 MAX_PER_QUERY = 80
 _BATCH_SIZE = 20  # efetch por vez
-_DELAY = 0.35     # <3 req/s sem key; use NCBI_API_KEY para 10 req/s
+_DELAY = 0.35  # <3 req/s sem key; use NCBI_API_KEY para 10 req/s
 
 
 def _api_key_param() -> dict:
@@ -83,6 +83,7 @@ def _fetch_abstracts(pmids: list[str]) -> list[dict]:
     xml = r.text
 
     import re
+
     articles = []
     # Parse simples via regex — evita dependência de lxml/xml.etree
     for block in re.findall(r"<PubmedArticle>(.*?)</PubmedArticle>", xml, re.DOTALL):
@@ -91,20 +92,22 @@ def _fetch_abstracts(pmids: list[str]) -> list[dict]:
         abstract_m = re.search(r"<AbstractText[^>]*>(.*?)</AbstractText>", block, re.DOTALL)
         year_m = re.search(r"<PubDate>.*?<Year>(\d{4})</Year>", block, re.DOTALL)
 
-        pmid    = pmid_m.group(1) if pmid_m else ""
-        title   = re.sub(r"<[^>]+>", "", title_m.group(1)) if title_m else ""
+        pmid = pmid_m.group(1) if pmid_m else ""
+        title = re.sub(r"<[^>]+>", "", title_m.group(1)) if title_m else ""
         abstract = re.sub(r"<[^>]+>", "", abstract_m.group(1)) if abstract_m else ""
-        year    = int(year_m.group(1)) if year_m else 0
+        year = int(year_m.group(1)) if year_m else 0
 
         if pmid and abstract:
-            articles.append({
-                "id": f"pubmed_{pmid}",
-                "title": title.replace("\n", " ").strip(),
-                "abstract": abstract.replace("\n", " ").strip(),
-                "year": year,
-                "categories": ["biomedical"],
-                "source": "pubmed",
-            })
+            articles.append(
+                {
+                    "id": f"pubmed_{pmid}",
+                    "title": title.replace("\n", " ").strip(),
+                    "abstract": abstract.replace("\n", " ").strip(),
+                    "year": year,
+                    "categories": ["biomedical"],
+                    "source": "pubmed",
+                }
+            )
     return articles
 
 
@@ -112,13 +115,17 @@ def fetch_pubmed_candidates(output_path: Path, max_per_query: int = MAX_PER_QUER
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
     if output_path.exists():
-        candidates = [json.loads(l) for l in output_path.read_text(encoding="utf-8").splitlines() if l.strip()]
+        candidates = [
+            json.loads(l) for l in output_path.read_text(encoding="utf-8").splitlines() if l.strip()
+        ]
         cached_queries = {c.get("query", "") for c in candidates}
         pending = [q for q in PUBMED_QUERIES if q not in cached_queries]
         if not pending:
             print(f"Candidatos PubMed carregados do cache: {len(candidates)}")
             return candidates
-        print(f"Cache parcial PubMed ({len(candidates)} candidatos). {len(pending)} queries pendentes.")
+        print(
+            f"Cache parcial PubMed ({len(candidates)} candidatos). {len(pending)} queries pendentes."
+        )
     else:
         candidates = []
         pending = PUBMED_QUERIES
@@ -137,7 +144,7 @@ def fetch_pubmed_candidates(output_path: Path, max_per_query: int = MAX_PER_QUER
 
         # Processa em batches para não estourar a URL
         for i in range(0, len(pmids), _BATCH_SIZE):
-            batch = [p for p in pmids[i:i + _BATCH_SIZE] if f"pubmed_{p}" not in seen_ids]
+            batch = [p for p in pmids[i : i + _BATCH_SIZE] if f"pubmed_{p}" not in seen_ids]
             if not batch:
                 continue
             try:
@@ -168,6 +175,7 @@ def fetch_pubmed_candidates(output_path: Path, max_per_query: int = MAX_PER_QUER
 
 if __name__ == "__main__":
     from dotenv import load_dotenv
+
     load_dotenv(override=True)
     out = Path("data/pairs/pubmed_candidates.jsonl")
     candidates = fetch_pubmed_candidates(out)

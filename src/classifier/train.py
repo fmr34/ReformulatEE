@@ -19,7 +19,6 @@ Uso:
 from __future__ import annotations
 
 import json
-import sys
 import time
 from collections import Counter
 from pathlib import Path
@@ -29,32 +28,33 @@ import numpy as np
 from sklearn.compose import ColumnTransformer
 from sklearn.decomposition import PCA
 from sklearn.ensemble import HistGradientBoostingClassifier
-from sklearn.metrics import cohen_kappa_score, classification_report
-from sklearn.model_selection import StratifiedKFold, cross_val_predict
+from sklearn.metrics import classification_report
+from sklearn.metrics import cohen_kappa_score
+from sklearn.model_selection import StratifiedKFold
+from sklearn.model_selection import cross_val_predict
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 
-from src.classifier.paradigm_classifier import (
-    ParadigmClassifier,
-    N_STRUCTURAL_TOTAL,
-)
+from src.classifier.paradigm_classifier import N_STRUCTURAL_TOTAL
+from src.classifier.paradigm_classifier import ParadigmClassifier
 
 # ---------------------------------------------------------------------------
 # Caminhos e parametros
 # ---------------------------------------------------------------------------
 
-LAYER2_PATH       = Path("data/pairs/pairs_layer2.jsonl")
-PROBES_PATH       = Path("data/pairs/adversarial_probes.jsonl")
-CROSSDOMAIN_PATH  = Path("data/pairs/adversarial_probes_crossdomain.jsonl")
-MODEL_PATH        = Path("data/models/paradigm_classifier.pkl")
+LAYER2_PATH = Path("data/pairs/pairs_layer2.jsonl")
+PROBES_PATH = Path("data/pairs/adversarial_probes.jsonl")
+CROSSDOMAIN_PATH = Path("data/pairs/adversarial_probes_crossdomain.jsonl")
+MODEL_PATH = Path("data/models/paradigm_classifier.pkl")
 
 ACCURACY_GATE = 0.85
-KAPPA_GATE    = 0.70
-PCA_DIMS      = 40   # dimensoes para compressao de cada bloco de embedding
+KAPPA_GATE = 0.70
+PCA_DIMS = 40  # dimensoes para compressao de cada bloco de embedding
 
 # ---------------------------------------------------------------------------
 # I/O
 # ---------------------------------------------------------------------------
+
 
 def pr(text: str) -> None:
     """Print seguro para terminais Windows (cp1252)."""
@@ -97,6 +97,7 @@ def carregar_pares() -> tuple[list[tuple[str, str]], list[int], list[str]]:
 # Construcao do pipeline sklearn
 # ---------------------------------------------------------------------------
 
+
 def build_pipeline(n_total_features: int, pca_dims: int) -> Pipeline:
     """
     Layout de colunas esperado (N_FEATURES_RAW = 1185):
@@ -108,41 +109,63 @@ def build_pipeline(n_total_features: int, pca_dims: int) -> Pipeline:
 
     Features apos PCA: N_STRUCTURAL_TOTAL + 1 (cross_enc) + pca_dims*3
     """
-    from src.classifier.paradigm_classifier import N_STRUCTURAL_TOTAL, EMB_DIM, N_CROSS_ENC
-    s        = N_STRUCTURAL_TOTAL
+    from src.classifier.paradigm_classifier import EMB_DIM
+    from src.classifier.paradigm_classifier import N_STRUCTURAL_TOTAL
+
+    s = N_STRUCTURAL_TOTAL
     emb_size = EMB_DIM
-    ce_idx   = s + 3 * emb_size  # indice 1184
+    ce_idx = s + 3 * emb_size  # indice 1184
 
     # Estruturais + cross_encoder no mesmo bloco (ambos passam por StandardScaler)
-    struct_idx   = list(range(s)) + [ce_idx]
-    emb_bad_idx  = list(range(s,             s +   emb_size))
-    emb_cand_idx = list(range(s + emb_size,  s + 2*emb_size))
-    emb_diff_idx = list(range(s + 2*emb_size, s + 3*emb_size))
+    struct_idx = list(range(s)) + [ce_idx]
+    emb_bad_idx = list(range(s, s + emb_size))
+    emb_cand_idx = list(range(s + emb_size, s + 2 * emb_size))
+    emb_diff_idx = list(range(s + 2 * emb_size, s + 3 * emb_size))
 
-    preprocessor = ColumnTransformer([
-        ("struct",   StandardScaler(),  struct_idx),
-        ("emb_bad",  Pipeline([("sc", StandardScaler()), ("pca", PCA(pca_dims, random_state=42))]), emb_bad_idx),
-        ("emb_cand", Pipeline([("sc", StandardScaler()), ("pca", PCA(pca_dims, random_state=42))]), emb_cand_idx),
-        ("emb_diff", Pipeline([("sc", StandardScaler()), ("pca", PCA(pca_dims, random_state=42))]), emb_diff_idx),
-    ])
+    preprocessor = ColumnTransformer(
+        [
+            ("struct", StandardScaler(), struct_idx),
+            (
+                "emb_bad",
+                Pipeline([("sc", StandardScaler()), ("pca", PCA(pca_dims, random_state=42))]),
+                emb_bad_idx,
+            ),
+            (
+                "emb_cand",
+                Pipeline([("sc", StandardScaler()), ("pca", PCA(pca_dims, random_state=42))]),
+                emb_cand_idx,
+            ),
+            (
+                "emb_diff",
+                Pipeline([("sc", StandardScaler()), ("pca", PCA(pca_dims, random_state=42))]),
+                emb_diff_idx,
+            ),
+        ]
+    )
 
-    return Pipeline([
-        ("prep", preprocessor),
-        ("clf", HistGradientBoostingClassifier(
-            max_iter=400,
-            learning_rate=0.05,
-            max_depth=5,
-            min_samples_leaf=5,
-            l2_regularization=0.1,
-            class_weight="balanced",   # corrige desbalanceamento 163 pos / 410 neg
-            random_state=42,
-        )),
-    ])
+    return Pipeline(
+        [
+            ("prep", preprocessor),
+            (
+                "clf",
+                HistGradientBoostingClassifier(
+                    max_iter=400,
+                    learning_rate=0.05,
+                    max_depth=5,
+                    min_samples_leaf=5,
+                    l2_regularization=0.1,
+                    class_weight="balanced",  # corrige desbalanceamento 163 pos / 410 neg
+                    random_state=42,
+                ),
+            ),
+        ]
+    )
 
 
 # ---------------------------------------------------------------------------
 # Treino principal
 # ---------------------------------------------------------------------------
+
 
 def treinar() -> None:
     pr("=" * 55)
@@ -172,7 +195,9 @@ def treinar() -> None:
     X = clf_obj.build_features(pares)
     elapsed = time.time() - t0
 
-    from src.classifier.paradigm_classifier import N_FEATURES_RAW, N_CROSS_ENC
+    from src.classifier.paradigm_classifier import N_CROSS_ENC
+    from src.classifier.paradigm_classifier import N_FEATURES_RAW
+
     pr(f"  Shape de X : {X.shape}  (esperado {N_FEATURES_RAW})")
     pr(f"  Estruturais: {N_STRUCTURAL_TOTAL} | Emb 3x384 | Cross-enc: {N_CROSS_ENC}")
     pr(f"  PCA: 3x 384 -> {PCA_DIMS} | Features pos-PCA: {N_STRUCTURAL_TOTAL + 1 + PCA_DIMS * 3}")
@@ -191,7 +216,7 @@ def treinar() -> None:
     cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
     y_pred = cross_val_predict(pipeline, X, y, cv=cv, n_jobs=1)
 
-    acc_global   = float((y_pred == y).mean())
+    acc_global = float((y_pred == y).mean())
     kappa_global = float(cohen_kappa_score(y, y_pred))
 
     pr(f"\n  {'Metrica':<25} {'Global':>8}")
@@ -200,7 +225,7 @@ def treinar() -> None:
     pr(f"  {'Cohen kappa':<25} {kappa_global:>8.4f}")
 
     # Por tipo de probe
-    pr(f"\n  Accuracy por tipo de probe (negativos):")
+    pr("\n  Accuracy por tipo de probe (negativos):")
     for tipo in ["parafrase", "desconectada", "desconectada_cross", "especulativa"]:
         idxs = [i for i, pt in enumerate(probe_types) if pt == tipo]
         if not idxs:
@@ -209,21 +234,22 @@ def treinar() -> None:
         pr(f"    {tipo:<15}: {acc_t:.4f}  ({len(idxs)} amostras)")
 
     # Subconjunto adversarial (probes + positivos)
-    idx_adv  = [i for i, pt in enumerate(probe_types) if pt != ""]
-    idx_pos  = [i for i, l in enumerate(labels)       if l == 1]
+    idx_adv = [i for i, pt in enumerate(probe_types) if pt != ""]
+    idx_pos = [i for i, l in enumerate(labels) if l == 1]
     idx_eval = sorted(set(idx_adv + idx_pos))
-    y_eval   = y[idx_eval]
-    yp_eval  = y_pred[idx_eval]
-    acc_adv   = float((yp_eval == y_eval).mean())
+    y_eval = y[idx_eval]
+    yp_eval = y_pred[idx_eval]
+    acc_adv = float((yp_eval == y_eval).mean())
     kappa_adv = float(cohen_kappa_score(y_eval, yp_eval))
 
     pr(f"\n  Subconjunto adversarial ({len(idx_eval)} amostras):")
     pr(f"    Accuracy : {acc_adv:.4f}  (gate >{ACCURACY_GATE})")
     pr(f"    Kappa    : {kappa_adv:.4f}  (gate >{KAPPA_GATE})")
 
-    pr(f"\n  Relatorio completo:")
+    pr("\n  Relatorio completo:")
     report = classification_report(
-        y, y_pred,
+        y,
+        y_pred,
         target_names=["intratavel/fake", "melhoria_genuina"],
         digits=4,
     )
@@ -236,14 +262,16 @@ def treinar() -> None:
 
     pr("=" * 55)
     if gate_ok:
-        pr(f"  GATE PASSOU  (acc={acc_adv:.3f} > {ACCURACY_GATE}, "
-           f"kappa={kappa_adv:.3f} > {KAPPA_GATE})")
+        pr(
+            f"  GATE PASSOU  (acc={acc_adv:.3f} > {ACCURACY_GATE}, "
+            f"kappa={kappa_adv:.3f} > {KAPPA_GATE})"
+        )
     else:
         pr(f"  GATE FALHOU  (acc={acc_adv:.3f}, kappa={kappa_adv:.3f})")
         pr("     -> modelo NAO salvo. Revisar features ou dataset.")
         return
 
-    pr(f"\n  Treinando modelo final em todos os dados...")
+    pr("\n  Treinando modelo final em todos os dados...")
     pipeline.fit(X, y)
 
     MODEL_PATH.parent.mkdir(parents=True, exist_ok=True)
@@ -253,22 +281,20 @@ def treinar() -> None:
 
     # Metadados
     meta = {
-        "acc_global":        round(acc_global, 6),
-        "kappa_global":      round(kappa_global, 6),
-        "acc_adversarial":   round(acc_adv, 6),
+        "acc_global": round(acc_global, 6),
+        "kappa_global": round(kappa_global, 6),
+        "acc_adversarial": round(acc_adv, 6),
         "kappa_adversarial": round(kappa_adv, 6),
-        "n_train":           len(pares),
-        "n_positivos":       int(contagem[1]),
-        "n_negativos":       int(contagem[0]),
-        "n_features_raw":    int(X.shape[1]),
+        "n_train": len(pares),
+        "n_positivos": int(contagem[1]),
+        "n_negativos": int(contagem[0]),
+        "n_features_raw": int(X.shape[1]),
         "n_features_pos_pca": int(N_STRUCTURAL_TOTAL + 1 + PCA_DIMS * 3),
-        "gate_passou":       gate_ok,
-        "model_path":        str(MODEL_PATH),
+        "gate_passou": gate_ok,
+        "model_path": str(MODEL_PATH),
     }
     meta_path = MODEL_PATH.with_suffix(".meta.json")
-    meta_path.write_text(
-        json.dumps(meta, ensure_ascii=False, indent=2), encoding="utf-8"
-    )
+    meta_path.write_text(json.dumps(meta, ensure_ascii=False, indent=2), encoding="utf-8")
     pr(f"  Metadados em  : {meta_path}")
 
 

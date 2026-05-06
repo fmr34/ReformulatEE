@@ -178,7 +178,7 @@ if __name__ == "__main__":
 
     pairs = extract_pairs(all_candidates, Path("data/pairs/extracted_pairs.jsonl"))
 
-    print(f"\n=== Amostra de pares extraidos ===")
+    print("\n=== Amostra de pares extraidos ===")
     for p in pairs[:5]:
         print(f"\n  [{p['source']}] [{p['domain']}] conf={p['confidence']:.2f}")
         print(f"  BAD:  {p['q_bad']}")

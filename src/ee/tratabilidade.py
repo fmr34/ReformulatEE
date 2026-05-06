@@ -83,7 +83,9 @@ def tratabilidade(query: str, model: str = "claude-haiku-4-5-20251001") -> dict:
     """
     # 1. Modelo local — caminho preferido quando disponível
     try:
-        from src.classifier.tractability_local import is_trained, predict_local
+        from src.classifier.tractability_local import is_trained
+        from src.classifier.tractability_local import predict_local
+
         if is_trained():
             return predict_local(query)
     except Exception:
@@ -98,7 +100,9 @@ def tratabilidade(query: str, model: str = "claude-haiku-4-5-20251001") -> dict:
 
     # 2. Cache SQLite (cross-session)
     try:
-        from src.db.historico import get_trat_cache, set_trat_cache
+        from src.db.historico import get_trat_cache
+        from src.db.historico import set_trat_cache
+
         cached = get_trat_cache(query)
         if cached:
             with _cache_lock:
@@ -112,11 +116,13 @@ def tratabilidade(query: str, model: str = "claude-haiku-4-5-20251001") -> dict:
     message = client.messages.create(
         model=model,
         max_tokens=256,
-        system=[{
-            "type": "text",
-            "text": _SYSTEM,
-            "cache_control": {"type": "ephemeral"},
-        }],
+        system=[
+            {
+                "type": "text",
+                "text": _SYSTEM,
+                "cache_control": {"type": "ephemeral"},
+            }
+        ],
         messages=[{"role": "user", "content": f"Research question: {query}"}],
     )
     raw = message.content[0].text
@@ -124,7 +130,7 @@ def tratabilidade(query: str, model: str = "claude-haiku-4-5-20251001") -> dict:
 
     # Sanitiza valores
     result["prob_tractable"] = max(0.0, min(1.0, float(result["prob_tractable"])))
-    result["confidence"]     = max(0.0, min(1.0, float(result["confidence"])))
+    result["confidence"] = max(0.0, min(1.0, float(result["confidence"])))
     if result["trajectory"] not in ("rising", "plateau", "declining", "absent"):
         result["trajectory"] = "absent"
 
@@ -133,6 +139,7 @@ def tratabilidade(query: str, model: str = "claude-haiku-4-5-20251001") -> dict:
         _mem_cache[key] = result
     try:
         from src.db.historico import set_trat_cache
+
         set_trat_cache(query, result)
     except Exception:
         pass

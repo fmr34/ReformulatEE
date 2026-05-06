@@ -1,7 +1,6 @@
 """Tests for epistemic effectiveness reward computation."""
 
 import sys
-import os
 from pathlib import Path
 
 # Add parent to path
@@ -15,7 +14,8 @@ class TestEEBasics:
 
     def test_ee_bounds(self):
         """EE scores should be in [0, 1]."""
-        from src.ee.reward import compute_ee, _NullIndex
+        from src.ee.reward import _NullIndex
+        from src.ee.reward import compute_ee
 
         # Use null index for testing (doesn't need corpus)
         null_idx = _NullIndex()
@@ -29,7 +29,11 @@ class TestEEBasics:
 
     def test_ee_components_sum(self):
         """EE should be weighted sum of components."""
-        from src.ee.reward import compute_ee, _NullIndex, BETA1, BETA2, BETA3
+        from src.ee.reward import BETA1
+        from src.ee.reward import BETA2
+        from src.ee.reward import BETA3
+        from src.ee.reward import _NullIndex
+        from src.ee.reward import compute_ee
 
         null_idx = _NullIndex()
         result = compute_ee("Test question", "Test question", null_idx)
@@ -44,7 +48,8 @@ class TestEEBasics:
 
     def test_identical_questions_have_low_proximity(self):
         """Identical questions should have 0 proximity (low reward for triviality)."""
-        from src.ee.reward import compute_ee, _NullIndex
+        from src.ee.reward import _NullIndex
+        from src.ee.reward import compute_ee
 
         null_idx = _NullIndex()
         result = compute_ee("Question", "Question", null_idx)
@@ -54,7 +59,8 @@ class TestEEBasics:
 
     def test_ee_different_prompts(self):
         """Different questions should yield different EE scores."""
-        from src.ee.reward import compute_ee, _NullIndex
+        from src.ee.reward import _NullIndex
+        from src.ee.reward import compute_ee
 
         null_idx = _NullIndex()
 
@@ -74,7 +80,8 @@ class TestStage1Filter:
 
     def test_stage1_pass_condition(self):
         """Stage 1 filter should pass if EE(cand) > EE(bad) + epsilon."""
-        from src.ee.reward import passes_stage1_filter, _EPSILON
+        from src.ee.reward import _EPSILON
+        from src.ee.reward import passes_stage1_filter
 
         ee_bad = 0.50
         ee_cand_pass = ee_bad + _EPSILON + 0.01  # Slightly above threshold
@@ -85,7 +92,8 @@ class TestStage1Filter:
 
     def test_stage1_at_boundary(self):
         """Test exact boundary conditions."""
-        from src.ee.reward import passes_stage1_filter, _EPSILON
+        from src.ee.reward import _EPSILON
+        from src.ee.reward import passes_stage1_filter
 
         ee_bad = 0.50
 

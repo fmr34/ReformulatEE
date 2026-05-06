@@ -136,7 +136,7 @@ def _extract_text_from_html(html: str, max_chars: int = 8000) -> str:
     window = 80
     scored: list[tuple[float, int]] = []
     for i in range(0, len(words) - window, window // 2):
-        chunk = " ".join(words[i:i + window]).lower()
+        chunk = " ".join(words[i : i + window]).lower()
         score = sum(chunk.count(m) for m in _REFORMULATION_MARKERS)
         scored.append((score, i))
 
@@ -148,17 +148,27 @@ def _extract_text_from_html(html: str, max_chars: int = 8000) -> str:
     for _, start in scored[:6]:
         if start not in seen_starts:
             seen_starts.add(start)
-            top_chunks.append(" ".join(words[start:start + window]))
+            top_chunks.append(" ".join(words[start : start + window]))
 
     combined = intro + " ... " + " ... ".join(top_chunks)
     return combined[:max_chars]
 
 
 _REFORMULATION_MARKERS = [
-    "the question is not", "rather than asking", "instead of asking",
-    "replaced by", "superseded", "abandoned", "the right question",
-    "reframe", "reformulat", "more tractable", "better question",
-    "shift from", "no longer ask", "transformed into",
+    "the question is not",
+    "rather than asking",
+    "instead of asking",
+    "replaced by",
+    "superseded",
+    "abandoned",
+    "the right question",
+    "reframe",
+    "reformulat",
+    "more tractable",
+    "better question",
+    "shift from",
+    "no longer ask",
+    "transformed into",
 ]
 
 
@@ -172,13 +182,17 @@ def fetch_sep_candidates(output_path: Path) -> list[dict]:
     cache = output_path.with_suffix(".jsonl")
 
     if cache.exists():
-        candidates = [json.loads(l) for l in cache.read_text(encoding="utf-8").splitlines() if l.strip()]
+        candidates = [
+            json.loads(l) for l in cache.read_text(encoding="utf-8").splitlines() if l.strip()
+        ]
         cached_slugs = {c.get("slug", "") for c in candidates}
         pending = [(slug, label) for slug, label in SEP_ENTRIES if slug not in cached_slugs]
         if not pending:
             print(f"Candidatos SEP carregados do cache: {len(candidates)}")
             return candidates
-        print(f"Cache parcial SEP ({len(candidates)} entradas). {len(pending)} slugs novos/corrigidos — buscando incrementalmente.")
+        print(
+            f"Cache parcial SEP ({len(candidates)} entradas). {len(pending)} slugs novos/corrigidos — buscando incrementalmente."
+        )
     else:
         candidates = []
         pending = SEP_ENTRIES

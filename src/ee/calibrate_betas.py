@@ -47,23 +47,23 @@ load_dotenv(override=True)
 # Caminhos
 # ---------------------------------------------------------------------------
 
-LAYER2_PATH   = Path("data/pairs/pairs_layer2.jsonl")
-CACHE_PATH    = Path("data/calibration/scores_cache.jsonl")
-GRID_PATH     = Path("data/calibration/grid_results.jsonl")
-BEST_PATH     = Path("data/calibration/best_config.json")
-ENV_PATH      = Path(".env")
+LAYER2_PATH = Path("data/pairs/pairs_layer2.jsonl")
+CACHE_PATH = Path("data/calibration/scores_cache.jsonl")
+GRID_PATH = Path("data/calibration/grid_results.jsonl")
+BEST_PATH = Path("data/calibration/best_config.json")
+ENV_PATH = Path(".env")
 
-SUCCESS_GATE  = 0.90
-API_DELAY     = 0.3   # segundos entre chamadas tratabilidade
+SUCCESS_GATE = 0.90
+API_DELAY = 0.3  # segundos entre chamadas tratabilidade
 
 # ---------------------------------------------------------------------------
 # Grid de hiperparametros
 # ---------------------------------------------------------------------------
 
-BETA_STEP     = 0.05
-BELL_CENTERS  = [0.30, 0.35, 0.40, 0.45, 0.50, 0.55, 0.60]
-BELL_WIDTHS   = [0.10, 0.15, 0.20, 0.25, 0.30]
-EPSILONS      = [0.05, 0.10, 0.15, 0.20]
+BETA_STEP = 0.05
+BELL_CENTERS = [0.30, 0.35, 0.40, 0.45, 0.50, 0.55, 0.60]
+BELL_WIDTHS = [0.10, 0.15, 0.20, 0.25, 0.30]
+EPSILONS = [0.05, 0.10, 0.15, 0.20]
 
 
 def _simplex_grid(step: float = BETA_STEP) -> list[tuple[float, float, float]]:
@@ -88,6 +88,7 @@ def pr(text: str) -> None:
 # ---------------------------------------------------------------------------
 # Etapa 1 — Cache de componentes
 # ---------------------------------------------------------------------------
+
 
 def _load_cache() -> dict[str, dict]:
     """Carrega cache existente: {question -> {resp, tract, trajectory, confidence}}."""
@@ -141,12 +142,12 @@ def compute_and_cache_scores(pairs: list[dict]) -> dict[str, dict]:
     erros = 0
     for q in tqdm(pendentes, desc="  Cache scores"):
         try:
-            resp  = respondibilidade(q, index, top_k=10)
+            resp = respondibilidade(q, index, top_k=10)
             tract = tratabilidade(q)
             rec = {
-                "question":   q,
-                "resp":       round(resp, 6),
-                "tract":      round(tract["prob_tractable"] * tract["confidence"], 6),
+                "question": q,
+                "resp": round(resp, 6),
+                "tract": round(tract["prob_tractable"] * tract["confidence"], 6),
                 "trajectory": tract["trajectory"],
                 "confidence": round(tract["confidence"], 4),
             }
@@ -165,19 +166,22 @@ def compute_and_cache_scores(pairs: list[dict]) -> dict[str, dict]:
 # Etapa 1b — Distancias semanticas (nao_trivialidade)
 # ---------------------------------------------------------------------------
 
+
 def compute_pair_distances(pairs: list[dict]) -> list[float]:
     """Cosine distance entre q_good e q_bad para cada par."""
     from sentence_transformers import SentenceTransformer
+
     emb = SentenceTransformer("all-MiniLM-L6-v2")
 
-    q_bads  = [p["q_bad"]  for p in pairs]
+    q_bads = [p["q_bad"] for p in pairs]
     q_goods = [p["q_good"] for p in pairs]
 
     all_texts = q_bads + q_goods
-    all_embs  = emb.encode(all_texts, batch_size=64,
-                            show_progress_bar=False, normalize_embeddings=True)
-    emb_bad  = all_embs[:len(pairs)]
-    emb_good = all_embs[len(pairs):]
+    all_embs = emb.encode(
+        all_texts, batch_size=64, show_progress_bar=False, normalize_embeddings=True
+    )
+    emb_bad = all_embs[: len(pairs)]
+    emb_good = all_embs[len(pairs) :]
 
     # cosine dist = 1 - dot (embeddings normalizados)
     sims = (emb_bad * emb_good).sum(axis=1)
@@ -188,13 +192,14 @@ def compute_pair_distances(pairs: list[dict]) -> list[float]:
 # Etapa 2 — Grid search
 # ---------------------------------------------------------------------------
 
+
 def bell(dist: float, center: float, width: float) -> float:
-    return float(np.exp(-((dist - center) ** 2) / (2 * width ** 2)))
+    return float(np.exp(-((dist - center) ** 2) / (2 * width**2)))
 
 
 def grid_search(
-    pairs:     list[dict],
-    cache:     dict[str, dict],
+    pairs: list[dict],
+    cache: dict[str, dict],
     distances: list[float],
 ) -> list[dict]:
     """
@@ -210,9 +215,9 @@ def grid_search(
     pr(f"  Total combos : {total_combos:,}\n")
 
     # Pre-extrai vetores para velocidade
-    resp_bad  = np.array([cache.get(p["q_bad"],  {}).get("resp",  0.0) for p in pairs])
-    resp_good = np.array([cache.get(p["q_good"], {}).get("resp",  0.0) for p in pairs])
-    tract_bad  = np.array([cache.get(p["q_bad"],  {}).get("tract", 0.0) for p in pairs])
+    resp_bad = np.array([cache.get(p["q_bad"], {}).get("resp", 0.0) for p in pairs])
+    resp_good = np.array([cache.get(p["q_good"], {}).get("resp", 0.0) for p in pairs])
+    tract_bad = np.array([cache.get(p["q_bad"], {}).get("tract", 0.0) for p in pairs])
     tract_good = np.array([cache.get(p["q_good"], {}).get("tract", 0.0) for p in pairs])
     dists = np.array(distances)
     # nt_bad_dist = np.zeros(len(pairs))  # dist(q_bad, q_bad) = 0 sempre (reservado)
@@ -223,24 +228,27 @@ def grid_search(
     with tqdm(total=total_combos, desc="  Grid search", ncols=70) as pbar:
         with GRID_PATH.open("w", encoding="utf-8") as fout:
             for center, width in product(BELL_CENTERS, BELL_WIDTHS):
-                nt_bad  = bell(0.0, center, width)    # constante por (center, width)
+                nt_bad = bell(0.0, center, width)  # constante por (center, width)
                 nt_good = np.array([bell(d, center, width) for d in dists])
 
                 for b1, b2, b3 in beta_grid:
-                    ee_bad  = b1 * resp_bad  + b2 * tract_bad  + b3 * nt_bad
+                    ee_bad = b1 * resp_bad + b2 * tract_bad + b3 * nt_bad
                     ee_good = b1 * resp_good + b2 * tract_good + b3 * nt_good
 
                     for eps in EPSILONS:
-                        margin  = ee_good - ee_bad
+                        margin = ee_good - ee_bad
                         success = (margin > eps).mean()
                         avg_margin = float(margin.mean())
 
                         rec = {
-                            "beta1": b1, "beta2": b2, "beta3": b3,
-                            "bell_center": center, "bell_width": width,
+                            "beta1": b1,
+                            "beta2": b2,
+                            "beta3": b3,
+                            "bell_center": center,
+                            "bell_width": width,
                             "epsilon": eps,
                             "success_rate": round(float(success), 6),
-                            "avg_margin":   round(avg_margin, 6),
+                            "avg_margin": round(avg_margin, 6),
                         }
                         results.append(rec)
                         fout.write(json.dumps(rec) + "\n")
@@ -254,6 +262,7 @@ def grid_search(
 # ---------------------------------------------------------------------------
 # Principal
 # ---------------------------------------------------------------------------
+
 
 def calibrar() -> None:
     pr("=" * 60)
@@ -283,8 +292,10 @@ def calibrar() -> None:
     # Distancias semanticas
     pr("\n[3/4] Computando distancias semanticas (nao_trivialidade)...")
     distances = compute_pair_distances(pairs_ok)
-    pr(f"  dist media: {np.mean(distances):.3f}  "
-       f"min: {np.min(distances):.3f}  max: {np.max(distances):.3f}")
+    pr(
+        f"  dist media: {np.mean(distances):.3f}  "
+        f"min: {np.min(distances):.3f}  max: {np.max(distances):.3f}"
+    )
 
     # Grid search
     pr("\n[4/4] Grid search...")
@@ -308,11 +319,15 @@ def calibrar() -> None:
     pr(f"\n  GATE: {'PASSOU' if gate_ok else 'FALHOU'}")
 
     pr("\n  Top 5 configuracoes:")
-    pr(f"  {'b1':>5} {'b2':>5} {'b3':>5} {'center':>7} {'width':>6} {'eps':>5} {'succ':>7} {'margin':>8}")
+    pr(
+        f"  {'b1':>5} {'b2':>5} {'b3':>5} {'center':>7} {'width':>6} {'eps':>5} {'succ':>7} {'margin':>8}"
+    )
     for r in top5:
-        pr(f"  {r['beta1']:>5.2f} {r['beta2']:>5.2f} {r['beta3']:>5.2f} "
-           f"{r['bell_center']:>7.2f} {r['bell_width']:>6.2f} "
-           f"{r['epsilon']:>5.2f} {r['success_rate']:>7.4f} {r['avg_margin']:>8.4f}")
+        pr(
+            f"  {r['beta1']:>5.2f} {r['beta2']:>5.2f} {r['beta3']:>5.2f} "
+            f"{r['bell_center']:>7.2f} {r['bell_width']:>6.2f} "
+            f"{r['epsilon']:>5.2f} {r['success_rate']:>7.4f} {r['avg_margin']:>8.4f}"
+        )
 
     # Salva configuracao otima
     BEST_PATH.write_text(json.dumps(best, ensure_ascii=False, indent=2), encoding="utf-8")
@@ -320,12 +335,12 @@ def calibrar() -> None:
 
     # Atualiza .env
     if ENV_PATH.exists():
-        set_key(str(ENV_PATH), "BETA1",        str(best["beta1"]))
-        set_key(str(ENV_PATH), "BETA2",        str(best["beta2"]))
-        set_key(str(ENV_PATH), "BETA3",        str(best["beta3"]))
-        set_key(str(ENV_PATH), "EPSILON",      str(best["epsilon"]))
-        set_key(str(ENV_PATH), "BELL_CENTER",  str(best["bell_center"]))
-        set_key(str(ENV_PATH), "BELL_WIDTH",   str(best["bell_width"]))
+        set_key(str(ENV_PATH), "BETA1", str(best["beta1"]))
+        set_key(str(ENV_PATH), "BETA2", str(best["beta2"]))
+        set_key(str(ENV_PATH), "BETA3", str(best["beta3"]))
+        set_key(str(ENV_PATH), "EPSILON", str(best["epsilon"]))
+        set_key(str(ENV_PATH), "BELL_CENTER", str(best["bell_center"]))
+        set_key(str(ENV_PATH), "BELL_WIDTH", str(best["bell_width"]))
         pr("  .env atualizado com novos betas.")
     pr(f"{'='*60}")
 
@@ -343,13 +358,13 @@ def _print_margin_distribution(
     center, width, eps = cfg["bell_center"], cfg["bell_width"], cfg["epsilon"]
 
     margins = []
-    falhas  = []
+    falhas = []
     for p, dist in zip(pairs, distances):
-        r_bad  = cache[p["q_bad"]]
+        r_bad = cache[p["q_bad"]]
         r_good = cache[p["q_good"]]
-        ee_bad  = b1 * r_bad["resp"]  + b2 * r_bad["tract"]  + b3 * bell(0.0, center, width)
+        ee_bad = b1 * r_bad["resp"] + b2 * r_bad["tract"] + b3 * bell(0.0, center, width)
         ee_good = b1 * r_good["resp"] + b2 * r_good["tract"] + b3 * bell(dist, center, width)
-        margin  = ee_good - ee_bad
+        margin = ee_good - ee_bad
         margins.append(margin)
         if margin <= eps:
             falhas.append((p["q_bad"], p["q_good"], margin, ee_bad, ee_good))

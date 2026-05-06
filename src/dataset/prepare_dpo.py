@@ -23,18 +23,20 @@ import os
 import sys
 from pathlib import Path
 
-sys.path.insert(0, os.path.normpath(os.path.join(os.path.dirname(__file__), '..', '..')))
+sys.path.insert(0, os.path.normpath(os.path.join(os.path.dirname(__file__), "..", "..")))
 
 # Forca UTF-8 no stdout do Windows
 import io
-if sys.stdout.encoding and sys.stdout.encoding.lower() != 'utf-8':
-    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+
+if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
 
 from dotenv import load_dotenv
+
 load_dotenv()
 
-_RL_DIR  = Path("data/rl")
-_OUT     = _RL_DIR / "dpo_final.jsonl"
+_RL_DIR = Path("data/rl")
+_OUT = _RL_DIR / "dpo_final.jsonl"
 
 _SYSTEM_PROMPT = (
     "You are an expert in philosophy of science. "
@@ -49,12 +51,9 @@ _TIER_ORDER = ["dpo_tier3.jsonl", "dpo_tier2.jsonl", "dpo_tier1.jsonl", "dpo_dat
 # Helpers
 # ---------------------------------------------------------------------------
 
+
 def _make_prompt(q_bad: str) -> str:
-    return (
-        f"{_SYSTEM_PROMPT}"
-        f"Original question: {q_bad}\n\n"
-        "Reformulated question:"
-    )
+    return f"{_SYSTEM_PROMPT}" f"Original question: {q_bad}\n\n" "Reformulated question:"
 
 
 def _prompt_key(prompt: str) -> str:
@@ -68,6 +67,7 @@ def _prompt_key(prompt: str) -> str:
 # ---------------------------------------------------------------------------
 # Carregadores por fonte
 # ---------------------------------------------------------------------------
+
 
 def _load_existing_jsonl(path: Path) -> list[dict]:
     """Carrega JSONL com formato DPO padrão (prompt/chosen/rejected)."""
@@ -103,17 +103,19 @@ def _load_batch_pairs(path: Path) -> list[dict]:
                 continue
             try:
                 row = json.loads(line)
-                q_bad  = row.get("q_bad", "").strip()
+                q_bad = row.get("q_bad", "").strip()
                 q_good = row.get("q_good", "").strip()
                 if not q_bad or not q_good or q_bad == q_good:
                     continue
-                pairs.append({
-                    "prompt":   _make_prompt(q_bad),
-                    "chosen":   q_good,
-                    "rejected": q_bad,
-                    "source":   row.get("source", "batch"),
-                    "domain":   row.get("domain", ""),
-                })
+                pairs.append(
+                    {
+                        "prompt": _make_prompt(q_bad),
+                        "chosen": q_good,
+                        "rejected": q_bad,
+                        "source": row.get("source", "batch"),
+                        "domain": row.get("domain", ""),
+                    }
+                )
             except json.JSONDecodeError:
                 pass
     return pairs
@@ -128,6 +130,7 @@ def _load_feedback_pairs() -> list[dict]:
     pairs = []
     try:
         from src.db.historico import todas
+
         registros = todas()
     except Exception as e:
         print(f"  [aviso] Não foi possível carregar historico.db: {e}")
@@ -136,9 +139,9 @@ def _load_feedback_pairs() -> list[dict]:
     for r in registros:
         if r.get("feedback") != 1:
             continue
-        q_bad  = (r.get("pergunta_en") or r.get("pergunta_orig", "")).strip()
+        q_bad = (r.get("pergunta_en") or r.get("pergunta_orig", "")).strip()
         chosen = r.get("melhor", "").strip()
-        cands  = r.get("candidatos") or []
+        cands = r.get("candidatos") or []
 
         if not q_bad or not chosen:
             continue
@@ -156,19 +159,22 @@ def _load_feedback_pairs() -> list[dict]:
         if chosen == rejected:
             continue
 
-        pairs.append({
-            "prompt":   _make_prompt(q_bad),
-            "chosen":   chosen,
-            "rejected": rejected,
-            "source":   "feedback_positive",
-            "domain":   "",
-        })
+        pairs.append(
+            {
+                "prompt": _make_prompt(q_bad),
+                "chosen": chosen,
+                "rejected": rejected,
+                "source": "feedback_positive",
+                "domain": "",
+            }
+        )
     return pairs
 
 
 # ---------------------------------------------------------------------------
 # Pipeline principal
 # ---------------------------------------------------------------------------
+
 
 def prepare(stats_only: bool = False) -> None:
     print("=" * 65)

@@ -17,7 +17,6 @@ Saída: data/pairs/adversarial_probes.jsonl
 from __future__ import annotations
 
 import json
-import os
 import random
 import re
 import time
@@ -29,12 +28,12 @@ from tqdm import tqdm
 
 load_dotenv(override=True)
 
-SEED           = 42
-N_PARES        = 70       # pares selecionados da Layer 2
-TIPOS          = ("parafrase", "desconectada", "especulativa")
-DELAY          = 0.4
-OUTPUT_PATH    = Path("data/pairs/adversarial_probes.jsonl")
-LAYER2_PATH    = Path("data/pairs/pairs_layer2.jsonl")
+SEED = 42
+N_PARES = 70  # pares selecionados da Layer 2
+TIPOS = ("parafrase", "desconectada", "especulativa")
+DELAY = 0.4
+OUTPUT_PATH = Path("data/pairs/adversarial_probes.jsonl")
+LAYER2_PATH = Path("data/pairs/pairs_layer2.jsonl")
 
 # ---------------------------------------------------------------------------
 # Prompts por tipo
@@ -48,7 +47,6 @@ Respond ONLY with valid JSON. No markdown, no explanation outside JSON.
 """
 
 _PROMPTS: dict[str, str] = {
-
     "parafrase": """\
 Generate a fake reformulation of type SOPHISTICATED PARAPHRASE.
 
@@ -69,7 +67,6 @@ JSON output:
   "why_fake": "<one sentence: which unoperationalizable concept was preserved>"
 }}
 """,
-
     "desconectada": """\
 Generate a fake reformulation of type TRACTABLE BUT DISCONNECTED.
 
@@ -90,7 +87,6 @@ JSON output:
   "why_fake": "<one sentence: why answering this does NOT help answer q_bad>"
 }}
 """,
-
     "especulativa": """\
 Generate a fake reformulation of type SPECULATIVE-TO-SPECULATIVE.
 
@@ -117,6 +113,7 @@ JSON output:
 # Geração
 # ---------------------------------------------------------------------------
 
+
 def _gerar_probe(
     client: anthropic.Anthropic,
     par: dict,
@@ -136,11 +133,11 @@ def _gerar_probe(
         )
         raw = re.sub(r"```[a-z]*\n?", "", msg.content[0].text).strip()
         data = json.loads(raw)
-    except Exception as e:
+    except Exception:
         return None
 
     q_fake = data.get("q_fake", "").strip()
-    why    = data.get("why_fake", "").strip()
+    why = data.get("why_fake", "").strip()
 
     # Validações básicas
     if not q_fake or not q_fake.endswith("?"):
@@ -154,16 +151,16 @@ def _gerar_probe(
         return None
 
     return {
-        "q_bad":       par["q_bad"],
+        "q_bad": par["q_bad"],
         "q_good_fake": q_fake,
-        "q_good_real": par["q_good"],   # referência — não usado no treino
-        "probe_type":  tipo,
-        "why_fake":    why,
-        "domain":      par.get("domain", ""),
-        "source":      par.get("source", ""),
-        "source_id":   par.get("source_id", ""),
-        "year":        par.get("year", 0),
-        "label":       0,               # EE deve ser BAIXA para este probe
+        "q_good_real": par["q_good"],  # referência — não usado no treino
+        "probe_type": tipo,
+        "why_fake": why,
+        "domain": par.get("domain", ""),
+        "source": par.get("source", ""),
+        "source_id": par.get("source_id", ""),
+        "year": par.get("year", 0),
+        "label": 0,  # EE deve ser BAIXA para este probe
     }
 
 
@@ -175,9 +172,7 @@ def gerar_probes(
     delay: float = DELAY,
 ) -> list[dict]:
     pares = [
-        json.loads(l)
-        for l in layer2_path.read_text(encoding="utf-8").splitlines()
-        if l.strip()
+        json.loads(l) for l in layer2_path.read_text(encoding="utf-8").splitlines() if l.strip()
     ]
 
     # Retoma: carrega probes já gerados
@@ -204,7 +199,7 @@ def gerar_probes(
         if (par.get("source_id", ""), tipo) not in done_keys
     ]
 
-    print(f"\n=== Layer 4 — Adversarial Probes ===")
+    print("\n=== Layer 4 — Adversarial Probes ===")
     print(f"Pares selecionados : {len(amostra)}")
     print(f"Tipos por par      : {len(TIPOS)}")
     print(f"Total esperado     : {len(amostra) * len(TIPOS)}")
@@ -228,20 +223,21 @@ def gerar_probes(
 
 def imprimir_resumo(probes: list[dict]) -> None:
     from collections import Counter
+
     tipos = Counter(p["probe_type"] for p in probes)
     fontes = Counter(p["source"] for p in probes)
 
     print(f"\n{'='*50}")
     print(f"  Total probes gerados: {len(probes)}")
-    print(f"\n  Por tipo:")
+    print("\n  Por tipo:")
     for t, n in tipos.most_common():
         print(f"    {t:<15} {n}")
-    print(f"\n  Por fonte:")
+    print("\n  Por fonte:")
     for s, n in fontes.most_common():
         print(f"    {s:<20} {n}")
     print(f"{'='*50}")
 
-    print(f"\n=== Amostra (1 de cada tipo) ===")
+    print("\n=== Amostra (1 de cada tipo) ===")
     vistos: set[str] = set()
     for p in probes:
         if p["probe_type"] not in vistos:

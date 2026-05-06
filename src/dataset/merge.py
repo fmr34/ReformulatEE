@@ -67,15 +67,18 @@ def merge_and_deduplicate(
         if len(q_bad) < 15 or len(q_good) < 15:
             continue
 
-        if (_is_duplicate(q_bad, bad_embeddings, _DEDUP_THRESHOLD) or
-                _is_duplicate(q_good, good_embeddings, _DEDUP_THRESHOLD)):
+        if _is_duplicate(q_bad, bad_embeddings, _DEDUP_THRESHOLD) or _is_duplicate(
+            q_good, good_embeddings, _DEDUP_THRESHOLD
+        ):
             n_dup += 1
             continue
 
         new_bad = _embed_batch([q_bad])
         new_good = _embed_batch([q_good])
         bad_embeddings = np.vstack([bad_embeddings, new_bad]) if len(bad_embeddings) else new_bad
-        good_embeddings = np.vstack([good_embeddings, new_good]) if len(good_embeddings) else new_good
+        good_embeddings = (
+            np.vstack([good_embeddings, new_good]) if len(good_embeddings) else new_good
+        )
 
         kept.append(p)
 
@@ -92,17 +95,18 @@ def merge_and_deduplicate(
 
 def print_summary(pairs: list[dict]) -> None:
     from collections import Counter
+
     sources = Counter(p["source"] for p in pairs)
     domains = Counter(p.get("domain", "unknown") for p in pairs)
     confs = [p.get("confidence", 0) for p in pairs]
 
-    print(f"\n=== Resumo Layer 1 ===")
+    print("\n=== Resumo Layer 1 ===")
     print(f"Total pares: {len(pairs)}")
     print(f"Confianca media: {np.mean(confs):.2f} | min: {min(confs):.2f} | max: {max(confs):.2f}")
-    print(f"\nPor fonte:")
+    print("\nPor fonte:")
     for src, n in sources.most_common():
         print(f"  {src}: {n}")
-    print(f"\nPor dominio (top 10):")
+    print("\nPor dominio (top 10):")
     for dom, n in domains.most_common(10):
         print(f"  {dom}: {n}")
 
@@ -118,8 +122,10 @@ if __name__ == "__main__":
     pairs = merge_and_deduplicate(extracted, output)
     print_summary(pairs)
 
-    print(f"\n=== Amostra ===")
+    print("\n=== Amostra ===")
     for p in pairs[:8]:
-        print(f"\n  [{p['source']}] [{p.get('domain','?')}] conf={p['confidence']:.2f} ({p['year']})")
+        print(
+            f"\n  [{p['source']}] [{p.get('domain','?')}] conf={p['confidence']:.2f} ({p['year']})"
+        )
         print(f"  BAD:  {p['q_bad']}")
         print(f"  GOOD: {p['q_good']}")

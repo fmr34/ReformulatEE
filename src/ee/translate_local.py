@@ -24,7 +24,7 @@ _MODEL_CACHE = Path(os.getenv("HF_HOME", "data/models/hf_cache"))
 
 # Nomes dos modelos Helsinki-NLP
 _PT_EN_MODEL = "Helsinki-NLP/opus-mt-tc-big-pt-en"
-_EN_PT_MODEL = "Helsinki-NLP/opus-mt-en-ROMANCE"   # usa prefixo >>pt<<
+_EN_PT_MODEL = "Helsinki-NLP/opus-mt-en-ROMANCE"  # usa prefixo >>pt<<
 
 # Pipelines lazy-loaded
 _pipe_pt_en = None
@@ -46,7 +46,7 @@ def _load_pipeline(direction: str):
                 "translation",
                 model=_PT_EN_MODEL,
                 cache_dir=cache_dir,
-                device=-1,   # CPU
+                device=-1,  # CPU
             )
         return _pipe_pt_en
     else:  # en_to_pt
@@ -57,7 +57,7 @@ def _load_pipeline(direction: str):
                 "translation",
                 model=_EN_PT_MODEL,
                 cache_dir=cache_dir,
-                device=-1,   # CPU
+                device=-1,  # CPU
             )
         return _pipe_en_pt
 
@@ -95,8 +95,9 @@ def translate(text: str, direction: str) -> str:
 def is_available() -> bool:
     """Retorna True se transformers e sentencepiece estiverem instalados."""
     try:
-        import transformers  # noqa: F401
         import sentencepiece  # noqa: F401
+        import transformers  # noqa: F401
+
         return True
     except ImportError:
         return False

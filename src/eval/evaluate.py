@@ -22,21 +22,24 @@ from pathlib import Path
 
 import numpy as np
 from dotenv import load_dotenv
-from sklearn.metrics import roc_auc_score, classification_report
+from sklearn.metrics import classification_report
+from sklearn.metrics import roc_auc_score
 from tqdm import tqdm
 
 load_dotenv(override=True)
 
 from src.corpus.fetch import fetch_corpus
-from src.corpus.index import build_index, CorpusIndex
+from src.corpus.index import CorpusIndex
+from src.corpus.index import build_index
 from src.ee.respondibilidade import respondibilidade
 from src.ee.tratabilidade import tratabilidade
-from src.eval.curated import get_curated, CuratedQuestion
+from src.eval.curated import CuratedQuestion
+from src.eval.curated import get_curated
 
 # Pesos normalizados para avaliacao standalone (sem nao_trivialidade)
 # B1 + B2 = 1.0
-_B1 = 0.5   # respondibilidade
-_B2 = 0.5   # tratabilidade
+_B1 = 0.5  # respondibilidade
+_B2 = 0.5  # tratabilidade
 
 
 def score_question(
@@ -92,7 +95,9 @@ def evaluate(
     auc = roc_auc_score(labels, scores)
     threshold = float(np.median(scores))
     preds = (scores >= threshold).astype(int)
-    report = classification_report(labels, preds, target_names=["baixa_EE", "alta_EE"], output_dict=True)
+    report = classification_report(
+        labels, preds, target_names=["baixa_EE", "alta_EE"], output_dict=True
+    )
 
     summary = {
         "auc": round(auc, 4),
@@ -120,10 +125,17 @@ def evaluate(
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Fase 0 — avaliacao de EE(Q)")
-    parser.add_argument("--no-tratabilidade", action="store_true",
-                        help="Desabilita chamadas API (usa valor neutro 0.5)")
-    parser.add_argument("--output", type=str, default="data/results/fase0_eval.json",
-                        help="Caminho para salvar resultados JSON")
+    parser.add_argument(
+        "--no-tratabilidade",
+        action="store_true",
+        help="Desabilita chamadas API (usa valor neutro 0.5)",
+    )
+    parser.add_argument(
+        "--output",
+        type=str,
+        default="data/results/fase0_eval.json",
+        help="Caminho para salvar resultados JSON",
+    )
     args = parser.parse_args()
 
     corpus_dir = Path(os.getenv("CORPUS_DIR", "data/corpus"))

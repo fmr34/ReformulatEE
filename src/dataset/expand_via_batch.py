@@ -18,22 +18,23 @@ from __future__ import annotations
 import json
 import os
 import sys
-import time
 from pathlib import Path
 
-sys.path.insert(0, os.path.normpath(os.path.join(os.path.dirname(__file__), '..', '..')))
+sys.path.insert(0, os.path.normpath(os.path.join(os.path.dirname(__file__), "..", "..")))
 
 # Forca UTF-8 no stdout do Windows
 import io
-if sys.stdout.encoding and sys.stdout.encoding.lower() != 'utf-8':
-    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+
+if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
 
 from dotenv import load_dotenv
+
 load_dotenv(override=True)
 
 import anthropic
 
-_OUT_PATH    = Path("data/rl/batch_pairs.jsonl")
+_OUT_PATH = Path("data/rl/batch_pairs.jsonl")
 _BATCH_ID_FILE = Path(".claude/batch_id.txt")
 
 _SYSTEM_A = (
@@ -56,26 +57,30 @@ def _build_requests(curated) -> list[dict]:
     for i, q in enumerate(curated):
         if q.label == 1:
             # Tipo A: boa → ruim
-            requests.append({
-                "custom_id": f"A_{i}",
-                "params": {
-                    "model": "claude-haiku-4-5",
-                    "max_tokens": 120,
-                    "system": _SYSTEM_A,
-                    "messages": [{"role": "user", "content": q.text}],
-                },
-            })
+            requests.append(
+                {
+                    "custom_id": f"A_{i}",
+                    "params": {
+                        "model": "claude-haiku-4-5",
+                        "max_tokens": 120,
+                        "system": _SYSTEM_A,
+                        "messages": [{"role": "user", "content": q.text}],
+                    },
+                }
+            )
         else:
             # Tipo B: ruim → boa
-            requests.append({
-                "custom_id": f"B_{i}",
-                "params": {
-                    "model": "claude-haiku-4-5",
-                    "max_tokens": 120,
-                    "system": _SYSTEM_B,
-                    "messages": [{"role": "user", "content": q.text}],
-                },
-            })
+            requests.append(
+                {
+                    "custom_id": f"B_{i}",
+                    "params": {
+                        "model": "claude-haiku-4-5",
+                        "max_tokens": 120,
+                        "system": _SYSTEM_B,
+                        "messages": [{"role": "user", "content": q.text}],
+                    },
+                }
+            )
 
     return requests
 
@@ -84,7 +89,7 @@ def cmd_submit() -> None:
     """Submete o batch e salva o ID."""
     from src.eval.curated import get_curated
 
-    curated  = get_curated()
+    curated = get_curated()
     requests = _build_requests(curated)
 
     client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
@@ -95,11 +100,11 @@ def cmd_submit() -> None:
     _BATCH_ID_FILE.parent.mkdir(parents=True, exist_ok=True)
     _BATCH_ID_FILE.write_text(batch.id)
 
-    print(f"\n  ✅ Batch submetido!")
+    print("\n  ✅ Batch submetido!")
     print(f"  ID: {batch.id}")
     print(f"  Status: {batch.processing_status}")
     print(f"  ID salvo em: {_BATCH_ID_FILE}")
-    print(f"\n  Aguarde ~5-30 min e então execute:")
+    print("\n  Aguarde ~5-30 min e então execute:")
     print(f"  python -m src.dataset.expand_via_batch --retrieve {batch.id}")
 
 
@@ -107,7 +112,7 @@ def cmd_retrieve(batch_id: str) -> None:
     """Recupera resultados, processa e salva os pares."""
     from src.eval.curated import get_curated
 
-    client  = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
+    client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
     curated = get_curated()
     curated_by_idx = {str(i): q for i, q in enumerate(curated)}
 
@@ -124,12 +129,12 @@ def cmd_retrieve(batch_id: str) -> None:
         return
 
     # Processa resultados
-    pairs   = []
-    errors  = 0
+    pairs = []
+    errors = 0
     skipped = 0
 
     for result in client.messages.batches.results(batch_id):
-        cid = result.custom_id           # "A_5" ou "B_12"
+        cid = result.custom_id  # "A_5" ou "B_12"
         tipo, idx_str = cid.split("_", 1)
         original = curated_by_idx.get(idx_str)
 
@@ -148,12 +153,24 @@ def cmd_retrieve(batch_id: str) -> None:
 
         if tipo == "A":
             # A: original é q_good, gerada é q_bad
-            pairs.append({"q_bad": generated,    "q_good": original.text,
-                           "source": "batch_A", "domain": original.domain})
+            pairs.append(
+                {
+                    "q_bad": generated,
+                    "q_good": original.text,
+                    "source": "batch_A",
+                    "domain": original.domain,
+                }
+            )
         else:
             # B: original é q_bad, gerada é q_good
-            pairs.append({"q_bad": original.text, "q_good": generated,
-                           "source": "batch_B", "domain": original.domain})
+            pairs.append(
+                {
+                    "q_bad": original.text,
+                    "q_good": generated,
+                    "source": "batch_B",
+                    "domain": original.domain,
+                }
+            )
 
     # Salva
     _OUT_PATH.parent.mkdir(parents=True, exist_ok=True)
@@ -161,13 +178,15 @@ def cmd_retrieve(batch_id: str) -> None:
         for p in pairs:
             f.write(json.dumps(p, ensure_ascii=False) + "\n")
 
-    print(f"\n  ✅ Resultados processados:")
+    print("\n  ✅ Resultados processados:")
     print(f"  Pares gerados : {len(pairs)}")
     print(f"  Erros API     : {errors}")
     print(f"  Ignorados     : {skipped}")
     print(f"  Arquivo       : {_OUT_PATH}")
-    print(f"\n  Dataset expandido. Total em batch_pairs.jsonl: "
-          f"{sum(1 for _ in open(_OUT_PATH, encoding='utf-8'))} pares")
+    print(
+        f"\n  Dataset expandido. Total em batch_pairs.jsonl: "
+        f"{sum(1 for _ in open(_OUT_PATH, encoding='utf-8'))} pares"
+    )
 
 
 def cmd_status(batch_id: str | None = None) -> None:
@@ -179,11 +198,11 @@ def cmd_status(batch_id: str | None = None) -> None:
         return
 
     client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
-    batch  = client.messages.batches.retrieve(batch_id)
+    batch = client.messages.batches.retrieve(batch_id)
 
     print(f"  ID      : {batch.id}")
     print(f"  Status  : {batch.processing_status}")
-    if hasattr(batch, 'request_counts') and batch.request_counts:
+    if hasattr(batch, "request_counts") and batch.request_counts:
         rc = batch.request_counts
         print(f"  Sucesso : {rc.succeeded}")
         print(f"  Erros   : {rc.errored}")

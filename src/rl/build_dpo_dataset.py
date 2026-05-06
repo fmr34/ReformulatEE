@@ -38,13 +38,13 @@ from pathlib import Path
 import numpy as np
 from sentence_transformers import SentenceTransformer
 
-LAYER2_PATH    = Path("data/pairs/pairs_layer2.jsonl")
-PROBES_PATH    = Path("data/pairs/adversarial_probes.jsonl")
-CROSS_PATH     = Path("data/pairs/adversarial_probes_crossdomain.jsonl")
-OUT_DIR        = Path("data/rl")
+LAYER2_PATH = Path("data/pairs/pairs_layer2.jsonl")
+PROBES_PATH = Path("data/pairs/adversarial_probes.jsonl")
+CROSS_PATH = Path("data/pairs/adversarial_probes_crossdomain.jsonl")
+OUT_DIR = Path("data/rl")
 
-SEED           = 42
-TIER_CUTS      = (0.35, 0.60)   # limites de distancia para os 3 tiers
+SEED = 42
+TIER_CUTS = (0.35, 0.60)  # limites de distancia para os 3 tiers
 ALPHA_PER_TIER = {1: 0.3, 2: 0.6, 3: 0.9}
 
 PROMPT_TEMPLATE = (
@@ -67,6 +67,7 @@ def pr(text: str) -> None:
 # Carrega dados
 # ---------------------------------------------------------------------------
 
+
 def _load_jsonl(path: Path) -> list[dict]:
     return [json.loads(l) for l in path.read_text(encoding="utf-8").splitlines() if l.strip()]
 
@@ -76,15 +77,16 @@ def _compute_distances(pairs: list[dict]) -> dict[str, float]:
     Retorna {source_id: cosine_distance(q_good, q_bad)}.
     """
     emb = SentenceTransformer("all-MiniLM-L6-v2")
-    q_bads  = [p["q_bad"]  for p in pairs]
+    q_bads = [p["q_bad"] for p in pairs]
     q_goods = [p["q_good"] for p in pairs]
 
-    all_embs = emb.encode(q_bads + q_goods, batch_size=64,
-                           show_progress_bar=False, normalize_embeddings=True)
-    emb_bad  = all_embs[:len(pairs)]
-    emb_good = all_embs[len(pairs):]
-    sims     = (emb_bad * emb_good).sum(axis=1)
-    dists    = 1.0 - sims
+    all_embs = emb.encode(
+        q_bads + q_goods, batch_size=64, show_progress_bar=False, normalize_embeddings=True
+    )
+    emb_bad = all_embs[: len(pairs)]
+    emb_good = all_embs[len(pairs) :]
+    sims = (emb_bad * emb_good).sum(axis=1)
+    dists = 1.0 - sims
 
     return {p["source_id"]: float(d) for p, d in zip(pairs, dists)}
 
@@ -101,12 +103,13 @@ def _assign_tier(dist: float) -> int:
 # Construcao do dataset
 # ---------------------------------------------------------------------------
 
+
 def build_dataset(seed: int = SEED) -> list[dict]:
     random.seed(seed)
 
     layer2 = _load_jsonl(LAYER2_PATH)
     probes = _load_jsonl(PROBES_PATH)
-    cross  = _load_jsonl(CROSS_PATH)
+    cross = _load_jsonl(CROSS_PATH)
 
     # Indexa probes por (q_bad, tipo)
     probes_by_qbad: dict[str, dict[str, dict]] = defaultdict(dict)
@@ -129,13 +132,13 @@ def build_dataset(seed: int = SEED) -> list[dict]:
     samples: list[dict] = []
 
     for pair in layer2:
-        sid      = pair["source_id"]
-        q_bad    = pair["q_bad"]
-        q_good   = pair["q_good"]
-        dist     = dists.get(sid, 0.5)
-        tier     = _assign_tier(dist)
-        alpha    = ALPHA_PER_TIER[tier]
-        prompt   = PROMPT_TEMPLATE.format(q_bad=q_bad)
+        sid = pair["source_id"]
+        q_bad = pair["q_bad"]
+        q_good = pair["q_good"]
+        dist = dists.get(sid, 0.5)
+        tier = _assign_tier(dist)
+        alpha = ALPHA_PER_TIER[tier]
+        prompt = PROMPT_TEMPLATE.format(q_bad=q_bad)
 
         # Candidatos rejected (prioridade: parafrase, especulativa, desconectada, cross)
         rejected_pool: list[tuple[str, str]] = []  # (q_fake, probe_type)
@@ -156,18 +159,20 @@ def build_dataset(seed: int = SEED) -> list[dict]:
 
         # Gera 1 amostra por rejected disponivel (max 3)
         for fake_q, probe_type in rejected_pool[:3]:
-            samples.append({
-                "prompt":     prompt,
-                "chosen":     q_good,
-                "rejected":   fake_q,
-                "tier":       tier,
-                "alpha":      alpha,
-                "dist_good":  round(dist, 4),
-                "probe_type": probe_type,
-                "source_id":  sid,
-                "domain":     pair.get("domain", ""),
-                "source":     pair.get("source", ""),
-            })
+            samples.append(
+                {
+                    "prompt": prompt,
+                    "chosen": q_good,
+                    "rejected": fake_q,
+                    "tier": tier,
+                    "alpha": alpha,
+                    "dist_good": round(dist, 4),
+                    "probe_type": probe_type,
+                    "source_id": sid,
+                    "domain": pair.get("domain", ""),
+                    "source": pair.get("source", ""),
+                }
+            )
 
     return samples
 
@@ -176,8 +181,10 @@ def build_dataset(seed: int = SEED) -> list[dict]:
 # Salva e exibe resumo
 # ---------------------------------------------------------------------------
 
+
 def salvar(samples: list[dict]) -> None:
     from collections import Counter
+
     OUT_DIR.mkdir(parents=True, exist_ok=True)
 
     # Arquivo completo
@@ -197,31 +204,33 @@ def salvar(samples: list[dict]) -> None:
         pr(f"  Salvo: {path}  ({len(tier_samples)} amostras, alpha={ALPHA_PER_TIER[tier]})")
 
     # Resumo
-    tier_cnt   = Counter(s["tier"]       for s in samples)
-    probe_cnt  = Counter(s["probe_type"] for s in samples)
-    source_cnt = Counter(s["source"]     for s in samples)
+    tier_cnt = Counter(s["tier"] for s in samples)
+    probe_cnt = Counter(s["probe_type"] for s in samples)
+    source_cnt = Counter(s["source"] for s in samples)
 
-    pr(f"\n  Distribuicao por tier:")
+    pr("\n  Distribuicao por tier:")
     for t, n in sorted(tier_cnt.items()):
         pr(f"    Tier {t} (alpha={ALPHA_PER_TIER[t]}): {n:>4} amostras")
 
-    pr(f"\n  Distribuicao por tipo de rejected:")
+    pr("\n  Distribuicao por tipo de rejected:")
     for pt, n in probe_cnt.most_common():
         pr(f"    {pt:<25}: {n:>4}")
 
-    pr(f"\n  Distribuicao por fonte:")
+    pr("\n  Distribuicao por fonte:")
     for s, n in source_cnt.most_common():
         pr(f"    {s:<25}: {n:>4}")
 
     dists_arr = np.array([s["dist_good"] for s in samples])
-    pr(f"\n  Distancias semanticas q_good-q_bad:")
-    pr(f"    media={dists_arr.mean():.3f}  "
-       f"p25={np.percentile(dists_arr,25):.3f}  "
-       f"p75={np.percentile(dists_arr,75):.3f}  "
-       f"max={dists_arr.max():.3f}")
+    pr("\n  Distancias semanticas q_good-q_bad:")
+    pr(
+        f"    media={dists_arr.mean():.3f}  "
+        f"p25={np.percentile(dists_arr,25):.3f}  "
+        f"p75={np.percentile(dists_arr,75):.3f}  "
+        f"max={dists_arr.max():.3f}"
+    )
 
     # Amostra por tier
-    pr(f"\n  Amostra (1 por tier):")
+    pr("\n  Amostra (1 por tier):")
     for tier in [1, 2, 3]:
         ex = next(s for s in samples if s["tier"] == tier)
         pr(f"\n  [TIER {tier} | alpha={ALPHA_PER_TIER[tier]} | dist={ex['dist_good']}]")

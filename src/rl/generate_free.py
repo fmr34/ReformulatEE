@@ -21,7 +21,8 @@ Configuração via .env:
 from __future__ import annotations
 
 import os
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import as_completed
 from pathlib import Path
 
 _SYSTEM = (
@@ -32,29 +33,32 @@ _SYSTEM = (
 )
 
 # Modelo padrão para HF Inference API
-_HF_MODEL   = os.getenv("HF_MODEL", "Qwen/Qwen2.5-1.5B-Instruct")
-_HF_TOKEN   = os.getenv("HF_TOKEN")
+_HF_MODEL = os.getenv("HF_MODEL", "Qwen/Qwen2.5-1.5B-Instruct")
+_HF_TOKEN = os.getenv("HF_TOKEN")
 
 # Modelo padrão para GGUF local
-_GGUF_REPO  = os.getenv("GGUF_MODEL_REPO", "Qwen/Qwen2.5-1.5B-Instruct-GGUF")
-_GGUF_FILE  = os.getenv("GGUF_MODEL_FILE",  "qwen2.5-1.5b-instruct-q4_k_m.gguf")
-_GGUF_PATH  = Path(os.getenv("GGUF_LOCAL_PATH",
-                              "data/models/gguf/qwen2.5-1.5b-instruct-q4_k_m.gguf"))
+_GGUF_REPO = os.getenv("GGUF_MODEL_REPO", "Qwen/Qwen2.5-1.5B-Instruct-GGUF")
+_GGUF_FILE = os.getenv("GGUF_MODEL_FILE", "qwen2.5-1.5b-instruct-q4_k_m.gguf")
+_GGUF_PATH = Path(
+    os.getenv("GGUF_LOCAL_PATH", "data/models/gguf/qwen2.5-1.5b-instruct-q4_k_m.gguf")
+)
 
-_gguf_model = None   # lazy-load
+_gguf_model = None  # lazy-load
 
 
 # ---------------------------------------------------------------------------
 # HF Inference API (primário — ideal para HF Spaces e zero-cost)
 # ---------------------------------------------------------------------------
 
+
 def _hf_single_call(q_bad: str) -> str:
     from huggingface_hub import InferenceClient
+
     client = InferenceClient(model=_HF_MODEL, token=_HF_TOKEN)
     resp = client.chat_completion(
         messages=[
             {"role": "system", "content": _SYSTEM},
-            {"role": "user",   "content": f"Original question: {q_bad}"},
+            {"role": "user", "content": f"Original question: {q_bad}"},
         ],
         max_tokens=100,
         temperature=1.1,
@@ -84,10 +88,12 @@ def generate_hf_inference(q_bad: str, n: int) -> list[str]:
 # GGUF local (opcional — requer llama-cpp-python instalado)
 # ---------------------------------------------------------------------------
 
+
 def _gguf_available() -> bool:
     """True se llama-cpp-python está instalado e o modelo existe localmente."""
     try:
         import llama_cpp  # noqa: F401
+
         return _GGUF_PATH.exists()
     except ImportError:
         return False
@@ -98,6 +104,7 @@ def _load_gguf():
     if _gguf_model is not None:
         return _gguf_model
     from llama_cpp import Llama
+
     n_threads = min(os.cpu_count() or 4, 8)
     print(f"  Carregando modelo GGUF: {_GGUF_PATH} ({n_threads} threads)...")
     _gguf_model = Llama(
@@ -115,6 +122,7 @@ def download_gguf_model() -> Path:
         print(f"  Modelo já existe: {_GGUF_PATH}")
         return _GGUF_PATH
     from huggingface_hub import hf_hub_download
+
     _GGUF_PATH.parent.mkdir(parents=True, exist_ok=True)
     print(f"  Baixando {_GGUF_FILE} de {_GGUF_REPO}...")
     path = hf_hub_download(
@@ -138,7 +146,7 @@ def generate_gguf(q_bad: str, n: int) -> list[str]:
             out = model.create_chat_completion(
                 messages=[
                     {"role": "system", "content": _SYSTEM},
-                    {"role": "user",   "content": f"Original question: {q_bad}"},
+                    {"role": "user", "content": f"Original question: {q_bad}"},
                 ],
                 max_tokens=100,
                 temperature=1.1,
@@ -155,6 +163,7 @@ def generate_gguf(q_bad: str, n: int) -> list[str]:
 # ---------------------------------------------------------------------------
 # Interface unificada com fallback automático
 # ---------------------------------------------------------------------------
+
 
 def _detect_backend() -> str:
     """Auto-detecta o melhor backend disponível."""
@@ -198,6 +207,7 @@ def generate(q_bad: str, n: int) -> list[str]:
     # Fallback final: Claude API
     if os.getenv("ANTHROPIC_API_KEY"):
         from src.rl.inference import _generate_claude
+
         return _generate_claude(q_bad, n)
 
     return []

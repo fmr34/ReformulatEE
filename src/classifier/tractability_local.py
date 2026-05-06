@@ -20,9 +20,19 @@ from pathlib import Path
 
 import numpy as np
 
-_MODEL_PATH = Path(os.path.normpath(
-    os.path.join(os.path.dirname(__file__), '..', '..', 'data', 'models', 'tractability', 'classifier.pkl')
-))
+_MODEL_PATH = Path(
+    os.path.normpath(
+        os.path.join(
+            os.path.dirname(__file__),
+            "..",
+            "..",
+            "data",
+            "models",
+            "tractability",
+            "classifier.pkl",
+        )
+    )
+)
 
 # Lazy-load do modelo em memória
 _classifier = None
@@ -31,15 +41,13 @@ _classifier = None
 class _RidgeClassifier:
     """Regressão Ridge com padronização de features — numpy puro, sem sklearn."""
 
-    def __init__(self,
-                 weights:   np.ndarray,
-                 bias:      float,
-                 feat_mean: np.ndarray,
-                 feat_std:  np.ndarray):
-        self.weights   = weights
-        self.bias      = bias
+    def __init__(
+        self, weights: np.ndarray, bias: float, feat_mean: np.ndarray, feat_std: np.ndarray
+    ):
+        self.weights = weights
+        self.bias = bias
         self.feat_mean = feat_mean
-        self.feat_std  = feat_std
+        self.feat_std = feat_std
 
     def predict_single(self, embedding: np.ndarray) -> float:
         x = (embedding - self.feat_mean) / (self.feat_std + 1e-8)
@@ -48,18 +56,19 @@ class _RidgeClassifier:
 
     def save(self, path: Path) -> None:
         path.parent.mkdir(parents=True, exist_ok=True)
-        with open(path, 'wb') as f:
+        with open(path, "wb") as f:
             pickle.dump(self, f)
 
     @classmethod
-    def load(cls, path: Path) -> '_RidgeClassifier':
-        with open(path, 'rb') as f:
+    def load(cls, path: Path) -> "_RidgeClassifier":
+        with open(path, "rb") as f:
             return pickle.load(f)
 
 
 # ---------------------------------------------------------------------------
 # API pública
 # ---------------------------------------------------------------------------
+
 
 def is_trained() -> bool:
     """Retorna True se o modelo local já foi treinado e está disponível."""
@@ -88,6 +97,7 @@ def predict_local(query: str) -> dict:
         )
 
     from src.ee.nao_trivialidade import embed
+
     emb = embed(query)
     score = clf.predict_single(emb)
 
@@ -102,15 +112,13 @@ def predict_local(query: str) -> dict:
 
     return {
         "prob_tractable": score,
-        "trajectory":     trajectory,
-        "confidence":     1.0,   # score já inclui calibração; não divide por confidence
+        "trajectory": trajectory,
+        "confidence": 1.0,  # score já inclui calibração; não divide por confidence
         "nearest_resolved_question": "",
     }
 
 
-def train_and_save(questions: list[str],
-                   scores:    list[float],
-                   alpha:     float = 1.0) -> dict:
+def train_and_save(questions: list[str], scores: list[float], alpha: float = 1.0) -> dict:
     """
     Treina o classificador Ridge e persiste o modelo.
 
@@ -130,7 +138,7 @@ def train_and_save(questions: list[str],
 
     # Padronização feature-wise
     feat_mean = X.mean(axis=0)
-    feat_std  = X.std(axis=0)
+    feat_std = X.std(axis=0)
     X_norm = (X - feat_mean) / (feat_std + 1e-8)
 
     # Ridge: w = (X'X + αI)^{-1} X'y
@@ -138,13 +146,13 @@ def train_and_save(questions: list[str],
     A = X_norm.T @ X_norm + alpha * np.eye(n_feat)
     b = X_norm.T @ y
     weights = np.linalg.solve(A, b)
-    bias    = float(y.mean() - (X_norm @ weights).mean())
+    bias = float(y.mean() - (X_norm @ weights).mean())
 
     # Métricas de treino
     y_pred = np.clip(X_norm @ weights + bias, 0.0, 1.0)
     ss_res = float(np.sum((y - y_pred) ** 2))
     ss_tot = float(np.sum((y - y.mean()) ** 2))
-    r2   = 1.0 - ss_res / (ss_tot + 1e-10)
+    r2 = 1.0 - ss_res / (ss_tot + 1e-10)
     rmse = float(np.sqrt(ss_res / len(y)))
 
     # Cross-validation 5-fold
@@ -152,12 +160,12 @@ def train_and_save(questions: list[str],
     fold_size = max(n // 5, 1)
     cv_rmse = []
     for fold in range(5):
-        val_idx   = list(range(fold * fold_size, min((fold + 1) * fold_size, n)))
+        val_idx = list(range(fold * fold_size, min((fold + 1) * fold_size, n)))
         train_idx = [i for i in range(n) if i not in val_idx]
         if not train_idx or not val_idx:
             continue
-        Xtr, ytr   = X_norm[train_idx], y[train_idx]
-        Xval, yval = X_norm[val_idx],   y[val_idx]
+        Xtr, ytr = X_norm[train_idx], y[train_idx]
+        Xval, yval = X_norm[val_idx], y[val_idx]
         A_cv = Xtr.T @ Xtr + alpha * np.eye(n_feat)
         w_cv = np.linalg.solve(A_cv, Xtr.T @ ytr)
         b_cv = float(ytr.mean() - (Xtr @ w_cv).mean())
@@ -166,10 +174,10 @@ def train_and_save(questions: list[str],
 
     # Salva
     clf = _RidgeClassifier(
-        weights   = weights.astype(np.float32),
-        bias      = bias,
-        feat_mean = feat_mean.astype(np.float32),
-        feat_std  = feat_std.astype(np.float32),
+        weights=weights.astype(np.float32),
+        bias=bias,
+        feat_mean=feat_mean.astype(np.float32),
+        feat_std=feat_std.astype(np.float32),
     )
     clf.save(_MODEL_PATH)
 
@@ -178,10 +186,10 @@ def train_and_save(questions: list[str],
     _classifier = None
 
     return {
-        "n_train":      len(y),
-        "r2":           round(r2, 4),
-        "rmse":         round(rmse, 4),
+        "n_train": len(y),
+        "r2": round(r2, 4),
+        "rmse": round(rmse, 4),
         "cv_rmse_mean": round(float(np.mean(cv_rmse)), 4) if cv_rmse else None,
-        "cv_rmse_std":  round(float(np.std(cv_rmse)),  4) if cv_rmse else None,
-        "model_path":   str(_MODEL_PATH),
+        "cv_rmse_std": round(float(np.std(cv_rmse)), 4) if cv_rmse else None,
+        "model_path": str(_MODEL_PATH),
     }

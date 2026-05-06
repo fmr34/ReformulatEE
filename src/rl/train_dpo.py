@@ -40,16 +40,16 @@ load_dotenv(override=True)
 # Configuracao (lida do .env com defaults para CPU)
 # ---------------------------------------------------------------------------
 
-DPO_MODEL   = os.getenv("DPO_MODEL",  "gpt2")
-DPO_EPOCHS  = int(os.getenv("DPO_EPOCHS",  "2"))
-DPO_BATCH   = int(os.getenv("DPO_BATCH",   "2"))
-DPO_LR      = float(os.getenv("DPO_LR",   "5e-5"))
-DPO_BETA    = float(os.getenv("DPO_BETA",  "0.1"))
-LORA_R      = int(os.getenv("LORA_R",     "8"))
-LORA_ALPHA  = int(os.getenv("LORA_ALPHA", "16"))
-MAX_LENGTH  = int(os.getenv("DPO_MAX_LEN","256"))
-OUT_DIR     = Path(os.getenv("DPO_OUT_DIR","data/models/dpo_policy"))
-DATA_DIR    = Path("data/rl")
+DPO_MODEL = os.getenv("DPO_MODEL", "gpt2")
+DPO_EPOCHS = int(os.getenv("DPO_EPOCHS", "2"))
+DPO_BATCH = int(os.getenv("DPO_BATCH", "2"))
+DPO_LR = float(os.getenv("DPO_LR", "5e-5"))
+DPO_BETA = float(os.getenv("DPO_BETA", "0.1"))
+LORA_R = int(os.getenv("LORA_R", "8"))
+LORA_ALPHA = int(os.getenv("LORA_ALPHA", "16"))
+MAX_LENGTH = int(os.getenv("DPO_MAX_LEN", "256"))
+OUT_DIR = Path(os.getenv("DPO_OUT_DIR", "data/models/dpo_policy"))
+DATA_DIR = Path("data/rl")
 
 TIERS = [1, 2, 3]
 
@@ -65,36 +65,38 @@ def pr(text: str) -> None:
 # Carregamento do dataset por tier
 # ---------------------------------------------------------------------------
 
+
 def _load_tier(tier: int) -> list[dict]:
     path = DATA_DIR / f"dpo_tier{tier}.jsonl"
     if not path.exists():
         return []
-    return [
-        json.loads(l)
-        for l in path.read_text(encoding="utf-8").splitlines()
-        if l.strip()
-    ]
+    return [json.loads(l) for l in path.read_text(encoding="utf-8").splitlines() if l.strip()]
 
 
 def _to_hf_dataset(samples: list[dict]):
     from datasets import Dataset
-    return Dataset.from_list([
-        {
-            "prompt":   s["prompt"],
-            "chosen":   s["chosen"],
-            "rejected": s["rejected"],
-        }
-        for s in samples
-    ])
+
+    return Dataset.from_list(
+        [
+            {
+                "prompt": s["prompt"],
+                "chosen": s["chosen"],
+                "rejected": s["rejected"],
+            }
+            for s in samples
+        ]
+    )
 
 
 # ---------------------------------------------------------------------------
 # Configuracao do modelo e LoRA
 # ---------------------------------------------------------------------------
 
+
 def _load_model_and_tokenizer():
-    from transformers import AutoTokenizer, AutoModelForCausalLM
     import torch
+    from transformers import AutoModelForCausalLM
+    from transformers import AutoTokenizer
 
     pr(f"  Carregando modelo: {DPO_MODEL}")
     tokenizer = AutoTokenizer.from_pretrained(DPO_MODEL)
@@ -117,7 +119,8 @@ def _load_model_and_tokenizer():
 
 
 def _lora_config():
-    from peft import LoraConfig, TaskType
+    from peft import LoraConfig
+    from peft import TaskType
 
     # Modulos alvo dependem da arquitetura
     if "gpt2" in DPO_MODEL.lower():
@@ -143,6 +146,7 @@ def _lora_config():
 # Treino DPO por tier (curriculo)
 # ---------------------------------------------------------------------------
 
+
 def _treinar_tier(
     tier: int,
     model,
@@ -150,8 +154,9 @@ def _treinar_tier(
     peft_config,
     checkpoint_dir: Path,
 ) -> None:
-    from trl import DPOTrainer, DPOConfig
     import torch
+    from trl import DPOConfig
+    from trl import DPOTrainer
 
     samples = _load_tier(tier)
     if not samples:
@@ -206,6 +211,7 @@ def _treinar_tier(
 # Loop principal
 # ---------------------------------------------------------------------------
 
+
 def treinar() -> None:
     pr("=" * 60)
     pr("  Fase 3 — DPO Training com curriculo alpha-annealing")
@@ -220,6 +226,7 @@ def treinar() -> None:
     pr(f"  Out      : {OUT_DIR}")
 
     import torch
+
     pr(f"  Device   : {'CUDA' if torch.cuda.is_available() else 'CPU'}")
 
     # Carrega modelo base e LoRA
@@ -238,7 +245,7 @@ def treinar() -> None:
     tokenizer.save_pretrained(str(final_dir))
 
     pr(f"\n{'='*60}")
-    pr(f"  Treinamento concluido!")
+    pr("  Treinamento concluido!")
     pr(f"  Modelo final: {OUT_DIR / 'tier3' / 'final'}")
     pr(f"  Tokenizer  : {final_dir}")
     pr(f"{'='*60}")
@@ -248,28 +255,31 @@ def treinar() -> None:
 # Demo rapida (smoke test) — roda 5 steps em CPU
 # ---------------------------------------------------------------------------
 
+
 def smoke_test() -> None:
     """
     Executa apenas 5 steps de treino no Tier 1 para validar o pipeline.
     Util para verificar se o codigo funciona antes de um treino completo.
     """
     import os as _os
+
     _os.environ["DPO_EPOCHS"] = "1"
 
     pr("=" * 60)
     pr("  Smoke test DPO (5 steps, Tier 1 apenas)")
     pr("=" * 60)
 
-    from trl import DPOTrainer, DPOConfig
-    from peft import LoraConfig, TaskType, get_peft_model
+    from trl import DPOConfig
+    from trl import DPOTrainer
 
-    samples = _load_tier(1)[:20]   # apenas 20 amostras
+    samples = _load_tier(1)[:20]  # apenas 20 amostras
     dataset = _to_hf_dataset(samples)
 
     model, tokenizer = _load_model_and_tokenizer()
     peft_config = _lora_config()
 
     import torch as _torch
+
     args = DPOConfig(
         output_dir=str(OUT_DIR / "smoke_test"),
         num_train_epochs=1,
@@ -305,6 +315,7 @@ def smoke_test() -> None:
 
 if __name__ == "__main__":
     import sys
+
     if "--smoke" in sys.argv:
         smoke_test()
     else:

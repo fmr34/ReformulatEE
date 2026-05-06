@@ -40,7 +40,7 @@ def cosine_distance(a: np.ndarray, b: np.ndarray) -> float:
 
 
 def bell(distance: float, center: float = 0.45, width: float = 0.20) -> float:
-    return float(np.exp(-((distance - center) ** 2) / (2 * width ** 2)))
+    return float(np.exp(-((distance - center) ** 2) / (2 * width**2)))
 
 
 def nao_trivialidade(
@@ -64,10 +64,13 @@ def cosine_similarity(q: str, q0: str) -> float:
 if __name__ == "__main__":
     q0 = "What is the essence of life?"
     pairs = [
-        ("What is the essence of life?",                                         "identica"),
-        ("What is the true nature of life?",                                     "parafrase"),
-        ("What are the molecular mechanisms of self-replication in living cells?","boa reformulacao"),
-        ("What is the optimal trading strategy for cryptocurrency markets?",      "desconectada"),
+        ("What is the essence of life?", "identica"),
+        ("What is the true nature of life?", "parafrase"),
+        (
+            "What are the molecular mechanisms of self-replication in living cells?",
+            "boa reformulacao",
+        ),
+        ("What is the optimal trading strategy for cryptocurrency markets?", "desconectada"),
     ]
     for q, label in pairs:
         score = nao_trivialidade(q, q0)

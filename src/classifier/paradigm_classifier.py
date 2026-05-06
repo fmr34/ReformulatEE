@@ -40,52 +40,188 @@ import numpy as np
 # ---------------------------------------------------------------------------
 
 _SPECULATIVE = {
-    "consciousness", "awareness", "qualia", "phenomenal", "subjective",
-    "essence", "nature", "meaning", "reality", "existence", "being",
-    "ontological", "ontology", "metaphysical", "metaphysics", "noumenal",
-    "teleological", "teleology", "intrinsic", "ineffable", "transcendent",
-    "transcendence", "ultimate", "fundamental", "emergent", "emergence",
-    "substrate", "irreducible", "irreducibility", "holistic", "holism",
-    "vitalism", "panpsychism", "epiphenomenal", "epiphenomenalism",
-    "supervenience", "grounding", "instantiation", "potentiality",
-    "actuality", "telos", "logos", "ontogenetic", "morphogenetic",
+    "consciousness",
+    "awareness",
+    "qualia",
+    "phenomenal",
+    "subjective",
+    "essence",
+    "nature",
+    "meaning",
+    "reality",
+    "existence",
+    "being",
+    "ontological",
+    "ontology",
+    "metaphysical",
+    "metaphysics",
+    "noumenal",
+    "teleological",
+    "teleology",
+    "intrinsic",
+    "ineffable",
+    "transcendent",
+    "transcendence",
+    "ultimate",
+    "fundamental",
+    "emergent",
+    "emergence",
+    "substrate",
+    "irreducible",
+    "irreducibility",
+    "holistic",
+    "holism",
+    "vitalism",
+    "panpsychism",
+    "epiphenomenal",
+    "epiphenomenalism",
+    "supervenience",
+    "grounding",
+    "instantiation",
+    "potentiality",
+    "actuality",
+    "telos",
+    "logos",
+    "ontogenetic",
+    "morphogenetic",
 }
 
 _OPERATIONAL = {
-    "measure", "measures", "measured", "measuring", "measurement",
-    "test", "tests", "tested", "testing", "experiment", "experimental",
-    "analyze", "analysis", "compare", "comparison", "correlate",
-    "correlation", "predict", "prediction", "predictive", "quantify",
-    "quantification", "identify", "isolate", "control", "replicate",
-    "simulate", "simulation", "model", "models", "optimize", "detect",
-    "estimate", "calculate", "compute", "observe", "observation",
-    "classify", "validate", "validation", "calibrate", "calibration",
-    "statistically", "empirically", "operationalize", "operationalized",
-    "protocol", "methodology", "randomized", "controlled", "blinded",
-    "sequence", "genome", "gene", "protein", "pathway", "mechanism",
-    "circuit", "neural", "behavioral", "cognitive", "physiological",
-    "specific", "particular", "defined", "characterized",
+    "measure",
+    "measures",
+    "measured",
+    "measuring",
+    "measurement",
+    "test",
+    "tests",
+    "tested",
+    "testing",
+    "experiment",
+    "experimental",
+    "analyze",
+    "analysis",
+    "compare",
+    "comparison",
+    "correlate",
+    "correlation",
+    "predict",
+    "prediction",
+    "predictive",
+    "quantify",
+    "quantification",
+    "identify",
+    "isolate",
+    "control",
+    "replicate",
+    "simulate",
+    "simulation",
+    "model",
+    "models",
+    "optimize",
+    "detect",
+    "estimate",
+    "calculate",
+    "compute",
+    "observe",
+    "observation",
+    "classify",
+    "validate",
+    "validation",
+    "calibrate",
+    "calibration",
+    "statistically",
+    "empirically",
+    "operationalize",
+    "operationalized",
+    "protocol",
+    "methodology",
+    "randomized",
+    "controlled",
+    "blinded",
+    "sequence",
+    "genome",
+    "gene",
+    "protein",
+    "pathway",
+    "mechanism",
+    "circuit",
+    "neural",
+    "behavioral",
+    "cognitive",
+    "physiological",
+    "specific",
+    "particular",
+    "defined",
+    "characterized",
 }
 
 _MEASUREMENT = {
-    "rate", "frequency", "level", "concentration", "correlation",
-    "coefficient", "proportion", "ratio", "percentage", "threshold",
-    "range", "scale", "index", "score", "metric", "magnitude",
-    "intensity", "duration", "latency", "accuracy", "precision",
-    "recall", "sensitivity", "specificity", "variance", "deviation",
-    "gradient", "density", "flux", "potential", "resistance",
-    "temperature", "velocity", "mass", "volume", "charge",
+    "rate",
+    "frequency",
+    "level",
+    "concentration",
+    "correlation",
+    "coefficient",
+    "proportion",
+    "ratio",
+    "percentage",
+    "threshold",
+    "range",
+    "scale",
+    "index",
+    "score",
+    "metric",
+    "magnitude",
+    "intensity",
+    "duration",
+    "latency",
+    "accuracy",
+    "precision",
+    "recall",
+    "sensitivity",
+    "specificity",
+    "variance",
+    "deviation",
+    "gradient",
+    "density",
+    "flux",
+    "potential",
+    "resistance",
+    "temperature",
+    "velocity",
+    "mass",
+    "volume",
+    "charge",
 }
 
 _HEDGING = {
-    "might", "could", "possibly", "perhaps", "presumably", "arguably",
-    "allegedly", "seemingly", "apparently", "conceivably", "hypothetically",
-    "theoretically", "speculatively", "putatively",
+    "might",
+    "could",
+    "possibly",
+    "perhaps",
+    "presumably",
+    "arguably",
+    "allegedly",
+    "seemingly",
+    "apparently",
+    "conceivably",
+    "hypothetically",
+    "theoretically",
+    "speculatively",
+    "putatively",
 }
 
 _WH_WORDS = {
-    "what": 0, "how": 1, "why": 2, "which": 3, "whether": 4,
-    "when": 5, "where": 6, "who": 7, "whom": 8, "whose": 9,
+    "what": 0,
+    "how": 1,
+    "why": 2,
+    "which": 3,
+    "whether": 4,
+    "when": 5,
+    "where": 6,
+    "who": 7,
+    "whom": 8,
+    "whose": 9,
 }
 
 _NOMINALIZATIONS = re.compile(
@@ -97,17 +233,18 @@ _NOMINALIZATIONS = re.compile(
 # Constantes de layout
 # ---------------------------------------------------------------------------
 
-N_STRUCT           = 10    # features estruturais por questao
-N_STRUCTURAL_TOTAL = N_STRUCT * 3 + 2   # 32: bad + cand + delta + sim + jaccard
-EMB_DIM            = 384   # all-MiniLM-L6-v2
-N_CROSS_ENC        = 1     # score do cross-encoder
+N_STRUCT = 10  # features estruturais por questao
+N_STRUCTURAL_TOTAL = N_STRUCT * 3 + 2  # 32: bad + cand + delta + sim + jaccard
+EMB_DIM = 384  # all-MiniLM-L6-v2
+N_CROSS_ENC = 1  # score do cross-encoder
 # Total colunas brutas: 32 + 384*3 + 1 = 1185
-N_FEATURES_RAW     = N_STRUCTURAL_TOTAL + EMB_DIM * 3 + N_CROSS_ENC
+N_FEATURES_RAW = N_STRUCTURAL_TOTAL + EMB_DIM * 3 + N_CROSS_ENC
 
 
 # ---------------------------------------------------------------------------
 # Extratores de features
 # ---------------------------------------------------------------------------
+
 
 def _words(text: str) -> list[str]:
     return re.findall(r"[a-zA-Z']+", text.lower())
@@ -115,9 +252,9 @@ def _words(text: str) -> list[str]:
 
 def _structural_features(q: str) -> list[float]:
     words = _words(q)
-    wset  = set(words)
-    n     = max(len(words), 1)
-    wh    = _WH_WORDS.get(words[0] if words else "", -1)
+    wset = set(words)
+    n = max(len(words), 1)
+    wh = _WH_WORDS.get(words[0] if words else "", -1)
     return [
         len(words),
         sum(1 for w in words if w in _SPECULATIVE) / n,
@@ -133,10 +270,41 @@ def _structural_features(q: str) -> list[float]:
 
 
 def _jaccard(q1: str, q2: str) -> float:
-    stop = {"is", "are", "the", "a", "an", "of", "in", "on", "at", "to",
-            "do", "does", "did", "can", "could", "how", "what", "why",
-            "which", "when", "where", "who", "that", "this", "these",
-            "those", "and", "or", "but", "for", "with", "between", "among"}
+    stop = {
+        "is",
+        "are",
+        "the",
+        "a",
+        "an",
+        "of",
+        "in",
+        "on",
+        "at",
+        "to",
+        "do",
+        "does",
+        "did",
+        "can",
+        "could",
+        "how",
+        "what",
+        "why",
+        "which",
+        "when",
+        "where",
+        "who",
+        "that",
+        "this",
+        "these",
+        "those",
+        "and",
+        "or",
+        "but",
+        "for",
+        "with",
+        "between",
+        "among",
+    }
     w1 = {w for w in _words(q1) if len(w) > 3 and w not in stop}
     w2 = {w for w in _words(q2) if len(w) > 3 and w not in stop}
     if not w1 and not w2:
@@ -145,9 +313,9 @@ def _jaccard(q1: str, q2: str) -> float:
 
 
 def build_structural_matrix(
-    q_bads:   list[str],
-    q_cands:  list[str],
-    emb_bad:  np.ndarray,
+    q_bads: list[str],
+    q_cands: list[str],
+    emb_bad: np.ndarray,
     emb_cand: np.ndarray,
 ) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
     """
@@ -157,8 +325,8 @@ def build_structural_matrix(
     sims = (emb_bad * emb_cand).sum(axis=1)  # cosine (embeddings normalizados)
     rows = []
     for q_bad, q_cand, sim in zip(q_bads, q_cands, sims):
-        fb    = _structural_features(q_bad)
-        fc    = _structural_features(q_cand)
+        fb = _structural_features(q_bad)
+        fc = _structural_features(q_cand)
         delta = [c - b for b, c in zip(fb, fc)]
         rows.append(fb + fc + delta + [float(sim), _jaccard(q_bad, q_cand)])
     return (
@@ -173,16 +341,17 @@ def build_structural_matrix(
 # Wrapper do modelo treinado
 # ---------------------------------------------------------------------------
 
+
 class ParadigmClassifier:
     """Classificador de pares (q_bad, q_candidato)."""
 
     CROSS_ENC_MODEL = "cross-encoder/ms-marco-MiniLM-L-6-v2"
-    EMBED_MODEL     = "all-MiniLM-L6-v2"
+    EMBED_MODEL = "all-MiniLM-L6-v2"
 
     def __init__(self, model_path: str | Path | None = None):
-        self.model_path    = Path(model_path or "data/models/paradigm_classifier.pkl")
-        self._pipeline     = None
-        self._embedder     = None
+        self.model_path = Path(model_path or "data/models/paradigm_classifier.pkl")
+        self._pipeline = None
+        self._embedder = None
         self._cross_encoder = None
 
     # ------------------------------------------------------------------
@@ -192,12 +361,14 @@ class ParadigmClassifier:
     def _load_embedder(self):
         if self._embedder is None:
             from sentence_transformers import SentenceTransformer
+
             self._embedder = SentenceTransformer(self.EMBED_MODEL)
         return self._embedder
 
     def _load_cross_encoder(self):
         if self._cross_encoder is None:
             from sentence_transformers import CrossEncoder
+
             self._cross_encoder = CrossEncoder(self.CROSS_ENC_MODEL)
         return self._cross_encoder
 
@@ -230,17 +401,15 @@ class ParadigmClassifier:
           [800:1184] emb_diff
           [1184]     cross_encoder score
         """
-        q_bads  = [p[0] for p in pairs]
+        q_bads = [p[0] for p in pairs]
         q_cands = [p[1] for p in pairs]
 
         all_embs = self._embed_batch(q_bads + q_cands)
-        emb_bad  = all_embs[:len(q_bads)]
-        emb_cand = all_embs[len(q_bads):]
+        emb_bad = all_embs[: len(q_bads)]
+        emb_cand = all_embs[len(q_bads) :]
 
-        X_struct, X_eb, X_ec, X_ed = build_structural_matrix(
-            q_bads, q_cands, emb_bad, emb_cand
-        )
-        X_ce = self._cross_enc_batch(pairs)   # (n, 1)
+        X_struct, X_eb, X_ec, X_ed = build_structural_matrix(q_bads, q_cands, emb_bad, emb_cand)
+        X_ce = self._cross_enc_batch(pairs)  # (n, 1)
 
         return np.hstack([X_struct, X_eb, X_ec, X_ed, X_ce])
 

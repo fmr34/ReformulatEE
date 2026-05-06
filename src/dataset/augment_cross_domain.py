@@ -26,19 +26,20 @@ import re
 from collections import defaultdict
 from pathlib import Path
 
-LAYER2_PATH  = Path("data/pairs/pairs_layer2.jsonl")
-OUTPUT_PATH  = Path("data/pairs/adversarial_probes_crossdomain.jsonl")
+LAYER2_PATH = Path("data/pairs/pairs_layer2.jsonl")
+OUTPUT_PATH = Path("data/pairs/adversarial_probes_crossdomain.jsonl")
 
-N_TARGET         = 200   # exemplos a gerar
-SEED             = 123
+N_TARGET = 200  # exemplos a gerar
+SEED = 123
 DOMAIN_SIM_THRESH = 0.20  # overlap Jaccard máximo entre nomes de domínio
-MAX_PER_QBAD     = 3      # máx amostras por q_bad (garante diversidade)
-MAX_PER_COMBO    = 2      # máx amostras por par de domínios (A, B)
+MAX_PER_QBAD = 3  # máx amostras por q_bad (garante diversidade)
+MAX_PER_COMBO = 2  # máx amostras por par de domínios (A, B)
 
 
 # ---------------------------------------------------------------------------
 # Similaridade entre nomes de domínio
 # ---------------------------------------------------------------------------
+
 
 def _dom_words(domain: str) -> set[str]:
     stop = {"of", "the", "a", "and", "in", "/", "or"}
@@ -58,6 +59,7 @@ def domain_jaccard(d1: str, d2: str) -> float:
 # Geração
 # ---------------------------------------------------------------------------
 
+
 def gerar_augmentacao(
     layer2_path: Path = LAYER2_PATH,
     output_path: Path = OUTPUT_PATH,
@@ -68,9 +70,7 @@ def gerar_augmentacao(
 
     # Carrega pares com domínio
     pares = [
-        json.loads(l)
-        for l in layer2_path.read_text(encoding="utf-8").splitlines()
-        if l.strip()
+        json.loads(l) for l in layer2_path.read_text(encoding="utf-8").splitlines() if l.strip()
     ]
     pares = [p for p in pares if p.get("q_bad") and p.get("q_good") and p.get("domain", "").strip()]
 
@@ -86,7 +86,7 @@ def gerar_augmentacao(
     # Pré-computa pares de domínios suficientemente diferentes
     doms_distintos: list[tuple[str, str]] = []
     for i, d1 in enumerate(dominios):
-        for d2 in dominios[i + 1:]:
+        for d2 in dominios[i + 1 :]:
             if domain_jaccard(d1, d2) < DOMAIN_SIM_THRESH:
                 doms_distintos.append((d1, d2))
 
@@ -115,7 +115,7 @@ def gerar_augmentacao(
             break
 
         qbad_id = par_a["source_id"]
-        combo   = (par_a["domain"].strip()[:20], par_b["domain"].strip()[:20])
+        combo = (par_a["domain"].strip()[:20], par_b["domain"].strip()[:20])
 
         if usos_qbad[qbad_id] >= MAX_PER_QBAD:
             continue
@@ -123,17 +123,17 @@ def gerar_augmentacao(
             continue
 
         novo = {
-            "q_bad":       par_a["q_bad"],
-            "q_good_fake": par_b["q_good"],        # q_good real de outro domínio
-            "q_good_real": par_a["q_good"],         # referência (não usado no treino)
-            "probe_type":  "desconectada_cross",    # subtipo de augmentação
-            "why_fake":    f"Cross-domain: q_bad from '{par_a['domain'][:40]}', "
-                           f"q_cand from '{par_b['domain'][:40]}' — answers a different problem.",
-            "domain":      par_a["domain"],
-            "source":      par_a.get("source", ""),
-            "source_id":   f"cross_{par_a['source_id']}_{par_b['source_id']}",
-            "year":        par_a.get("year", 0),
-            "label":       0,
+            "q_bad": par_a["q_bad"],
+            "q_good_fake": par_b["q_good"],  # q_good real de outro domínio
+            "q_good_real": par_a["q_good"],  # referência (não usado no treino)
+            "probe_type": "desconectada_cross",  # subtipo de augmentação
+            "why_fake": f"Cross-domain: q_bad from '{par_a['domain'][:40]}', "
+            f"q_cand from '{par_b['domain'][:40]}' — answers a different problem.",
+            "domain": par_a["domain"],
+            "source": par_a.get("source", ""),
+            "source_id": f"cross_{par_a['source_id']}_{par_b['source_id']}",
+            "year": par_a.get("year", 0),
+            "label": 0,
         }
         novos.append(novo)
         usos_qbad[qbad_id] += 1
@@ -152,16 +152,18 @@ def gerar_augmentacao(
 # Resumo
 # ---------------------------------------------------------------------------
 
+
 def imprimir_resumo(novos: list[dict]) -> None:
     from collections import Counter
-    dominios_bad  = Counter(n["domain"][:40] for n in novos)
+
+    dominios_bad = Counter(n["domain"][:40] for n in novos)
     print(f"\n{'='*55}")
     print(f"  Novos exemplos desconectada_cross: {len(novos)}")
-    print(f"\n  Top 10 domínios de q_bad:")
+    print("\n  Top 10 domínios de q_bad:")
     for d, n in dominios_bad.most_common(10):
         print(f"    {d:<45} {n:>3}")
 
-    print(f"\n  Amostra (3 exemplos):")
+    print("\n  Amostra (3 exemplos):")
     for item in novos[:3]:
         print(f"\n  q_bad  : {item['q_bad'][:75]}")
         print(f"  q_cand : {item['q_good_fake'][:75]}")

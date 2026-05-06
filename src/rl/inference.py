@@ -50,10 +50,11 @@ from __future__ import annotations
 import json
 import os
 import sys
-from concurrent.futures import ThreadPoolExecutor, as_completed
-from dataclasses import dataclass, field
+from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import as_completed
+from dataclasses import dataclass
+from dataclasses import field
 from pathlib import Path
-from typing import Optional
 
 from dotenv import load_dotenv
 
@@ -63,16 +64,16 @@ load_dotenv(override=True)
 # Configuracao
 # ---------------------------------------------------------------------------
 
-BACKEND          = os.getenv("INFERENCE_BACKEND",        "auto")
-TRANSLATE_BACKEND = os.getenv("TRANSLATE_BACKEND",       "local")
-MODEL_DIR        = Path(os.getenv("INFERENCE_MODEL_DIR", "data/models/dpo_policy/tier3/final"))
-BASE_MODEL       = os.getenv("DPO_MODEL",                "gpt2")
-N_CANDIDATES     = int(os.getenv("INFERENCE_N",          "8"))
-ALPHA            = float(os.getenv("INFERENCE_ALPHA",    "0.5"))
-MAX_NEW_TOKENS   = int(os.getenv("INFERENCE_MAX_NEW_TOKENS", "80"))
-TEMPERATURE      = float(os.getenv("INFERENCE_TEMPERATURE", "1.1"))
-TOP_P            = float(os.getenv("INFERENCE_TOP_P",    "0.95"))
-CORPUS_DIR       = Path(os.getenv("CORPUS_DIR",          "data/corpus"))
+BACKEND = os.getenv("INFERENCE_BACKEND", "auto")
+TRANSLATE_BACKEND = os.getenv("TRANSLATE_BACKEND", "local")
+MODEL_DIR = Path(os.getenv("INFERENCE_MODEL_DIR", "data/models/dpo_policy/tier3/final"))
+BASE_MODEL = os.getenv("DPO_MODEL", "gpt2")
+N_CANDIDATES = int(os.getenv("INFERENCE_N", "8"))
+ALPHA = float(os.getenv("INFERENCE_ALPHA", "0.5"))
+MAX_NEW_TOKENS = int(os.getenv("INFERENCE_MAX_NEW_TOKENS", "80"))
+TEMPERATURE = float(os.getenv("INFERENCE_TEMPERATURE", "1.1"))
+TOP_P = float(os.getenv("INFERENCE_TOP_P", "0.95"))
+CORPUS_DIR = Path(os.getenv("CORPUS_DIR", "data/corpus"))
 
 PROMPT_TEMPLATE = (
     "You are an expert in philosophy of science. "
@@ -111,6 +112,7 @@ def _get_claude_client():
     global _claude_client
     if _claude_client is None:
         import anthropic
+
         api_key = os.getenv("ANTHROPIC_API_KEY")
         if not api_key:
             raise RuntimeError(
@@ -132,12 +134,13 @@ def pr(text: str) -> None:
 # Resultado de inferencia
 # ---------------------------------------------------------------------------
 
+
 @dataclass
 class InferenceResult:
-    q_bad:      str
-    best:       str
-    ee_bad:     float
-    ee_best:    float
+    q_bad: str
+    best: str
+    ee_bad: float
+    ee_best: float
     score_best: float
     stage1_pass: bool
     candidates: list[dict] = field(default_factory=list)
@@ -164,7 +167,8 @@ _corpus_index = None
 def _get_index():
     global _corpus_index
     if _corpus_index is None:
-        from src.corpus.index import CorpusIndex, build_index
+        from src.corpus.index import build_index
+
         index_pkl = CORPUS_DIR / "bm25_index.pkl"
         if not index_pkl.exists():
             pr("  [aviso] Corpus BM25 nao encontrado — respondibilidade sera 0.")
@@ -176,6 +180,7 @@ def _get_index():
 
 class _NullIndex:
     """Fallback quando corpus nao esta disponivel."""
+
     def search(self, *args, **kwargs):
         return []
 
@@ -184,31 +189,34 @@ class _NullIndex:
 # EE scoring
 # ---------------------------------------------------------------------------
 
+
 def _score_candidate(q_cand: str, q_bad: str) -> dict:
     """Retorna dict com ee, score, prox para um candidato."""
-    from src.ee.reward import compute_ee, compute_score
+    from src.ee.reward import compute_ee
+    from src.ee.reward import compute_score
+
     index = _get_index()
     try:
         result = compute_ee(q_cand, q_bad, index)
-        score  = compute_score(result, alpha=ALPHA)
+        score = compute_score(result, alpha=ALPHA)
         return {
-            "text":      q_cand,
-            "ee":        result.ee,
-            "score":     score,
-            "prox":      result.prox,
-            "resp":      result.respondibilidade,
-            "tract":     result.tratabilidade,
-            "nt":        result.nao_trivialidade,
+            "text": q_cand,
+            "ee": result.ee,
+            "score": score,
+            "prox": result.prox,
+            "resp": result.respondibilidade,
+            "tract": result.tratabilidade,
+            "nt": result.nao_trivialidade,
         }
     except Exception as exc:
         return {
-            "text":  q_cand,
-            "ee":    0.0,
+            "text": q_cand,
+            "ee": 0.0,
             "score": 0.0,
-            "prox":  0.0,
-            "resp":  0.0,
+            "prox": 0.0,
+            "resp": 0.0,
             "tract": 0.0,
-            "nt":    0.0,
+            "nt": 0.0,
             "error": str(exc),
         }
 
@@ -225,14 +233,17 @@ def _load_local_pipeline():
     if _local_pipeline is not None:
         return _local_pipeline
 
-    from transformers import AutoTokenizer, AutoModelForCausalLM, pipeline
     import torch
+    from transformers import AutoModelForCausalLM
+    from transformers import AutoTokenizer
+    from transformers import pipeline
 
     pr(f"  Carregando modelo local: {MODEL_DIR}")
 
     # Tenta carregar PEFT adapter; fallback para base model
     if (MODEL_DIR / "adapter_config.json").exists():
         from peft import PeftModel
+
         tokenizer = AutoTokenizer.from_pretrained(str(MODEL_DIR))
         base = AutoModelForCausalLM.from_pretrained(
             BASE_MODEL,
@@ -303,17 +314,20 @@ def _generate_local(q_bad: str, n: int) -> list[str]:
 # Backend CLAUDE (Anthropic API)
 # ---------------------------------------------------------------------------
 
+
 def _generate_claude(q_bad: str, n: int) -> list[str]:
     """
     Gera n candidatos usando Claude API em paralelo (ThreadPoolExecutor).
     Usa prompt caching no system prompt para reduzir custo.
     """
     client = _get_claude_client()
-    system = [{
-        "type": "text",
-        "text": _GENERATION_SYSTEM,
-        "cache_control": {"type": "ephemeral"},
-    }]
+    system = [
+        {
+            "type": "text",
+            "text": _GENERATION_SYSTEM,
+            "cache_control": {"type": "ephemeral"},
+        }
+    ]
     user_msg = [{"role": "user", "content": f"Original question: {q_bad}"}]
 
     def _single_call(_):
@@ -344,6 +358,7 @@ def _generate_claude(q_bad: str, n: int) -> list[str]:
 # Interface principal
 # ---------------------------------------------------------------------------
 
+
 def _score_all(candidates_text: list[str], q_bad: str) -> list[dict]:
     """
     Pontua todos os candidatos em paralelo via ThreadPoolExecutor.
@@ -358,8 +373,17 @@ def _score_all(candidates_text: list[str], q_bad: str) -> list[dict]:
             except Exception as exc:
                 q = futures[f]
                 pr(f"  [aviso] Erro ao pontuar candidato: {exc}")
-                results.append({"text": q, "ee": 0.0, "score": 0.0,
-                                 "prox": 0.0, "resp": 0.0, "tract": 0.0, "nt": 0.0})
+                results.append(
+                    {
+                        "text": q,
+                        "ee": 0.0,
+                        "score": 0.0,
+                        "prox": 0.0,
+                        "resp": 0.0,
+                        "tract": 0.0,
+                        "nt": 0.0,
+                    }
+                )
     return results
 
 
@@ -379,6 +403,7 @@ def gerar_candidatos(q_bad: str, n: int = N_CANDIDATES) -> list[str]:
     else:
         # auto, hf_inference, gguf — delega ao módulo zero-cost
         from src.rl.generate_free import generate as _generate_free
+
         return _generate_free(q_bad, n)
 
 
@@ -393,21 +418,24 @@ def reformular(q_bad: str, n: int = N_CANDIDATES) -> InferenceResult:
     Returns:
         InferenceResult com o melhor candidato e metricas
     """
-    from src.ee.reward import compute_ee, compute_score, passes_stage1_filter
+    from src.ee.reward import compute_ee
 
     # Score da pergunta original
-    index   = _get_index()
-    r_bad   = compute_ee(q_bad, q_bad, index)
-    ee_bad  = r_bad.ee
+    index = _get_index()
+    r_bad = compute_ee(q_bad, q_bad, index)
+    ee_bad = r_bad.ee
 
     # Gera candidatos
     candidates_text = gerar_candidatos(q_bad, n)
     if not candidates_text:
         # Fallback: devolve a pergunta original
         return InferenceResult(
-            q_bad=q_bad, best=q_bad,
-            ee_bad=ee_bad, ee_best=ee_bad,
-            score_best=0.0, stage1_pass=False,
+            q_bad=q_bad,
+            best=q_bad,
+            ee_bad=ee_bad,
+            ee_best=ee_bad,
+            score_best=0.0,
+            stage1_pass=False,
             candidates=[],
         )
 
@@ -416,6 +444,7 @@ def reformular(q_bad: str, n: int = N_CANDIDATES) -> InferenceResult:
 
     # Filtro Stage 1: EE(cand) > EE(q_bad) + epsilon
     from src.ee.reward import _EPSILON
+
     approved = [s for s in scored if s["ee"] > ee_bad + _EPSILON]
 
     if approved:
@@ -441,14 +470,17 @@ def reformular(q_bad: str, n: int = N_CANDIDATES) -> InferenceResult:
 # Traducao automatica pt-br (MarianMT local por padrao; Claude como fallback)
 # ---------------------------------------------------------------------------
 
+
 def _translate_claude(text: str, direction: str) -> str:
     """Traduz via Claude API com prompt caching. direction: 'pt_to_en' | 'en_to_pt'."""
     client = _get_claude_client()
-    system = [{
-        "type": "text",
-        "text": _TRANSLATE_SYSTEMS[direction],
-        "cache_control": {"type": "ephemeral"},
-    }]
+    system = [
+        {
+            "type": "text",
+            "text": _TRANSLATE_SYSTEMS[direction],
+            "cache_control": {"type": "ephemeral"},
+        }
+    ]
     msg = client.messages.create(
         model="claude-haiku-4-5",
         max_tokens=150,
@@ -470,7 +502,9 @@ def _translate(text: str, direction: str) -> str:
 
     # Backend local (padrao)
     try:
-        from src.ee.translate_local import translate as _translate_local, is_available
+        from src.ee.translate_local import is_available
+        from src.ee.translate_local import translate as _translate_local
+
         if is_available():
             return _translate_local(text, direction)
         # transformers nao instalado — tenta Claude
@@ -490,15 +524,15 @@ def _translate(text: str, direction: str) -> str:
 
 @dataclass
 class PtBrResult:
-    q_bad_pt:    str          # pergunta original em pt-br
-    q_bad_en:    str          # traducao para ingles
-    best_en:     str          # melhor reformulacao em ingles
-    best_pt:     str          # melhor reformulacao em pt-br
-    ee_bad:      float
-    ee_best:     float
-    score_best:  float
+    q_bad_pt: str  # pergunta original em pt-br
+    q_bad_en: str  # traducao para ingles
+    best_en: str  # melhor reformulacao em ingles
+    best_pt: str  # melhor reformulacao em pt-br
+    ee_bad: float
+    ee_best: float
+    score_best: float
     stage1_pass: bool
-    candidates:  list[dict] = field(default_factory=list)
+    candidates: list[dict] = field(default_factory=list)
 
     def summary(self) -> str:
         lines = [
@@ -578,6 +612,7 @@ def run_demo() -> None:
     pr("  Fase 3 — Demo Inferencia DPO (best-of-N + EE scoring)")
     pr("=" * 65)
     from src.rl.generate_free import _detect_backend as _det
+
     _resolved = _det() if BACKEND not in ("claude", "local") else BACKEND
     _blabel = f"{BACKEND} → {_resolved}" if BACKEND not in ("claude", "local") else BACKEND
     pr(f"\n  Backend  : {_blabel}")
@@ -596,7 +631,7 @@ def run_demo() -> None:
 
         # Top-3 candidatos
         sorted_cands = sorted(result.candidates, key=lambda s: s["score"], reverse=True)
-        pr(f"\n  Top-3 candidatos:")
+        pr("\n  Top-3 candidatos:")
         for j, c in enumerate(sorted_cands[:3], 1):
             pr(f"    {j}. EE={c['ee']:.3f} | Score={c['score']:.3f} | {c['text'][:70]}")
 
@@ -610,6 +645,7 @@ def run_demo_pt() -> None:
     pr("  Fase 3 — Demo pt-br (traducao automatica + EE scoring)")
     pr("=" * 65)
     from src.rl.generate_free import _detect_backend as _det_pt
+
     _resolved_pt = _det_pt() if BACKEND not in ("claude", "local") else BACKEND
     _blabel_pt = f"{BACKEND} → {_resolved_pt}" if BACKEND not in ("claude", "local") else BACKEND
     pr(f"\n  Backend  : {_blabel_pt}")
@@ -632,7 +668,8 @@ def run_demo_pt() -> None:
 def run_batch(path: str, ptbr: bool = False) -> None:
     """Processa um arquivo .txt com uma pergunta por linha."""
     questions = [
-        l.strip() for l in Path(path).read_text(encoding="utf-8").splitlines()
+        l.strip()
+        for l in Path(path).read_text(encoding="utf-8").splitlines()
         if l.strip() and not l.startswith("#")
     ]
     pr(f"  Processando {len(questions)} perguntas de {path}...")
@@ -643,27 +680,31 @@ def run_batch(path: str, ptbr: bool = False) -> None:
         if ptbr:
             r = reformular_ptbr(q)
             pr(r.summary())
-            results.append({
-                "q_bad_pt":    r.q_bad_pt,
-                "q_bad_en":    r.q_bad_en,
-                "best_en":     r.best_en,
-                "best_pt":     r.best_pt,
-                "ee_bad":      round(r.ee_bad, 4),
-                "ee_best":     round(r.ee_best, 4),
-                "score_best":  round(r.score_best, 4),
-                "stage1_pass": r.stage1_pass,
-            })
+            results.append(
+                {
+                    "q_bad_pt": r.q_bad_pt,
+                    "q_bad_en": r.q_bad_en,
+                    "best_en": r.best_en,
+                    "best_pt": r.best_pt,
+                    "ee_bad": round(r.ee_bad, 4),
+                    "ee_best": round(r.ee_best, 4),
+                    "score_best": round(r.score_best, 4),
+                    "stage1_pass": r.stage1_pass,
+                }
+            )
         else:
             r = reformular(q)
             pr(r.summary())
-            results.append({
-                "q_bad":       r.q_bad,
-                "best":        r.best,
-                "ee_bad":      round(r.ee_bad, 4),
-                "ee_best":     round(r.ee_best, 4),
-                "score_best":  round(r.score_best, 4),
-                "stage1_pass": r.stage1_pass,
-            })
+            results.append(
+                {
+                    "q_bad": r.q_bad,
+                    "best": r.best,
+                    "ee_bad": round(r.ee_bad, 4),
+                    "ee_best": round(r.ee_best, 4),
+                    "score_best": round(r.score_best, 4),
+                    "stage1_pass": r.stage1_pass,
+                }
+            )
 
     out_path = Path(path).with_suffix(".results.jsonl")
     with out_path.open("w", encoding="utf-8") as f:
@@ -702,14 +743,18 @@ if __name__ == "__main__":
             result = reformular_ptbr(q)
             pr("\n" + result.summary())
             pr("\n  Top candidatos (decrescente por score):")
-            for j, c in enumerate(sorted(result.candidates, key=lambda s: s["score"], reverse=True), 1):
+            for j, c in enumerate(
+                sorted(result.candidates, key=lambda s: s["score"], reverse=True), 1
+            ):
                 status = "PASS" if c["ee"] > result.ee_bad + 0.05 else "FAIL"
                 pr(f"  {j:2}. [{status}] EE={c['ee']:.3f} Sc={c['score']:.3f} | {c['text'][:75]}")
         else:
             result = reformular(q)
             pr(result.summary())
             pr("\n  Todos os candidatos (decrescente por score):")
-            for j, c in enumerate(sorted(result.candidates, key=lambda s: s["score"], reverse=True), 1):
+            for j, c in enumerate(
+                sorted(result.candidates, key=lambda s: s["score"], reverse=True), 1
+            ):
                 status = "PASS" if c["ee"] > result.ee_bad + 0.05 else "FAIL"
                 pr(f"  {j:2}. [{status}] EE={c['ee']:.3f} Sc={c['score']:.3f} | {c['text'][:75]}")
     else:

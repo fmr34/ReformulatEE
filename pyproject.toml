@@ -1,4 +1,4 @@
-﻿[build-system]
+[build-system]
 requires = ["setuptools>=65.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
@@ -81,20 +81,7 @@ packages = ["src"]
 line-length = 100
 target-version = ["py39", "py310", "py311", "py312"]
 include = '\.pyi?$'
-extend-exclude = '''
-/(
-  # diretórios
-  \.eggs
-  | \.git
-  | \.hg
-  | \.mypy_cache
-  | \.tox
-  | \.venv
-  | build
-  | dist
-  | data
-)/
-'''
+extend-exclude = '/(\.eggs|\.git|\.venv|build|dist|data|notebooks)/'
 
 [tool.ruff]
 line-length = 100

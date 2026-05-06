@@ -45,7 +45,7 @@ REFORMULATION_QUERIES = [
 ]
 
 MAX_PER_QUERY = 100
-_DELAY_NO_KEY = 1.5   # sem S2_API_KEY
+_DELAY_NO_KEY = 1.5  # sem S2_API_KEY
 _DELAY_WITH_KEY = 0.4
 
 
@@ -64,7 +64,9 @@ def fetch_s2_candidates(output_path: Path, max_per_query: int = MAX_PER_QUERY) -
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
     if output_path.exists():
-        candidates = [json.loads(l) for l in output_path.read_text(encoding="utf-8").splitlines() if l.strip()]
+        candidates = [
+            json.loads(l) for l in output_path.read_text(encoding="utf-8").splitlines() if l.strip()
+        ]
         cached_queries = {c.get("query", "") for c in candidates}
         pending = [q for q in REFORMULATION_QUERIES if q not in cached_queries]
         if not pending:
@@ -110,10 +112,7 @@ def fetch_s2_candidates(output_path: Path, max_per_query: int = MAX_PER_QUERY) -
             seen_ids.add(pid)
             # fieldsOfStudy pode ser lista de strings ou lista de dicts dependendo da versao da API
             fields_raw = paper.get("fieldsOfStudy") or []
-            categories = [
-                f if isinstance(f, str) else f.get("category", "")
-                for f in fields_raw
-            ]
+            categories = [f if isinstance(f, str) else f.get("category", "") for f in fields_raw]
             entry = {
                 "id": f"s2_{pid}",
                 "title": paper.get("title", ""),
@@ -138,6 +137,7 @@ def fetch_s2_candidates(output_path: Path, max_per_query: int = MAX_PER_QUERY) -
 
 if __name__ == "__main__":
     from dotenv import load_dotenv
+
     load_dotenv(override=True)
     out = Path("data/pairs/s2_candidates.jsonl")
     candidates = fetch_s2_candidates(out)

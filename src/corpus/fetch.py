@@ -5,8 +5,9 @@ Domains: philosophy of science, scientific methodology, epistemology.
 
 import json
 import time
-import arxiv
 from pathlib import Path
+
+import arxiv
 from tqdm import tqdm
 
 SEARCH_QUERIES = [
@@ -41,7 +42,9 @@ def fetch_corpus(output_dir: Path, max_per_query: int = MAX_RESULTS_PER_QUERY) -
     cache_file = output_dir / "papers.jsonl"
 
     if cache_file.exists():
-        papers = [json.loads(l) for l in cache_file.read_text(encoding="utf-8").splitlines() if l.strip()]
+        papers = [
+            json.loads(l) for l in cache_file.read_text(encoding="utf-8").splitlines() if l.strip()
+        ]
         print(f"Corpus carregado do cache: {len(papers)} papers")
         return papers
 
@@ -60,13 +63,15 @@ def fetch_corpus(output_dir: Path, max_per_query: int = MAX_RESULTS_PER_QUERY) -
                 if result.entry_id in seen_ids:
                     continue
                 seen_ids.add(result.entry_id)
-                papers.append({
-                    "id": result.entry_id,
-                    "title": result.title,
-                    "abstract": result.summary.replace("\n", " "),
-                    "year": result.published.year,
-                    "categories": result.categories,
-                })
+                papers.append(
+                    {
+                        "id": result.entry_id,
+                        "title": result.title,
+                        "abstract": result.summary.replace("\n", " "),
+                        "year": result.published.year,
+                        "categories": result.categories,
+                    }
+                )
         except Exception as e:
             print(f"Erro na query '{query}': {e}")
         time.sleep(1.0)
@@ -81,8 +86,10 @@ def fetch_corpus(output_dir: Path, max_per_query: int = MAX_RESULTS_PER_QUERY) -
 
 if __name__ == "__main__":
     from dotenv import load_dotenv
+
     load_dotenv()
     import os
+
     corpus_dir = Path(os.getenv("CORPUS_DIR", "data/corpus"))
     papers = fetch_corpus(corpus_dir)
     print(f"Total: {len(papers)} papers")

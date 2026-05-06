@@ -55,8 +55,7 @@ logs/
 wandb/
 
 # ── Claude Code internals ────────────────────────────────────────────────────
-.claude/batch_id.txt
-.claude/worktrees/
+.claude/
 
 # ── Arquivos temporários ──────────────────────────────────────────────────────
 *.tmp

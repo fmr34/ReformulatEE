@@ -14,27 +14,28 @@ Filtro de Estagio 1 (Patch B):
 from __future__ import annotations
 
 import os
-from dataclasses import dataclass, field
-from typing import Literal
+from dataclasses import dataclass
+from dataclasses import field
 
 from dotenv import load_dotenv
 
 load_dotenv(override=True)
 
 from src.corpus.index import CorpusIndex
+from src.ee.nao_trivialidade import cosine_similarity
+from src.ee.nao_trivialidade import nao_trivialidade
 from src.ee.respondibilidade import respondibilidade
-from src.ee.nao_trivialidade import nao_trivialidade, cosine_similarity
 from src.ee.tratabilidade import tratabilidade
 
 # Pesos calibrados (Fase 2 — grid search sobre 163 pares Layer 2)
-_B1      = float(os.getenv("BETA1",       "0.05"))
-_B2      = float(os.getenv("BETA2",       "0.05"))
-_B3      = float(os.getenv("BETA3",       "0.90"))
-_ALPHA   = float(os.getenv("ALPHA",       "0.5"))
-_EPSILON = float(os.getenv("EPSILON",     "0.05"))
+_B1 = float(os.getenv("BETA1", "0.05"))
+_B2 = float(os.getenv("BETA2", "0.05"))
+_B3 = float(os.getenv("BETA3", "0.90"))
+_ALPHA = float(os.getenv("ALPHA", "0.5"))
+_EPSILON = float(os.getenv("EPSILON", "0.05"))
 # Parametros da funcao sino (nao_trivialidade) — calibrados
 _BELL_CENTER = float(os.getenv("BELL_CENTER", "0.50"))
-_BELL_WIDTH  = float(os.getenv("BELL_WIDTH",  "0.25"))
+_BELL_WIDTH = float(os.getenv("BELL_WIDTH", "0.25"))
 
 
 @dataclass
@@ -106,6 +107,7 @@ def passes_stage1_filter(
 
 if __name__ == "__main__":
     from pathlib import Path
+
     from src.corpus.fetch import fetch_corpus
     from src.corpus.index import build_index
 

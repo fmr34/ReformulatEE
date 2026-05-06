@@ -14,15 +14,16 @@ import os
 import sys
 from pathlib import Path
 
-sys.path.insert(0, os.path.normpath(os.path.join(os.path.dirname(__file__), '..', '..')))
+sys.path.insert(0, os.path.normpath(os.path.join(os.path.dirname(__file__), "..", "..")))
 
 from dotenv import load_dotenv
+
 load_dotenv()
 
 from src.corpus.index import build_index
 
 corpus_dir = Path(os.getenv("CORPUS_DIR", "data/corpus"))
-sem_path   = corpus_dir / "bm25_index_semantic.npy"
+sem_path = corpus_dir / "bm25_index_semantic.npy"
 
 if sem_path.exists():
     print(f"Índice semântico já existe: {sem_path}")

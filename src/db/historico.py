@@ -25,7 +25,8 @@ def _conn() -> sqlite3.Connection:
 
 def init_db() -> None:
     with _conn() as c:
-        c.execute("""
+        c.execute(
+            """
             CREATE TABLE IF NOT EXISTS historico (
                 id            INTEGER PRIMARY KEY AUTOINCREMENT,
                 ts            TEXT    NOT NULL,
@@ -40,15 +41,18 @@ def init_db() -> None:
                 stage1_pass   INTEGER NOT NULL,
                 feedback      INTEGER DEFAULT NULL   -- 1=positivo, -1=negativo
             )
-        """)
-        c.execute("""
+        """
+        )
+        c.execute(
+            """
             CREATE TABLE IF NOT EXISTS cache_tratabilidade (
                 hash          TEXT PRIMARY KEY,
                 query         TEXT NOT NULL,
                 resultado     TEXT NOT NULL,          -- JSON
                 ts            TEXT NOT NULL
             )
-        """)
+        """
+        )
 
 
 # ---------------------------------------------------------------------------
@@ -127,13 +131,15 @@ def todas() -> list[dict]:
     """Retorna todos os registros completos para análise/exportação."""
     try:
         with _conn() as c:
-            rows = c.execute("""
+            rows = c.execute(
+                """
                 SELECT id, ts, idioma, pergunta_orig, pergunta_en,
                        candidatos, melhor, melhor_pt,
                        ee_antes, ee_depois, stage1_pass, feedback
                 FROM historico
                 ORDER BY id DESC
-            """).fetchall()
+            """
+            ).fetchall()
         cols = [
             "id",
             "ts",

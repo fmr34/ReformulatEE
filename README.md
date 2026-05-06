@@ -7,7 +7,7 @@ sdk: gradio
 sdk_version: 6.13.0
 app_file: app.py
 pinned: false
-license: mit
+license: apache-2.0
 short_description: Reformulate research questions with maximum epistemic effectiveness
 ---
 
@@ -15,7 +15,7 @@ short_description: Reformulate research questions with maximum epistemic effecti
 
 [![Spaces](https://huggingface.co/datasets/huggingface/badges/raw/main/run-on-spaces-sm.svg)](https://huggingface.co/spaces)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 A machine learning system that **reformulates research questions** to maximize their **epistemic effectiveness** — making them more operationalizable, methodologically tractable, and non-trivial.
 
@@ -236,7 +236,7 @@ Contributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines
 
 ## 📄 License
 
-MIT License — see [LICENSE](LICENSE)
+Apache License 2.0 — see [LICENSE](LICENSE)
 
 ## 🔗 Citation
 

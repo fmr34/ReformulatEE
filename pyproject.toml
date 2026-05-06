@@ -10,7 +10,7 @@ readme = "README.md"
 requires-python = ">=3.9"
 license = {text = "MIT"}
 authors = [
-    {name = "fmr34", email = "https://github.com/fmr34"}
+    {name = "fmr34"}
 ]
 keywords = [
     "nlp",

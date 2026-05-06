@@ -27,7 +27,7 @@ Thank you for your interest in contributing! This document provides guidelines a
 ### 1. Fork & Clone
 
 ```bash
-git clone https://github.com/yourusername/reformulatee.git
+git clone https://github.com/fmr34/reformulatee.git
 cd reformulatee
 git remote add upstream https://github.com/original-author/reformulatee.git
 ```
@@ -302,7 +302,7 @@ Maintainers will handle:
 
 - **GitHub Discussions** — Questions, ideas, announcements
 - **GitHub Issues** — Bug reports, feature requests
-- **Email** — youremail@example.com for non-technical inquiries
+- **Email** — https://github.com/fmr34 for non-technical inquiries
 
 ---
 

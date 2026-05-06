@@ -10,7 +10,7 @@ readme = "README.md"
 requires-python = ">=3.9"
 license = {text = "MIT"}
 authors = [
-    {name = "Your Name", email = "your.email@example.com"}
+    {name = "fmr34", email = "https://github.com/fmr34"}
 ]
 keywords = [
     "nlp",
@@ -69,10 +69,10 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/yourusername/reformulatee"
-Repository = "https://github.com/yourusername/reformulatee.git"
-Documentation = "https://github.com/yourusername/reformulatee#-documentation"
-Issues = "https://github.com/yourusername/reformulatee/issues"
+Homepage = "https://github.com/fmr34/reformulatee"
+Repository = "https://github.com/fmr34/reformulatee.git"
+Documentation = "https://github.com/fmr34/reformulatee#-documentation"
+Issues = "https://github.com/fmr34/reformulatee/issues"
 
 [tool.setuptools]
 packages = ["src"]

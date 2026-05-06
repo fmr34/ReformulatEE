@@ -45,7 +45,7 @@ Research questions vary in their tractability. A question is **epistemically tra
 ### Local Installation
 
 ```bash
-git clone https://github.com/yourusername/reformulatee.git
+git clone https://github.com/fmr34/reformulatee.git
 cd reformulatee
 python -m venv .venv
 source .venv/bin/activate  # Windows: .venv\Scripts\activate
@@ -164,7 +164,7 @@ python -m src.dataset.prepare_dpo
 # 2. Open notebooks/dpo_finetune_colab.ipynb in Colab
 # 3. Upload dpo_final.jsonl, train Qwen2.5-1.5B with DPO
 # 4. Publish to HF Hub
-# 5. Update .env: HF_MODEL=yourusername/reformulatee-reformulator
+# 5. Update .env: HF_MODEL=fmr34/reformulatee-reformulator
 ```
 
 **Cost:** ~$0.003 (100 × Haiku calls for dataset generation) + free Colab GPU
@@ -245,9 +245,9 @@ If you use ReformulatEE in research:
 ```bibtex
 @software{reformulatee_2025,
   title={ReformulatEE: Epistemic Effectiveness Reformulation},
-  author={Your Name},
+  author={fmr34},
   year={2025},
-  url={https://github.com/yourusername/reformulatee},
+  url={https://github.com/fmr34/reformulatee},
   note={Open source portfolio project}
 }
 ```
@@ -265,9 +265,9 @@ If you use ReformulatEE in research:
 
 - **Issues** — GitHub Issues for bugs / feature requests
 - **Discussions** — GitHub Discussions for Q&A
-- **Email** — your.email@example.com
+- **Email** — https://github.com/fmr34
 
 ---
 
-**Built with 🤖 by [Your Name]**  
+**Built with 🤖 by [fmr34]**  
 *Portfolio project exploring LLM fine-tuning, RLHF, and epistemic philosophy.*

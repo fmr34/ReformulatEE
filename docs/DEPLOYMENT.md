@@ -8,7 +8,7 @@
 git init
 git add .
 git commit -m "Initial commit: ReformulatEE open source"
-git remote add origin https://github.com/yourusername/reformulatee.git
+git remote add origin https://github.com/fmr34/reformulatee.git
 git branch -M main
 git push -u origin main
 ```
@@ -150,7 +150,7 @@ gcloud run deploy reformulatee \
 az container create \
   --resource-group mygroup \
   --name reformulatee \
-  --image yourusername/reformulatee:latest \
+  --image fmr34/reformulatee:latest \
   --ports 7860 \
   --environment-variables INFERENCE_BACKEND=hf_inference
 ```
@@ -223,7 +223,7 @@ def reformular_ui(...):
 ```bash
 # View logs in dashboard
 # Or via HF CLI:
-huggingface-cli get-space-logs yourusername/reformulatee
+huggingface-cli get-space-logs fmr34/reformulatee
 ```
 
 ### Custom Logging
@@ -282,7 +282,7 @@ jobs:
         run: |
           git config user.email "ci@example.com"
           git config user.name "CI Bot"
-          git remote add huggingface https://huggingface.co/spaces/yourusername/reformulatee
+          git remote add huggingface https://huggingface.co/spaces/fmr34/reformulatee
           git push huggingface main
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}

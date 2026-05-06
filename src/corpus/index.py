@@ -9,6 +9,8 @@ Para construir o índice semântico (uma vez):
   python -m src.corpus.build_semantic_index
 """
 
+from __future__ import annotations
+
 import json
 import os
 import pickle

@@ -24,7 +24,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install black ruff
+          pip install "black==26.3.1" ruff
 
       - name: Check code formatting with Black
         run: black --check src/ tests/ --line-length 100

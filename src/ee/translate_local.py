@@ -35,7 +35,8 @@ def _load_model(model_name: str):
     if model_name in _models:
         return _models[model_name]
 
-    from transformers import MarianMTModel, MarianTokenizer
+    from transformers import MarianMTModel
+    from transformers import MarianTokenizer
 
     _MODEL_CACHE.mkdir(parents=True, exist_ok=True)
     cache_dir = str(_MODEL_CACHE)
@@ -73,7 +74,9 @@ def translate(text: str, direction: str) -> str:
         input_text = text
 
     tokenizer, model = _load_model(model_name)
-    inputs = tokenizer([input_text], return_tensors="pt", padding=True, truncation=True, max_length=512)
+    inputs = tokenizer(
+        [input_text], return_tensors="pt", padding=True, truncation=True, max_length=512
+    )
     outputs = model.generate(**inputs)
     return tokenizer.decode(outputs[0], skip_special_tokens=True).strip()
 

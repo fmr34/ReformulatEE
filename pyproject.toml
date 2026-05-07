@@ -48,6 +48,8 @@ dependencies = [
     "huggingface-hub>=0.16.0",
     "scikit-learn>=1.0.0",
     "scipy>=1.9.0",
+    "sentencepiece>=0.1.99",
+    "sacremoses>=0.0.53",
 ]
 
 [project.optional-dependencies]

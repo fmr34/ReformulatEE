@@ -57,7 +57,7 @@ def _hf_single_call(q_bad: str) -> str:
     model = os.getenv("HF_MODEL", _HF_MODEL)
     token = os.getenv("HF_TOKEN", _HF_TOKEN)
     print(f"  [hf_inference] modelo={model} token={'***' if token else 'None'}")
-    client = InferenceClient(model=model, token=token)
+    client = InferenceClient(model=model, token=token, provider="hf-inference")
     resp = client.chat_completion(
         messages=[
             {"role": "system", "content": _SYSTEM},

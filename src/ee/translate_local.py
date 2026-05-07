@@ -2,7 +2,7 @@
 Traducao local usando Helsinki-NLP MarianMT — substitui chamadas Claude API.
 
 Modelos (~300 MB cada, baixados automaticamente na primeira chamada):
-  pt→en : Helsinki-NLP/opus-mt-tc-big-pt-en
+  pt→en : Helsinki-NLP/opus-mt-pt-en
   en→pt : Helsinki-NLP/opus-mt-en-ROMANCE  (prefixo >>pt<< obrigatorio)
 
 Uso:
@@ -23,7 +23,7 @@ from pathlib import Path
 _MODEL_CACHE = Path(os.getenv("HF_HOME", "data/models/hf_cache"))
 
 # Nomes dos modelos Helsinki-NLP
-_PT_EN_MODEL = "Helsinki-NLP/opus-mt-tc-big-pt-en"
+_PT_EN_MODEL = "Helsinki-NLP/opus-mt-pt-en"
 _EN_PT_MODEL = "Helsinki-NLP/opus-mt-en-ROMANCE"  # usa prefixo >>pt<<
 
 # Pipelines lazy-loaded

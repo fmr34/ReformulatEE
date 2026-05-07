@@ -8,7 +8,7 @@ sdk_version: 6.13.0
 app_file: app.py
 pinned: false
 license: apache-2.0
-short_description: Reformulate research questions with maximum epistemic effectiveness
+short_description: Turn vague research questions into testable hypotheses
 ---
 
 # 🔬 ReformulatEE — Epistemic Effectiveness Reformulation

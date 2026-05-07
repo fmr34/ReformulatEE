@@ -80,7 +80,7 @@ python app.py          # opens http://localhost:7860
 
 | Symptom | Cause | Fix |
 |---------|-------|-----|
-| Space fails to start | Missing dependency | Check logs → add to `requirements.txt` |
+| Space fails to start | Missing dependency | Check logs → add to `pyproject.toml` |
 | High latency | Local inference active | Set `INFERENCE_BACKEND=hf_inference` |
 | Out of memory | MarianMT + embeddings loaded together | Increase Space hardware tier |
 | Empty "Últimas perguntas" | Fresh SQLite DB | Expected; example questions shown as fallback |

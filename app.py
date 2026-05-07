@@ -101,22 +101,22 @@ def reformular_ui(pergunta, idioma):
 
     top  = sorted(cands, key=lambda c: c['score'], reverse=True)
     rows = ''.join(
-        f'<tr style="{"font-weight:600;background:#f0fff4" if i==1 else ""};border-bottom:1px solid #eee">'
-        f'<td style="padding:4px 8px;text-align:center">{"🟢" if c["ee"]>ee_bad+0.05 else "🔴"} {i}</td>'
-        f'<td style="padding:4px 8px;font-family:monospace">{c["ee"]:.3f}</td>'
-        f'<td style="padding:4px 8px">{c["text"]}</td></tr>'
+        f'<tr style="{"font-weight:600;background:#f0fff4" if i==1 else ""};border-bottom:1px solid #eee;color:#333">'
+        f'<td style="padding:4px 8px;text-align:center;color:#333">{"🟢" if c["ee"]>ee_bad+0.05 else "🔴"} {i}</td>'
+        f'<td style="padding:4px 8px;font-family:monospace;color:#333">{c["ee"]:.3f}</td>'
+        f'<td style="padding:4px 8px;color:#333">{c["text"]}</td></tr>'
         for i, c in enumerate(top, 1)
     )
 
     html = f"""
 <div style="font-family:system-ui,sans-serif;line-height:1.5;max-width:860px">
-  <div style="background:#f5f5f5;border-left:4px solid #bbb;padding:10px 14px;border-radius:4px;margin-bottom:10px">
+  <div style="background:#f5f5f5;border-left:4px solid #bbb;padding:10px 14px;border-radius:4px;margin-bottom:10px;color:#333">
     <div style="font-size:.72em;color:#888;text-transform:uppercase">Pergunta original</div>
-    <div style="margin-top:4px">{entrada}</div>{sub_in}
+    <div style="margin-top:4px;color:#333">{entrada}</div>{sub_in}
   </div>
-  <div style="background:#eafaf1;border-left:4px solid #2ecc71;padding:10px 14px;border-radius:4px;margin-bottom:14px">
+  <div style="background:#eafaf1;border-left:4px solid #2ecc71;padding:10px 14px;border-radius:4px;margin-bottom:14px;color:#333">
     <div style="font-size:.72em;color:#27ae60;text-transform:uppercase">Reformulação epistêmica</div>
-    <div style="font-weight:600;font-size:1.04em;margin-top:4px">{saida}</div>{sub_out}
+    <div style="font-weight:600;font-size:1.04em;margin-top:4px;color:#111">{saida}</div>{sub_out}
   </div>
   <div style="display:flex;gap:28px;flex-wrap:wrap;margin-bottom:14px;font-size:.9em">
     <div><div style="font-size:.72em;color:#888">EE ANTES</div>{bar(ee_bad)}</div>
@@ -128,8 +128,8 @@ def reformular_ui(pergunta, idioma):
   </div>
   <details>
     <summary style="cursor:pointer;color:#2980b9;font-size:.85em">▶ Ver {len(cands)} candidatos</summary>
-    <table style="border-collapse:collapse;width:100%;margin-top:6px;font-size:.82em">
-      <thead><tr style="background:#f0f0f0">
+    <table style="border-collapse:collapse;width:100%;margin-top:6px;font-size:.82em;color:#333">
+      <thead><tr style="background:#f0f0f0;color:#333">
         <th style="padding:4px 8px">#</th>
         <th style="padding:4px 8px">EE</th>
         <th style="padding:4px 8px;text-align:left">Reformulação</th>

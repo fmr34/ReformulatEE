@@ -1,0 +1,10 @@
+{
+  "beta1": 0.05,
+  "beta2": 0.05,
+  "beta3": 0.9,
+  "bell_center": 0.5,
+  "bell_width": 0.25,
+  "epsilon": 0.05,
+  "success_rate": 0.98773,
+  "avg_margin": 0.592204
+}

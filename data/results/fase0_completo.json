@@ -1,0 +1,935 @@
+{
+  "auc": 0.995,
+  "gate_passed": true,
+  "threshold_used": 0.2809,
+  "n_questions": 100,
+  "classification_report": {
+    "baixa_EE": {
+      "precision": 0.96,
+      "recall": 0.96,
+      "f1-score": 0.96,
+      "support": 50.0
+    },
+    "alta_EE": {
+      "precision": 0.96,
+      "recall": 0.96,
+      "f1-score": 0.96,
+      "support": 50.0
+    },
+    "accuracy": 0.96,
+    "macro avg": {
+      "precision": 0.96,
+      "recall": 0.96,
+      "f1-score": 0.96,
+      "support": 100.0
+    },
+    "weighted avg": {
+      "precision": 0.96,
+      "recall": 0.96,
+      "f1-score": 0.96,
+      "support": 100.0
+    }
+  },
+  "per_question": [
+    {
+      "text": "What are the molecular mechanisms of CRISPR-Cas9 DNA repair?",
+      "label": 1,
+      "domain": "biology",
+      "respondibilidade": 0.268,
+      "tratabilidade": 0.874,
+      "trajectory": "rising",
+      "ee": 0.571
+    },
+    {
+      "text": "How does transformer architecture scaling affect downstream task performance?",
+      "label": 1,
+      "domain": "ml",
+      "respondibilidade": 0.0039,
+      "tratabilidade": 0.931,
+      "trajectory": "rising",
+      "ee": 0.4674
+    },
+    {
+      "text": "What is the effect of sleep deprivation on hippocampal neurogenesis in rodents?",
+      "label": 1,
+      "domain": "neuroscience",
+      "respondibilidade": 0.0825,
+      "tratabilidade": 0.8188,
+      "trajectory": "rising",
+      "ee": 0.4507
+    },
+    {
+      "text": "How do ribosomes synthesize proteins from mRNA codon sequences?",
+      "label": 1,
+      "domain": "biochemistry",
+      "respondibilidade": 0.0,
+      "tratabilidade": 0.931,
+      "trajectory": "rising",
+      "ee": 0.4655
+    },
+    {
+      "text": "What statistical methods are used to detect publication bias in meta-analyses?",
+      "label": 1,
+      "domain": "methodology",
+      "respondibilidade": 0.9985,
+      "tratabilidade": 0.874,
+      "trajectory": "rising",
+      "ee": 0.9363
+    },
+    {
+      "text": "How does antibiotic resistance spread between bacterial populations via plasmid transfer?",
+      "label": 1,
+      "domain": "microbiology",
+      "respondibilidade": 0.34,
+      "tratabilidade": 0.931,
+      "trajectory": "rising",
+      "ee": 0.6355
+    },
+    {
+      "text": "What is the relationship between synaptic pruning and adolescent cognitive development?",
+      "label": 1,
+      "domain": "neuroscience",
+      "respondibilidade": 0.0,
+      "tratabilidade": 0.663,
+      "trajectory": "rising",
+      "ee": 0.3315
+    },
+    {
+      "text": "How do convolutional neural networks learn hierarchical visual representations?",
+      "label": 1,
+      "domain": "ml",
+      "respondibilidade": 0.5999,
+      "tratabilidade": 0.782,
+      "trajectory": "rising",
+      "ee": 0.691
+    },
+    {
+      "text": "What are the measurable effects of urban heat islands on local precipitation patterns?",
+      "label": 1,
+      "domain": "climate",
+      "respondibilidade": 0.4977,
+      "tratabilidade": 0.748,
+      "trajectory": "rising",
+      "ee": 0.6228
+    },
+    {
+      "text": "How does mRNA stability affect protein expression levels in eukaryotic cells?",
+      "label": 1,
+      "domain": "biochemistry",
+      "respondibilidade": 0.0005,
+      "tratabilidade": 0.874,
+      "trajectory": "rising",
+      "ee": 0.4373
+    },
+    {
+      "text": "What is the dose-response relationship between particulate matter exposure and cardiovascular disease?",
+      "label": 1,
+      "domain": "epidemiology",
+      "respondibilidade": 0.0,
+      "tratabilidade": 0.782,
+      "trajectory": "rising",
+      "ee": 0.391
+    },
+    {
+      "text": "How does working memory capacity correlate with fluid intelligence across age groups?",
+      "label": 1,
+      "domain": "psychology",
+      "respondibilidade": 0.0001,
+      "tratabilidade": 0.782,
+      "trajectory": "rising",
+      "ee": 0.3911
+    },
+    {
+      "text": "What are the empirical predictors of treaty compliance in international environmental agreements?",
+      "label": 1,
+      "domain": "political science",
+      "respondibilidade": 0.0,
+      "tratabilidade": 0.663,
+      "trajectory": "rising",
+      "ee": 0.3315
+    },
+    {
+      "text": "How do feedback loops in the carbon cycle affect atmospheric CO2 concentration projections?",
+      "label": 1,
+      "domain": "climate",
+      "respondibilidade": 0.1527,
+      "tratabilidade": 0.7216,
+      "trajectory": "rising",
+      "ee": 0.4372
+    },
+    {
+      "text": "What is the relationship between gut microbiome diversity and immune response to vaccines?",
+      "label": 1,
+      "domain": "immunology",
+      "respondibilidade": 0.0327,
+      "tratabilidade": 0.782,
+      "trajectory": "rising",
+      "ee": 0.4073
+    },
+    {
+      "text": "How do phonological awareness deficits predict reading difficulties in early childhood?",
+      "label": 1,
+      "domain": "education",
+      "respondibilidade": 0.0,
+      "tratabilidade": 0.874,
+      "trajectory": "rising",
+      "ee": 0.437
+    },
+    {
+      "text": "What are the measurable cognitive effects of mindfulness-based stress reduction interventions?",
+      "label": 1,
+      "domain": "psychology",
+      "respondibilidade": 0.0,
+      "tratabilidade": 0.612,
+      "trajectory": "plateau",
+      "ee": 0.306
+    },
+    {
+      "text": "How does reward prediction error in dopaminergic neurons drive reinforcement learning?",
+      "label": 1,
+      "domain": "neuroscience",
+      "respondibilidade": 0.0199,
+      "tratabilidade": 0.782,
+      "trajectory": "rising",
+      "ee": 0.4009
+    },
+    {
+      "text": "What computational methods can identify protein folding pathways from amino acid sequences?",
+      "label": 1,
+      "domain": "biochemistry",
+      "respondibilidade": 0.7577,
+      "tratabilidade": 0.782,
+      "trajectory": "rising",
+      "ee": 0.7699
+    },
+    {
+      "text": "How does institutional trust mediate the relationship between inequality and political participation?",
+      "label": 1,
+      "domain": "political science",
+      "respondibilidade": 0.0,
+      "tratabilidade": 0.6396,
+      "trajectory": "rising",
+      "ee": 0.3198
+    },
+    {
+      "text": "What are the epidemiological risk factors for type 2 diabetes onset in populations under 40?",
+      "label": 1,
+      "domain": "epidemiology",
+      "respondibilidade": 0.0,
+      "tratabilidade": 0.8648,
+      "trajectory": "rising",
+      "ee": 0.4324
+    },
+    {
+      "text": "How does transfer learning reduce labeled data requirements in medical image classification?",
+      "label": 1,
+      "domain": "ml",
+      "respondibilidade": 0.0004,
+      "tratabilidade": 0.8648,
+      "trajectory": "rising",
+      "ee": 0.4326
+    },
+    {
+      "text": "What is the effect of minimum wage increases on employment rates in low-skill sectors?",
+      "label": 1,
+      "domain": "economics",
+      "respondibilidade": 0.5081,
+      "tratabilidade": 0.782,
+      "trajectory": "rising",
+      "ee": 0.645
+    },
+    {
+      "text": "How do epigenetic modifications inherited across generations affect disease susceptibility?",
+      "label": 1,
+      "domain": "genetics",
+      "respondibilidade": 0.0404,
+      "tratabilidade": 0.6375,
+      "trajectory": "rising",
+      "ee": 0.339
+    },
+    {
+      "text": "What measurement approaches can operationalize scientific paradigm shifts quantitatively?",
+      "label": 1,
+      "domain": "methodology",
+      "respondibilidade": 0.0855,
+      "tratabilidade": 0.4526,
+      "trajectory": "rising",
+      "ee": 0.2691
+    },
+    {
+      "text": "How does linguistic framing of risk information affect decision-making under uncertainty?",
+      "label": 1,
+      "domain": "psychology",
+      "respondibilidade": 0.0388,
+      "tratabilidade": 0.748,
+      "trajectory": "rising",
+      "ee": 0.3934
+    },
+    {
+      "text": "What are the detectable precursors of volcanic eruptions in seismic and geodetic signals?",
+      "label": 1,
+      "domain": "geology",
+      "respondibilidade": 0.0,
+      "tratabilidade": 0.782,
+      "trajectory": "rising",
+      "ee": 0.391
+    },
+    {
+      "text": "How does group size affect collective decision accuracy in self-organizing systems?",
+      "label": 1,
+      "domain": "complexity",
+      "respondibilidade": 0.0001,
+      "tratabilidade": 0.615,
+      "trajectory": "rising",
+      "ee": 0.3075
+    },
+    {
+      "text": "What neural correlates distinguish conscious from unconscious visual processing?",
+      "label": 1,
+      "domain": "neuroscience",
+      "respondibilidade": 0.0005,
+      "tratabilidade": 0.66,
+      "trajectory": "rising",
+      "ee": 0.3302
+    },
+    {
+      "text": "How do market concentration levels affect innovation rates in pharmaceutical R&D?",
+      "label": 1,
+      "domain": "economics",
+      "respondibilidade": 0.0,
+      "tratabilidade": 0.6396,
+      "trajectory": "rising",
+      "ee": 0.3198
+    },
+    {
+      "text": "What are the measurable effects of peer tutoring on mathematics achievement in secondary school?",
+      "label": 1,
+      "domain": "education",
+      "respondibilidade": 0.0,
+      "tratabilidade": 0.8648,
+      "trajectory": "rising",
+      "ee": 0.4324
+    },
+    {
+      "text": "How does climate variability affect conflict onset probability in agriculturally dependent societies?",
+      "label": 1,
+      "domain": "political science",
+      "respondibilidade": 0.0,
+      "tratabilidade": 0.663,
+      "trajectory": "rising",
+      "ee": 0.3315
+    },
+    {
+      "text": "What are the operational signatures of active versus dormant scientific paradigms in citation networks?",
+      "label": 1,
+      "domain": "scientometrics",
+      "respondibilidade": 0.0004,
+      "tratabilidade": 0.5616,
+      "trajectory": "rising",
+      "ee": 0.281
+    },
+    {
+      "text": "How does n-back training transfer to untrained working memory tasks?",
+      "label": 1,
+      "domain": "psychology",
+      "respondibilidade": 0.0424,
+      "tratabilidade": 0.6375,
+      "trajectory": "plateau",
+      "ee": 0.34
+    },
+    {
+      "text": "What mechanisms underlie synaptic long-term potentiation at hippocampal CA1 synapses?",
+      "label": 1,
+      "domain": "neuroscience",
+      "respondibilidade": 0.0112,
+      "tratabilidade": 0.931,
+      "trajectory": "rising",
+      "ee": 0.4711
+    },
+    {
+      "text": "How do social network structure and tie strength affect information diffusion rates?",
+      "label": 1,
+      "domain": "sociology",
+      "respondibilidade": 0.4947,
+      "tratabilidade": 0.782,
+      "trajectory": "rising",
+      "ee": 0.6384
+    },
+    {
+      "text": "What are the measurable determinants of replication success across scientific disciplines?",
+      "label": 1,
+      "domain": "methodology",
+      "respondibilidade": 0.1433,
+      "tratabilidade": 0.5616,
+      "trajectory": "rising",
+      "ee": 0.3524
+    },
+    {
+      "text": "How does placebo analgesia modulate pain processing in the anterior cingulate cortex?",
+      "label": 1,
+      "domain": "neuroscience",
+      "respondibilidade": 0.0,
+      "tratabilidade": 0.765,
+      "trajectory": "rising",
+      "ee": 0.3825
+    },
+    {
+      "text": "What is the empirical relationship between patent scope and subsequent innovation in biotechnology?",
+      "label": 1,
+      "domain": "economics",
+      "respondibilidade": 0.0001,
+      "tratabilidade": 0.5832,
+      "trajectory": "rising",
+      "ee": 0.2916
+    },
+    {
+      "text": "How do RNA-binding proteins regulate alternative splicing under cellular stress conditions?",
+      "label": 1,
+      "domain": "biochemistry",
+      "respondibilidade": 0.0,
+      "tratabilidade": 0.782,
+      "trajectory": "rising",
+      "ee": 0.391
+    },
+    {
+      "text": "What factors predict spontaneous remission rates in major depressive disorder without treatment?",
+      "label": 1,
+      "domain": "psychiatry",
+      "respondibilidade": 0.0,
+      "tratabilidade": 0.5616,
+      "trajectory": "rising",
+      "ee": 0.2808
+    },
+    {
+      "text": "How does urban street network topology affect pedestrian injury rates?",
+      "label": 1,
+      "domain": "public health",
+      "respondibilidade": 0.0,
+      "tratabilidade": 0.697,
+      "trajectory": "rising",
+      "ee": 0.3485
+    },
+    {
+      "text": "What are the computational signatures of overfitting in neural language model pretraining?",
+      "label": 1,
+      "domain": "ml",
+      "respondibilidade": 0.0013,
+      "tratabilidade": 0.6396,
+      "trajectory": "rising",
+      "ee": 0.3204
+    },
+    {
+      "text": "How does early bilingual experience affect executive function development in children?",
+      "label": 1,
+      "domain": "cognitive science",
+      "respondibilidade": 0.0,
+      "tratabilidade": 0.7216,
+      "trajectory": "rising",
+      "ee": 0.3608
+    },
+    {
+      "text": "What is the relationship between forest fragmentation and species extinction debt timelines?",
+      "label": 1,
+      "domain": "ecology",
+      "respondibilidade": 0.0,
+      "tratabilidade": 0.612,
+      "trajectory": "rising",
+      "ee": 0.306
+    },
+    {
+      "text": "How do randomized controlled trials detect heterogeneous treatment effects across subgroups?",
+      "label": 1,
+      "domain": "methodology",
+      "respondibilidade": 0.07,
+      "tratabilidade": 0.8648,
+      "trajectory": "rising",
+      "ee": 0.4674
+    },
+    {
+      "text": "What are the neurophysiological correlates of expert chess pattern recognition?",
+      "label": 1,
+      "domain": "cognitive science",
+      "respondibilidade": 0.0,
+      "tratabilidade": 0.6396,
+      "trajectory": "plateau",
+      "ee": 0.3198
+    },
+    {
+      "text": "How does economic inequality affect intergenerational social mobility across OECD countries?",
+      "label": 1,
+      "domain": "economics",
+      "respondibilidade": 0.0001,
+      "tratabilidade": 0.782,
+      "trajectory": "rising",
+      "ee": 0.3911
+    },
+    {
+      "text": "What are the measurable effects of teacher expectation on student academic outcomes?",
+      "label": 1,
+      "domain": "education",
+      "respondibilidade": 0.0004,
+      "tratabilidade": 0.782,
+      "trajectory": "rising",
+      "ee": 0.3912
+    },
+    {
+      "text": "How do attentional blinks reflect temporal limits of conscious perception?",
+      "label": 1,
+      "domain": "cognitive science",
+      "respondibilidade": 0.0,
+      "tratabilidade": 0.748,
+      "trajectory": "plateau",
+      "ee": 0.374
+    },
+    {
+      "text": "What is the essence of life?",
+      "label": 0,
+      "domain": "philosophy",
+      "respondibilidade": 0.0001,
+      "tratabilidade": 0.1275,
+      "trajectory": "absent",
+      "ee": 0.0638
+    },
+    {
+      "text": "What is the true nature of consciousness?",
+      "label": 0,
+      "domain": "philosophy",
+      "respondibilidade": 0.0,
+      "tratabilidade": 0.2975,
+      "trajectory": "rising",
+      "ee": 0.1488
+    },
+    {
+      "text": "What is the meaning of existence?",
+      "label": 0,
+      "domain": "philosophy",
+      "respondibilidade": 0.0009,
+      "tratabilidade": 0.1275,
+      "trajectory": "plateau",
+      "ee": 0.0642
+    },
+    {
+      "text": "What is the ultimate purpose of the universe?",
+      "label": 0,
+      "domain": "philosophy",
+      "respondibilidade": 0.0,
+      "tratabilidade": 0.046,
+      "trajectory": "absent",
+      "ee": 0.023
+    },
+    {
+      "text": "What is reality, fundamentally?",
+      "label": 0,
+      "domain": "philosophy",
+      "respondibilidade": 0.0001,
+      "tratabilidade": 0.2975,
+      "trajectory": "plateau",
+      "ee": 0.1488
+    },
+    {
+      "text": "What is the soul?",
+      "label": 0,
+      "domain": "philosophy",
+      "respondibilidade": 0.0,
+      "tratabilidade": 0.046,
+      "trajectory": "absent",
+      "ee": 0.023
+    },
+    {
+      "text": "Is there a God?",
+      "label": 0,
+      "domain": "theology",
+      "respondibilidade": 0.0,
+      "tratabilidade": 0.1275,
+      "trajectory": "plateau",
+      "ee": 0.0638
+    },
+    {
+      "text": "What is the nature of good and evil?",
+      "label": 0,
+      "domain": "ethics",
+      "respondibilidade": 0.0,
+      "tratabilidade": 0.2125,
+      "trajectory": "plateau",
+      "ee": 0.1063
+    },
+    {
+      "text": "What is beauty?",
+      "label": 0,
+      "domain": "aesthetics",
+      "respondibilidade": 0.0,
+      "tratabilidade": 0.252,
+      "trajectory": "rising",
+      "ee": 0.126
+    },
+    {
+      "text": "What is the true self?",
+      "label": 0,
+      "domain": "philosophy",
+      "respondibilidade": 0.0002,
+      "tratabilidade": 0.205,
+      "trajectory": "plateau",
+      "ee": 0.1026
+    },
+    {
+      "text": "What is the deeper meaning of suffering?",
+      "label": 0,
+      "domain": "philosophy",
+      "respondibilidade": 0.0,
+      "tratabilidade": 0.1275,
+      "trajectory": "absent",
+      "ee": 0.0638
+    },
+    {
+      "text": "Does free will exist?",
+      "label": 0,
+      "domain": "philosophy",
+      "respondibilidade": 0.0,
+      "tratabilidade": 0.2975,
+      "trajectory": "plateau",
+      "ee": 0.1488
+    },
+    {
+      "text": "What is time, really?",
+      "label": 0,
+      "domain": "philosophy",
+      "respondibilidade": 0.0,
+      "tratabilidade": 0.2625,
+      "trajectory": "rising",
+      "ee": 0.1313
+    },
+    {
+      "text": "What lies beyond the observable universe?",
+      "label": 0,
+      "domain": "cosmology",
+      "respondibilidade": 0.0,
+      "tratabilidade": 0.2975,
+      "trajectory": "rising",
+      "ee": 0.1488
+    },
+    {
+      "text": "What is the true nature of love?",
+      "label": 0,
+      "domain": "philosophy",
+      "respondibilidade": 0.0,
+      "tratabilidade": 0.2975,
+      "trajectory": "plateau",
+      "ee": 0.1488
+    },
+    {
+      "text": "What is the essence of justice?",
+      "label": 0,
+      "domain": "philosophy",
+      "respondibilidade": 0.0,
+      "tratabilidade": 0.1275,
+      "trajectory": "plateau",
+      "ee": 0.0638
+    },
+    {
+      "text": "Is mathematics invented or discovered?",
+      "label": 0,
+      "domain": "philosophy",
+      "respondibilidade": 0.0001,
+      "tratabilidade": 0.2125,
+      "trajectory": "plateau",
+      "ee": 0.1063
+    },
+    {
+      "text": "What is the relationship between mind and body?",
+      "label": 0,
+      "domain": "philosophy",
+      "respondibilidade": 0.0001,
+      "tratabilidade": 0.5525,
+      "trajectory": "rising",
+      "ee": 0.2763
+    },
+    {
+      "text": "What is the ultimate nature of matter?",
+      "label": 0,
+      "domain": "physics",
+      "respondibilidade": 0.0,
+      "tratabilidade": 0.287,
+      "trajectory": "plateau",
+      "ee": 0.1435
+    },
+    {
+      "text": "Why is there something rather than nothing?",
+      "label": 0,
+      "domain": "metaphysics",
+      "respondibilidade": 0.0,
+      "tratabilidade": 0.1275,
+      "trajectory": "plateau",
+      "ee": 0.0638
+    },
+    {
+      "text": "What is the true source of human happiness?",
+      "label": 0,
+      "domain": "philosophy",
+      "respondibilidade": 0.0,
+      "tratabilidade": 0.429,
+      "trajectory": "rising",
+      "ee": 0.2145
+    },
+    {
+      "text": "What does it mean to live a good life?",
+      "label": 0,
+      "domain": "ethics",
+      "respondibilidade": 0.0,
+      "tratabilidade": 0.2975,
+      "trajectory": "plateau",
+      "ee": 0.1488
+    },
+    {
+      "text": "What is the nature of intelligence?",
+      "label": 0,
+      "domain": "philosophy",
+      "respondibilidade": 0.0005,
+      "tratabilidade": 0.4125,
+      "trajectory": "rising",
+      "ee": 0.2065
+    },
+    {
+      "text": "What is the deep structure of language?",
+      "label": 0,
+      "domain": "linguistics",
+      "respondibilidade": 0.003,
+      "tratabilidade": 0.612,
+      "trajectory": "rising",
+      "ee": 0.3075
+    },
+    {
+      "text": "What is the true nature of time and space?",
+      "label": 0,
+      "domain": "philosophy",
+      "respondibilidade": 0.0004,
+      "tratabilidade": 0.4125,
+      "trajectory": "rising",
+      "ee": 0.2064
+    },
+    {
+      "text": "What is society, fundamentally?",
+      "label": 0,
+      "domain": "sociology",
+      "respondibilidade": 0.0001,
+      "tratabilidade": 0.18,
+      "trajectory": "plateau",
+      "ee": 0.0901
+    },
+    {
+      "text": "What is the essence of art?",
+      "label": 0,
+      "domain": "aesthetics",
+      "respondibilidade": 0.0001,
+      "tratabilidade": 0.1275,
+      "trajectory": "plateau",
+      "ee": 0.0638
+    },
+    {
+      "text": "What is the ultimate cause of everything?",
+      "label": 0,
+      "domain": "metaphysics",
+      "respondibilidade": 0.0,
+      "tratabilidade": 0.1275,
+      "trajectory": "absent",
+      "ee": 0.0638
+    },
+    {
+      "text": "What is knowledge?",
+      "label": 0,
+      "domain": "epistemology",
+      "respondibilidade": 0.0056,
+      "tratabilidade": 0.2975,
+      "trajectory": "plateau",
+      "ee": 0.1516
+    },
+    {
+      "text": "What is the true nature of morality?",
+      "label": 0,
+      "domain": "ethics",
+      "respondibilidade": 0.0001,
+      "tratabilidade": 0.255,
+      "trajectory": "plateau",
+      "ee": 0.1275
+    },
+    {
+      "text": "What is life's purpose?",
+      "label": 0,
+      "domain": "philosophy",
+      "respondibilidade": 0.0003,
+      "tratabilidade": 0.138,
+      "trajectory": "absent",
+      "ee": 0.0692
+    },
+    {
+      "text": "What is truly real?",
+      "label": 0,
+      "domain": "metaphysics",
+      "respondibilidade": 0.0003,
+      "tratabilidade": 0.1125,
+      "trajectory": "plateau",
+      "ee": 0.0564
+    },
+    {
+      "text": "What is the nature of emotions?",
+      "label": 0,
+      "domain": "philosophy",
+      "respondibilidade": 0.0,
+      "tratabilidade": 0.612,
+      "trajectory": "rising",
+      "ee": 0.306
+    },
+    {
+      "text": "What is the essence of power?",
+      "label": 0,
+      "domain": "political philosophy",
+      "respondibilidade": 0.0,
+      "tratabilidade": 0.2125,
+      "trajectory": "plateau",
+      "ee": 0.1063
+    },
+    {
+      "text": "What is the true nature of identity?",
+      "label": 0,
+      "domain": "philosophy",
+      "respondibilidade": 0.0001,
+      "tratabilidade": 0.252,
+      "trajectory": "plateau",
+      "ee": 0.126
+    },
+    {
+      "text": "What is the fundamental nature of causation?",
+      "label": 0,
+      "domain": "philosophy",
+      "respondibilidade": 0.0,
+      "tratabilidade": 0.2975,
+      "trajectory": "plateau",
+      "ee": 0.1488
+    },
+    {
+      "text": "What is the deepest nature of information?",
+      "label": 0,
+      "domain": "philosophy",
+      "respondibilidade": 0.0,
+      "tratabilidade": 0.252,
+      "trajectory": "rising",
+      "ee": 0.126
+    },
+    {
+      "text": "What is the ultimate nature of space?",
+      "label": 0,
+      "domain": "philosophy",
+      "respondibilidade": 0.0,
+      "tratabilidade": 0.2625,
+      "trajectory": "rising",
+      "ee": 0.1313
+    },
+    {
+      "text": "What is the true nature of creativity?",
+      "label": 0,
+      "domain": "philosophy",
+      "respondibilidade": 0.0001,
+      "tratabilidade": 0.252,
+      "trajectory": "rising",
+      "ee": 0.126
+    },
+    {
+      "text": "What is the essence of democracy?",
+      "label": 0,
+      "domain": "political philosophy",
+      "respondibilidade": 0.0,
+      "tratabilidade": 0.2125,
+      "trajectory": "plateau",
+      "ee": 0.1063
+    },
+    {
+      "text": "What is the nature of truth?",
+      "label": 0,
+      "domain": "epistemology",
+      "respondibilidade": 0.0001,
+      "tratabilidade": 0.2975,
+      "trajectory": "plateau",
+      "ee": 0.1488
+    },
+    {
+      "text": "What is the true nature of matter and energy?",
+      "label": 0,
+      "domain": "philosophy",
+      "respondibilidade": 0.0,
+      "tratabilidade": 0.2625,
+      "trajectory": "rising",
+      "ee": 0.1313
+    },
+    {
+      "text": "What is the fundamental nature of life and death?",
+      "label": 0,
+      "domain": "philosophy",
+      "respondibilidade": 0.0,
+      "tratabilidade": 0.252,
+      "trajectory": "rising",
+      "ee": 0.126
+    },
+    {
+      "text": "What is the true nature of freedom?",
+      "label": 0,
+      "domain": "philosophy",
+      "respondibilidade": 0.0,
+      "tratabilidade": 0.2125,
+      "trajectory": "plateau",
+      "ee": 0.1063
+    },
+    {
+      "text": "What is the essence of science?",
+      "label": 0,
+      "domain": "philosophy of science",
+      "respondibilidade": 0.0006,
+      "tratabilidade": 0.1275,
+      "trajectory": "plateau",
+      "ee": 0.0641
+    },
+    {
+      "text": "What is the true nature of evil?",
+      "label": 0,
+      "domain": "ethics",
+      "respondibilidade": 0.0,
+      "tratabilidade": 0.1275,
+      "trajectory": "absent",
+      "ee": 0.0638
+    },
+    {
+      "text": "What is the fundamental nature of the mind?",
+      "label": 0,
+      "domain": "philosophy",
+      "respondibilidade": 0.0002,
+      "tratabilidade": 0.287,
+      "trajectory": "rising",
+      "ee": 0.1436
+    },
+    {
+      "text": "What is the nature of being?",
+      "label": 0,
+      "domain": "ontology",
+      "respondibilidade": 0.0002,
+      "tratabilidade": 0.1275,
+      "trajectory": "plateau",
+      "ee": 0.0639
+    },
+    {
+      "text": "What is the essence of culture?",
+      "label": 0,
+      "domain": "anthropology",
+      "respondibilidade": 0.0001,
+      "tratabilidade": 0.205,
+      "trajectory": "plateau",
+      "ee": 0.1025
+    },
+    {
+      "text": "What is the ultimate nature of reality and existence?",
+      "label": 0,
+      "domain": "metaphysics",
+      "respondibilidade": 0.0002,
+      "tratabilidade": 0.1275,
+      "trajectory": "plateau",
+      "ee": 0.0638
+    }
+  ]
+}

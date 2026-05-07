@@ -167,7 +167,7 @@ with gr.Blocks(title='ReformulatEE', theme=gr.themes.Soft()) as app:
         with gr.Column(scale=3):
             inp_q = gr.Textbox(
                 label='Pergunta de pesquisa',
-                placeholder='Ex: O que causa o envelhecimento biológico?',
+                placeholder='Digite sua pergunta de pesquisa aqui...',
                 lines=3
             )
         with gr.Column(scale=1):

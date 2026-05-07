@@ -202,7 +202,11 @@ def generate(q_bad: str, n: int) -> list[str]:
 
     if backend == "hf_inference":
         try:
-            return generate_hf_inference(q_bad, n)
+            result = generate_hf_inference(q_bad, n)
+            if result:
+                return result
+            print("  [hf_inference] sem candidatos, usando Claude como fallback...")
+            backend = "claude"
         except Exception as e:
             print(f"  [hf_inference] falhou ({e}), usando Claude...")
             backend = "claude"

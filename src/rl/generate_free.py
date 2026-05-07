@@ -2,18 +2,17 @@
 Backends de geração gratuitos para substituir a Claude API.
 
 Hierarquia de backends (tentados em ordem):
-  1. hf_inference  — HuggingFace Inference API (gratuita, ideal para HF Spaces)
-  2. claude        — Claude API (fallback, requer ANTHROPIC_API_KEY)
-
-Backend GGUF local (llama-cpp-python) é documentado como opcional:
-  → Requer Windows Long Path habilitado (admin) + pip install llama-cpp-python
-  → Configurar: INFERENCE_BACKEND=gguf no .env
-  → Ver README para instruções de instalação no Intel Arc (SYCL)
+  1. ollama       — Ollama local (ideal para uso local com modelo fine-tuned)
+  2. hf_inference — HuggingFace Inference API (gratuita, ideal para HF Spaces)
+  3. gguf         — llama-cpp-python local (opcional)
+  4. claude       — Claude API (fallback final, requer ANTHROPIC_API_KEY)
 
 Configuração via .env:
-  INFERENCE_BACKEND   = hf_inference | gguf | claude   (default: auto)
-  HF_MODEL            = Qwen/Qwen2.5-1.5B-Instruct     (modelo para HF Inference)
-  HF_TOKEN            = hf_...                          (opcional, aumenta rate limit)
+  INFERENCE_BACKEND   = ollama | hf_inference | gguf | claude   (default: auto)
+  OLLAMA_MODEL        = reformulatee        (nome do modelo no Ollama)
+  OLLAMA_BASE_URL     = http://localhost:11434  (padrão)
+  HF_MODEL            = Qwen/Qwen2.5-1.5B-Instruct
+  HF_TOKEN            = hf_...
   GGUF_MODEL_REPO     = Qwen/Qwen2.5-1.5B-Instruct-GGUF
   GGUF_MODEL_FILE     = qwen2.5-1.5b-instruct-q4_k_m.gguf
 """
@@ -36,6 +35,10 @@ _SYSTEM = (
 _HF_MODEL = os.getenv("HF_MODEL", "Qwen/Qwen2.5-1.5B-Instruct")  # base model (serverless)
 _HF_TOKEN = os.getenv("HF_TOKEN")
 
+# Ollama
+_OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "reformulatee")
+_OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
+
 # Modelo padrão para GGUF local
 _GGUF_REPO = os.getenv("GGUF_MODEL_REPO", "Qwen/Qwen2.5-1.5B-Instruct-GGUF")
 _GGUF_FILE = os.getenv("GGUF_MODEL_FILE", "qwen2.5-1.5b-instruct-q4_k_m.gguf")
@@ -47,7 +50,79 @@ _gguf_model = None  # lazy-load
 
 
 # ---------------------------------------------------------------------------
-# HF Inference API (primário — ideal para HF Spaces e zero-cost)
+# Ollama (primário local — usa modelo fine-tuned via API OpenAI-compatible)
+# ---------------------------------------------------------------------------
+
+
+def _ollama_available() -> bool:
+    """True se Ollama está rodando e o modelo está carregado."""
+    import urllib.request
+
+    try:
+        url = f"{_OLLAMA_BASE_URL}/api/tags"
+        with urllib.request.urlopen(url, timeout=2) as resp:
+            import json
+
+            data = json.loads(resp.read())
+            model = os.getenv("OLLAMA_MODEL", _OLLAMA_MODEL)
+            models = [m["name"].split(":")[0] for m in data.get("models", [])]
+            return model in models
+    except Exception:
+        return False
+
+
+def _ollama_single_call(q_bad: str, seed: int = 0) -> str:
+    import urllib.request
+    import json
+
+    model = os.getenv("OLLAMA_MODEL", _OLLAMA_MODEL)
+    base_url = os.getenv("OLLAMA_BASE_URL", _OLLAMA_BASE_URL)
+    print(f"  [ollama] modelo={model}")
+
+    payload = json.dumps({
+        "model": model,
+        "messages": [
+            {"role": "system", "content": _SYSTEM},
+            {"role": "user", "content": f"Original question: {q_bad}"},
+        ],
+        "stream": False,
+        "options": {
+            "temperature": 1.1,
+            "num_predict": 100,
+            "seed": seed,
+        },
+    }).encode()
+
+    req = urllib.request.Request(
+        f"{base_url}/api/chat",
+        data=payload,
+        headers={"Content-Type": "application/json"},
+    )
+    with urllib.request.urlopen(req, timeout=120) as resp:
+        data = json.loads(resp.read())
+    return data["message"]["content"].strip().split("\n")[0].strip()
+
+
+def generate_ollama(q_bad: str, n: int) -> list[str]:
+    """
+    Gera n candidatos via Ollama local em paralelo.
+    Requer: ollama rodando + modelo registrado (ollama create reformulatee -f Modelfile).
+    """
+    candidates = []
+    with ThreadPoolExecutor(max_workers=n) as ex:
+        futures = [ex.submit(_ollama_single_call, q_bad, i) for i in range(n)]
+        for f in as_completed(futures):
+            try:
+                text = f.result()
+                if text:
+                    candidates.append(text)
+            except Exception as e:
+                print(f"  [ollama] ERRO: {e}")
+    return candidates
+
+
+# ---------------------------------------------------------------------------
+# HF Inference API (primário remoto — ideal para HF Spaces e zero-cost)
 # ---------------------------------------------------------------------------
 
 
@@ -171,12 +246,16 @@ def generate_gguf(q_bad: str, n: int) -> list[str]:
 def _detect_backend() -> str:
     """Auto-detecta o melhor backend disponível."""
     explicit = os.getenv("INFERENCE_BACKEND", "").lower()
-    if explicit in ("hf_inference", "gguf", "claude", "local"):
+    if explicit in ("ollama", "hf_inference", "gguf", "claude", "local"):
         return explicit
 
-    # HF Spaces detectado
+    # HF Spaces detectado — sempre usa HF Inference API
     if os.getenv("SPACE_ID"):
         return "hf_inference"
+
+    # Ollama rodando localmente com modelo carregado
+    if _ollama_available():
+        return "ollama"
 
     # Modelo GGUF local disponível
     if _gguf_available():
@@ -189,9 +268,20 @@ def _detect_backend() -> str:
 def generate(q_bad: str, n: int) -> list[str]:
     """
     Gera n candidatos usando o melhor backend disponível.
-    Fallback automático: GGUF → HF Inference → Claude.
+    Fallback automático: Ollama → GGUF → HF Inference → Claude.
     """
     backend = _detect_backend()
+
+    if backend == "ollama":
+        try:
+            result = generate_ollama(q_bad, n)
+            if result:
+                return result
+            print("  [ollama] sem candidatos, tentando HF Inference...")
+            backend = "hf_inference"
+        except Exception as e:
+            print(f"  [ollama] falhou ({e}), tentando HF Inference...")
+            backend = "hf_inference"
 
     if backend == "gguf":
         try:

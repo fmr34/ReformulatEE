@@ -26,40 +26,25 @@ _MODEL_CACHE = Path(os.getenv("HF_HOME", "data/models/hf_cache"))
 _PT_EN_MODEL = "Helsinki-NLP/opus-mt-ROMANCE-en"
 _EN_PT_MODEL = "Helsinki-NLP/opus-mt-en-ROMANCE"  # usa prefixo >>pt<<
 
-# Pipelines lazy-loaded
-_pipe_pt_en = None
-_pipe_en_pt = None
+# Modelos lazy-loaded (tokenizer + model)
+_models: dict = {}
 
 
-def _load_pipeline(direction: str):
-    """Carrega pipeline MarianMT com cache local."""
-    from transformers import pipeline
+def _load_model(model_name: str):
+    """Carrega MarianMTModel + tokenizer com cache local."""
+    if model_name in _models:
+        return _models[model_name]
+
+    from transformers import MarianMTModel, MarianTokenizer
 
     _MODEL_CACHE.mkdir(parents=True, exist_ok=True)
     cache_dir = str(_MODEL_CACHE)
 
-    if direction == "pt_to_en":
-        global _pipe_pt_en
-        if _pipe_pt_en is None:
-            print(f"  [translate_local] Carregando {_PT_EN_MODEL}...")
-            _pipe_pt_en = pipeline(
-                "translation",
-                model=_PT_EN_MODEL,
-                cache_dir=cache_dir,
-                device=-1,  # CPU
-            )
-        return _pipe_pt_en
-    else:  # en_to_pt
-        global _pipe_en_pt
-        if _pipe_en_pt is None:
-            print(f"  [translate_local] Carregando {_EN_PT_MODEL}...")
-            _pipe_en_pt = pipeline(
-                "translation",
-                model=_EN_PT_MODEL,
-                cache_dir=cache_dir,
-                device=-1,  # CPU
-            )
-        return _pipe_en_pt
+    print(f"  [translate_local] Carregando {model_name}...")
+    tokenizer = MarianTokenizer.from_pretrained(model_name, cache_dir=cache_dir)
+    model = MarianMTModel.from_pretrained(model_name, cache_dir=cache_dir)
+    _models[model_name] = (tokenizer, model)
+    return tokenizer, model
 
 
 def translate(text: str, direction: str) -> str:
@@ -80,16 +65,17 @@ def translate(text: str, direction: str) -> str:
     if direction not in ("pt_to_en", "en_to_pt"):
         raise ValueError(f"direction invalido: {direction!r}. Use 'pt_to_en' ou 'en_to_pt'.")
 
-    pipe = _load_pipeline(direction)
-
     if direction == "en_to_pt":
-        # opus-mt-en-ROMANCE requer prefixo de lingua alvo
-        input_text = f">>pt<< {text}"
+        model_name = _EN_PT_MODEL
+        input_text = f">>pt<< {text}"  # opus-mt-en-ROMANCE requer prefixo
     else:
+        model_name = _PT_EN_MODEL
         input_text = text
 
-    result = pipe(input_text, max_length=512)
-    return result[0]["translation_text"].strip()
+    tokenizer, model = _load_model(model_name)
+    inputs = tokenizer([input_text], return_tensors="pt", padding=True, truncation=True, max_length=512)
+    outputs = model.generate(**inputs)
+    return tokenizer.decode(outputs[0], skip_special_tokens=True).strip()
 
 
 def is_available() -> bool:

@@ -162,7 +162,7 @@ To replicate:
 
 - [Architecture](docs/ARCHITECTURE.md) — component breakdown and data flow
 - [Deployment](docs/DEPLOYMENT.md) — HF Spaces, Docker, local setup
-- [Contributing](CONTRIBUTING.md) — contribution guidelines
+- [Contributing](docs/CONTRIBUTING.md) — contribution guidelines
 
 ---
 

@@ -149,7 +149,7 @@ Para replicar:
 
 - [Arquitetura](docs/ARCHITECTURE.md) — componentes e fluxo de dados
 - [Implantação](docs/DEPLOYMENT.md) — HF Spaces, Docker, configuração local
-- [Contribuição](CONTRIBUTING.md) — diretrizes de contribuição
+- [Contribuição](docs/CONTRIBUTING.md) — diretrizes de contribuição
 
 ---
 

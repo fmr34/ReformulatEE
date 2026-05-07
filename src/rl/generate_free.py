@@ -57,16 +57,23 @@ def _hf_single_call(q_bad: str) -> str:
     model = os.getenv("HF_MODEL", _HF_MODEL)
     token = os.getenv("HF_TOKEN", _HF_TOKEN)
     print(f"  [hf_inference] modelo={model} token={'***' if token else 'None'}")
-    client = InferenceClient(model=model, token=token, provider="hf-inference")
-    resp = client.chat_completion(
-        messages=[
-            {"role": "system", "content": _SYSTEM},
-            {"role": "user", "content": f"Original question: {q_bad}"},
-        ],
-        max_tokens=100,
-        temperature=1.1,
+    client = InferenceClient(token=token, provider="hf-inference")
+    # chat_completion não é suportado pelo provider clássico; usar text_generation
+    # com o chat template do Qwen2.5 formatado manualmente
+    prompt = (
+        f"<|im_start|>system\n{_SYSTEM}<|im_end|>\n"
+        f"<|im_start|>user\nOriginal question: {q_bad}<|im_end|>\n"
+        f"<|im_start|>assistant\n"
     )
-    return resp.choices[0].message.content.strip().split("\n")[0].strip()
+    result = client.text_generation(
+        prompt,
+        model=model,
+        max_new_tokens=100,
+        temperature=1.1,
+        stop_sequences=["<|im_end|>"],
+        return_full_text=False,
+    )
+    return result.strip().split("\n")[0].strip()
 
 
 def generate_hf_inference(q_bad: str, n: int) -> list[str]:

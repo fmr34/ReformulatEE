@@ -54,7 +54,10 @@ _gguf_model = None  # lazy-load
 def _hf_single_call(q_bad: str) -> str:
     from huggingface_hub import InferenceClient
 
-    client = InferenceClient(model=_HF_MODEL, token=_HF_TOKEN)
+    model = os.getenv("HF_MODEL", _HF_MODEL)
+    token = os.getenv("HF_TOKEN", _HF_TOKEN)
+    print(f"  [hf_inference] modelo={model} token={'***' if token else 'None'}")
+    client = InferenceClient(model=model, token=token)
     resp = client.chat_completion(
         messages=[
             {"role": "system", "content": _SYSTEM},
@@ -80,7 +83,7 @@ def generate_hf_inference(q_bad: str, n: int) -> list[str]:
                 if text:
                     candidates.append(text)
             except Exception as e:
-                print(f"  [hf_inference] aviso: {e}")
+                print(f"  [hf_inference] ERRO: {e}")
     return candidates
 
 

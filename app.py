@@ -186,9 +186,19 @@ with gr.Blocks(title='ReformulatEE', theme=gr.themes.Soft()) as app:
         btn_pos = gr.Button('👍  Boa reformulação', variant='secondary', size='sm')
         btn_neg = gr.Button('👎  Pode melhorar',    variant='secondary', size='sm')
 
+    _EXEMPLOS = [
+        ['O que causa o envelhecimento biológico?', 'Português'],
+        ['O que é consciência?', 'Português'],
+        ['Livre-arbítrio existe?', 'Português'],
+        ['What is the meaning of life?', 'English'],
+        ['Is consciousness fundamental?', 'English'],
+        ['What causes aging?', 'English'],
+    ]
+    _samples_iniciais = ultimas(8) or _EXEMPLOS
+
     historico = gr.Dataset(
         components=[inp_q, inp_idioma],
-        samples=ultimas(8),
+        samples=_samples_iniciais,
         label='📋 Últimas perguntas',
         headers=['Pergunta', 'Idioma'],
     )

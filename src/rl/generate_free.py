@@ -33,7 +33,7 @@ _SYSTEM = (
 )
 
 # Modelo padrão para HF Inference API
-_HF_MODEL = os.getenv("HF_MODEL", "Qwen/Qwen2.5-1.5B-Instruct")
+_HF_MODEL = os.getenv("HF_MODEL", "Qwen/Qwen2.5-1.5B-Instruct")  # base model (serverless)
 _HF_TOKEN = os.getenv("HF_TOKEN")
 
 # Modelo padrão para GGUF local

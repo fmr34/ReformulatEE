@@ -77,8 +77,8 @@ else → hf_inference (default)
 Converts pt-br ↔ en using MarianMT.
 
 **Models:**
-- `Helsinki-NLP/opus-mt-tc-big-pt-en` (~300 MB)
-- `Helsinki-NLP/opus-mt-en-ROMANCE` + `>>pt<<` prefix
+- `Helsinki-NLP/opus-mt-ROMANCE-en` (~300 MB, pt→en)
+- `Helsinki-NLP/opus-mt-en-ROMANCE` + `>>pt<<` prefix (en→pt)
 
 **Cost:** FREE (CPU inference, 22ms per call)
 
@@ -244,7 +244,7 @@ python -m src.classifier.train_tractability --api
 - RMSE CV = 0.4408 ± 0.3293
 - Binary accuracy (threshold 0.4) = 100%
 
-### DPO Fine-tuning (Onda 4)
+### DPO Fine-tuning
 
 **Data preparation:**
 ```bash

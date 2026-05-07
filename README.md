@@ -1,4 +1,4 @@
-﻿---
+---
 title: ReformulatEE
 emoji: 🔬
 colorFrom: blue
@@ -13,261 +13,171 @@ short_description: Turn vague research questions into testable hypotheses
 
 # 🔬 ReformulatEE — Epistemic Effectiveness Reformulation
 
-[![Spaces](https://huggingface.co/datasets/huggingface/badges/raw/main/run-on-spaces-sm.svg)](https://huggingface.co/spaces)
+[![Live Demo](https://huggingface.co/datasets/huggingface/badges/raw/main/open-in-hf-spaces-sm.svg)](https://huggingface.co/spaces/fmr34/reformulatee)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![CI](https://github.com/fmr34/ReformulatEE/actions/workflows/test.yml/badge.svg)](https://github.com/fmr34/ReformulatEE/actions)
 
-A machine learning system that **reformulates research questions** to maximize their **epistemic effectiveness** — making them more operationalizable, methodologically tractable, and non-trivial.
+ReformulatEE transforms vague research questions into concrete, testable hypotheses by maximizing their **Epistemic Effectiveness (EE)** — a composite score measuring how operationalizable, tractable, and non-trivial a question is.
 
-## 🎯 What is Epistemic Effectiveness?
+> **[Try it live →](https://huggingface.co/spaces/fmr34/reformulatee)**
 
-Research questions vary in their tractability. A question is **epistemically tractable** if it can be answered using existing methodologies and tools. ReformulatEE learns to transform vague, philosophical questions into concrete, testable ones.
+---
 
-**EE(Q) = 0.05·Respondibilidade + 0.05·Tratabilidade + 0.90·Não-trivialidade**
+## How It Works
 
-| Input | Output | EE Score |
-|---|---|---|
-| "What is the meaning of life?" | "What psychological processes drive meaning attribution across cultures?" | ↑ 0.87 |
-| "Is consciousness fundamental?" | "Which neural signatures correlate with subjective report accuracy?" | ↑ 0.79 |
+```
+Input question  →  Generate 8 candidates  →  Score each (EE)  →  Filter  →  Best output
+```
 
-## ✨ Key Features
+**EE(Q) = 0.05 · Respondibilidade + 0.05 · Tratabilidade + 0.90 · Não-trivialidade**
 
-- **Zero-cost inference** — Uses HuggingFace Inference API (free) + local Helsinki-NLP translation
-- **Local tractability classifier** — Ridge regression on sentence embeddings (no API calls)
-- **Hybrid semantic search** — BM25 + cosine similarity re-ranking across 30K+ papers
-- **Multi-lingual support** — Portuguese ↔ English via MarianMT
-- **Best-of-N sampling** — Generates 8 candidates, scores, filters Stage 1, returns top
-- **User feedback loop** — 👍/👎 ratings stored locally in SQLite
-- **Portfolio-ready** — Deploy on HuggingFace Spaces, GitHub, zero maintenance cost
+| Component | Description | Method |
+|-----------|-------------|--------|
+| **Respondibilidade** | Is there an active research corpus? | BM25 + semantic search over 30K+ papers |
+| **Tratabilidade** | Can it be answered with existing tools? | Local Ridge classifier on sentence embeddings |
+| **Não-trivialidade** | Is it meaningfully different from the original? | Semantic dissimilarity probe |
 
-## 🚀 Quick Start
+**Example:**
 
-### Local Installation
+| Input | Output | EE |
+|-------|--------|----|
+| "What is consciousness?" | "What measurable neural correlates distinguish conscious from unconscious processing?" | 0.137 → **0.926** |
+| "O que causa o envelhecimento?" | "Como a taxa de dano ao DNA mitocondrial correlaciona com biomarcadores de senescência?" | 0.153 → **0.891** |
+
+---
+
+## Quick Start
+
+### Web Interface
 
 ```bash
-git clone https://github.com/fmr34/reformulatee.git
-cd reformulatee
-python -m venv .venv
-source .venv/bin/activate  # Windows: .venv\Scripts\activate
+git clone https://github.com/fmr34/ReformulatEE.git
+cd ReformulatEE
 pip install -e .
+cp .env.example .env   # add your API keys
+python app.py          # opens http://localhost:7860
 ```
 
-### Web Interface (Gradio)
-
-```bash
-python app.py
-# Opens http://localhost:7860
-```
-
-### CLI Usage
+### CLI
 
 ```bash
 # English
-python -m src.rl.inference "What are negative probabilities?"
+python -m src.rl.inference "Does free will exist?"
 
 # Portuguese
 python -m src.rl.inference --pt "O que é a consciência?"
 
-# Batch mode
-python -m src.rl.inference --batch questions.txt
+# Batch
+python -m src.rl.inference --pt --batch questions.txt
 ```
-
-### Docker (HF Spaces)
-
-```dockerfile
-FROM python:3.11-slim
-WORKDIR /app
-COPY . .
-RUN pip install -e .
-CMD ["python", "app.py"]
-```
-
-## 📊 Results
-
-Trained on **~150 high-quality DPO pairs** from curated research questions:
-
-| Metric | Value |
-|---|---|
-| **EE Improvement (avg)** | 5.6× |
-| **Stage 1 Filter Pass Rate** | 98.8% |
-| **Tractability Classifier Accuracy** | 100% (val set) |
-| **Semantic Search NDCG@10** | 0.72 |
-| **Model Size (LoRA)** | 3 M params / 45 MB |
-
-## 🏗️ Architecture
-
-```
-┌─ Web Interface (Gradio)
-├─ Reformulation Pipeline
-│  ├─ Generation (HF Inference API / GGUF local)
-│  ├─ EE Scoring
-│  │  ├─ Respondibilidade (BM25 + semantic search)
-│  │  ├─ Tratabilidade (local Ridge classifier)
-│  │  └─ Não-trivialidade (LLM semantic probe)
-│  └─ Stage 1 Filter + best-of-N selection
-├─ Multi-lingual Translation (Helsinki-NLP MarianMT)
-└─ Database (SQLite historico.db)
-   ├─ Query history + 8 candidates + best chosen
-   └─ Feedback (👍/👎) for future training
-```
-
-## 📦 Dependencies
-
-### Core
-- `transformers>=4.30` — HuggingFace models
-- `gradio>=4.0` — Web UI
-- `anthropic>=0.7` — Claude API (optional, for fine-tuning)
-- `sentence-transformers>=2.2` — all-MiniLM embeddings
-
-### Optional
-- `torch` — if using local GGUF inference
-- `llama-cpp-python` — GGUF models (requires Windows Long Paths enabled)
-- `trl>=0.11` — DPO training on Colab
-
-See `pyproject.toml` for full list.
-
-## 🔧 Configuration
-
-### Environment Variables
-
-```bash
-# Generation backend: hf_inference (default) | gguf | claude | local
-INFERENCE_BACKEND=hf_inference
-
-# Translation backend: local (default) | claude
-TRANSLATE_BACKEND=local
-
-# HuggingFace model for generation (if using fine-tuned)
-HF_MODEL=Qwen/Qwen2.5-1.5B-Instruct
-
-# Optional: Claude API for fallback
-ANTHROPIC_API_KEY=sk-ant-...
-
-# Corpus for respondibilidade scoring
-CORPUS_DIR=data/corpus
-```
-
-## 📚 Data & Training
-
-### Available Datasets
-
-1. **Curated Questions** (`src/eval/curated.py`) — 100 hand-picked research questions
-2. **DPO Pairs** (`data/rl/dpo_final.jsonl`) — 133 chosen/rejected pairs
-3. **Corpus Index** (`data/corpus/`) — 30K+ papers for semantic search
-
-### Fine-tuning on Colab
-
-```bash
-# 1. Prepare dataset locally
-python -m src.dataset.prepare_dpo
-
-# 2. Open notebooks/dpo_finetune_colab.ipynb in Colab
-# 3. Upload dpo_final.jsonl, train Qwen2.5-1.5B with DPO
-# 4. Publish to HF Hub
-# 5. Update .env: HF_MODEL=fmr34/reformulatee-reformulator
-```
-
-**Cost:** ~$0.003 (100 × Haiku calls for dataset generation) + free Colab GPU
-
-## 🧪 Evaluation
-
-### Metrics
-
-```python
-from src.ee.reward import compute_ee
-from src.corpus.index import build_index
-
-index = build_index("data/corpus")
-result = compute_ee("Original question here", "Original question here", index)
-print(f"EE Score: {result.ee:.3f}")
-print(f"  Respondibilidade: {result.respondibilidade:.3f}")
-print(f"  Tratabilidade:    {result.tratabilidade:.3f}")
-print(f"  Não-trivialidade: {result.nao_trivialidade:.3f}")
-```
-
-### Run Tests
-
-```bash
-pytest tests/ -v
-```
-
-## 🌐 Deployment
-
-### HuggingFace Spaces
-
-Push this repo to GitHub, then connect to HF Spaces:
-1. Go to https://huggingface.co/new-space
-2. Select **Gradio** runtime
-3. Link your GitHub repo
-4. Auto-deploys on each push (zero-cost for free tier)
-
-### Docker
-
-```bash
-docker build -t reformulatee .
-docker run -p 7860:7860 reformulatee
-```
-
-### Local Server
-
-```bash
-python app.py
-# Access: http://localhost:7860
-```
-
-## 📖 Documentation
-
-- **[Architecture](docs/architecture.md)** — System design & component breakdown
-- **[Training](docs/training.md)** — DPO fine-tuning pipeline (Onda 4)
-- **[Dataset](docs/dataset.md)** — Curated questions, batch expansion, pair generation
-- **[Evaluation](docs/evaluation.md)** — Metrics, benchmarks, human evaluation
-
-## 🤝 Contributing
-
-Contributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
-
-### Quick Contribution Ideas
-
-- [ ] Human evaluation of reformulated questions
-- [ ] Additional language support (beyond pt/en)
-- [ ] Expand corpus with domain-specific papers
-- [ ] Improve semantic search re-ranking
-- [ ] Unit tests for scoring components
-
-## 📄 License
-
-Apache License 2.0 — see [LICENSE](LICENSE)
-
-## 🔗 Citation
-
-If you use ReformulatEE in research:
-
-```bibtex
-@software{reformulatee_2025,
-  title={ReformulatEE: Epistemic Effectiveness Reformulation},
-  author={fmr34},
-  year={2025},
-  url={https://github.com/fmr34/reformulatee},
-  note={Open source portfolio project}
-}
-```
-
-## 💡 Roadmap
-
-- [x] **Onda 1** — Performance (caching, parallelization, feedback loop)
-- [x] **Onda 2** — Local ML (classifier, hybrid search, dataset expansion)
-- [x] **Onda 3** — Zero-cost (HF Inference API + local translation)
-- [x] **Onda 4** — DPO fine-tuning (Colab notebook + HF Hub)
-- [x] **Onda 5** — Open source (this repo + documentation)
-- [ ] **Onda 6** — HF Spaces + GitHub release + community
-
-## 📞 Contact & Support
-
-- **Issues** — GitHub Issues for bugs / feature requests
-- **Discussions** — GitHub Discussions for Q&A
-- **GitHub** — https://github.com/fmr34
 
 ---
 
-**Built with 🤖 by [fmr34]**  
-*Portfolio project exploring LLM fine-tuning, RLHF, and epistemic philosophy.*
+## Configuration
+
+Copy `.env.example` to `.env` and set:
+
+```bash
+# Required for tractability scoring
+ANTHROPIC_API_KEY=sk-ant-...
+
+# Generation backend
+INFERENCE_BACKEND=hf_inference   # hf_inference | claude | gguf | local
+HF_TOKEN=hf_...                  # HuggingFace token (Inference API)
+HF_MODEL=fmr34/reformulatee-reformulator-merged   # fine-tuned model
+
+# Optional
+CORPUS_DIR=data/corpus           # path to paper corpus
+```
+
+---
+
+## Architecture
+
+```
+Gradio Web Interface
+        │
+   Translation (MarianMT pt ↔ en)
+        │
+   Generation — 8 parallel candidates
+   ├─ hf_inference  HF Inference API (default, free)
+   ├─ claude        Claude Haiku (fallback)
+   └─ gguf          Local quantized model
+        │
+   EE Scoring
+   ├─ Respondibilidade  BM25 + cosine re-ranking
+   ├─ Tratabilidade     Ridge(α=50) on MiniLM embeddings
+   └─ Não-trivialidade  Semantic dissimilarity
+        │
+   Stage 1 Filter  EE(candidate) > EE(original) + ε
+        │
+   Best candidate → Database (SQLite) → User feedback
+```
+
+---
+
+## Models
+
+| Model | HuggingFace | Description |
+|-------|-------------|-------------|
+| Generator | [fmr34/reformulatee-reformulator-merged](https://huggingface.co/fmr34/reformulatee-reformulator-merged) | Qwen2.5-1.5B fine-tuned with DPO |
+| LoRA adapter | [fmr34/reformulatee-reformulator](https://huggingface.co/fmr34/reformulatee-reformulator) | Adapter only (17 MB) |
+| Translation pt→en | Helsinki-NLP/opus-mt-ROMANCE-en | MarianMT local inference |
+| Translation en→pt | Helsinki-NLP/opus-mt-en-ROMANCE | MarianMT local inference |
+| Embeddings | all-MiniLM-L6-v2 | Sentence embeddings for scoring |
+
+---
+
+## Installation
+
+### Requirements
+
+- Python 3.9+
+- ~1 GB disk (models downloaded on first run)
+
+### Dependencies
+
+```bash
+pip install -e .                     # core
+pip install -e ".[training]"         # + DPO fine-tuning (trl, peft)
+pip install -e ".[dev]"              # + development tools
+```
+
+---
+
+## Fine-tuning
+
+The generator was fine-tuned using **DPO (Direct Preference Optimization)** on ~700 chosen/rejected pairs of research question reformulations.
+
+To replicate:
+1. `python -m src.dataset.prepare_dpo` — consolidate dataset
+2. Open `notebooks/dpo_finetune_colab.ipynb` in Google Colab (free T4 GPU)
+3. Upload `data/rl/dpo_final.jsonl`, run training (~45 min)
+4. Publish to HF Hub and update `HF_MODEL` in `.env`
+
+---
+
+## Documentation
+
+- [Architecture](docs/ARCHITECTURE.md) — component breakdown and data flow
+- [Deployment](docs/DEPLOYMENT.md) — HF Spaces, Docker, local setup
+- [Contributing](CONTRIBUTING.md) — contribution guidelines
+
+---
+
+## License
+
+Apache License 2.0 — see [LICENSE](LICENSE)
+
+## Citation
+
+```bibtex
+@software{reformulatee_2025,
+  title   = {ReformulatEE: Epistemic Effectiveness Reformulation},
+  author  = {fmr34},
+  year    = {2025},
+  url     = {https://github.com/fmr34/ReformulatEE},
+  license = {Apache-2.0}
+}
+```

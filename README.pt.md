@@ -36,7 +36,22 @@ Pergunta de entrada  →  Gera 8 candidatos  →  Pontua cada um (EE)  →  Filt
 
 ## Início Rápido
 
-### Interface Web
+Existem duas formas de usar o ReformulatEE:
+
+| | Demo Público | Local (modelo fine-tuned) |
+|---|---|---|
+| **Setup** | Nenhum — abra no navegador | Clone do repo + ambiente Python |
+| **Geração** | Claude API | Qwen2.5-1.5B fine-tuned ou qualquer modelo Ollama |
+| **Pontuação EE** | ✅ Completa | ✅ Completa |
+| **Link** | [HF Space](https://huggingface.co/spaces/fmr34/reformulatee) | Veja abaixo |
+
+### Opção 1 — Demo Público
+
+**[→ Experimente ao vivo no HuggingFace Spaces](https://huggingface.co/spaces/fmr34/reformulatee)**
+
+Sem instalação necessária.
+
+### Opção 2 — Local com Modelo Fine-tuned
 
 ```bash
 git clone https://github.com/fmr34/ReformulatEE.git
@@ -44,6 +59,17 @@ cd ReformulatEE
 pip install -e .
 cp .env.example .env   # adicione suas chaves de API
 python app.py          # abre http://localhost:7860
+```
+
+Defina `INFERENCE_BACKEND=local` no `.env` para usar o modelo fine-tuned via DPO
+([fmr34/reformulatee-reformulator-merged](https://huggingface.co/fmr34/reformulatee-reformulator-merged)),
+baixado automaticamente na primeira execução.
+
+Alternativamente, com o [Ollama](https://ollama.com) instalado:
+```bash
+ollama pull qwen2.5:7b   # ou qualquer outro modelo
+# defina INFERENCE_BACKEND=ollama e OLLAMA_MODEL=qwen2.5:7b no .env
+python app.py
 ```
 
 ### CLI
@@ -69,13 +95,16 @@ Copie `.env.example` para `.env` e defina:
 # Necessário para pontuação de tratabilidade
 ANTHROPIC_API_KEY=sk-ant-...
 
-# Backend de geração
-INFERENCE_BACKEND=hf_inference   # hf_inference | claude | gguf | local
-HF_TOKEN=hf_...                  # Token HuggingFace (Inference API)
-HF_MODEL=fmr34/reformulatee-reformulator-merged   # modelo fine-tuned
+# Backend de geração — escolha um:
+# claude  = Claude API (padrão do demo público, mais confiável)
+# local   = Qwen2.5-1.5B fine-tuned baixado do HF Hub
+# ollama  = qualquer modelo local via Ollama (ex: qwen2.5:7b)
+INFERENCE_BACKEND=claude
+
+HF_TOKEN=hf_...   # Token HuggingFace (necessário para backend local)
 
 # Opcional
-CORPUS_DIR=data/corpus           # caminho para o corpus de artigos
+CORPUS_DIR=data/corpus   # caminho para o corpus de artigos
 ```
 
 ---

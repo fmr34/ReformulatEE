@@ -49,7 +49,22 @@ Input question  →  Generate 8 candidates  →  Score each (EE)  →  Filter  �
 
 ## Quick Start
 
-### Web Interface
+There are two ways to use ReformulatEE:
+
+| | Public Demo | Local (fine-tuned model) |
+|---|---|---|
+| **Setup** | None — open in browser | Clone repo + Python env |
+| **Generation** | Claude API | Fine-tuned Qwen2.5-1.5B or any Ollama model |
+| **EE Scoring** | ✅ Full | ✅ Full |
+| **Link** | [HF Space](https://huggingface.co/spaces/fmr34/reformulatee) | See below |
+
+### Option 1 — Public Demo
+
+**[→ Try it live on HuggingFace Spaces](https://huggingface.co/spaces/fmr34/reformulatee)**
+
+No installation required.
+
+### Option 2 — Local with Fine-tuned Model
 
 ```bash
 git clone https://github.com/fmr34/ReformulatEE.git
@@ -57,6 +72,17 @@ cd ReformulatEE
 pip install -e .
 cp .env.example .env   # add your API keys
 python app.py          # opens http://localhost:7860
+```
+
+Set `INFERENCE_BACKEND=local` in `.env` to use the DPO fine-tuned model
+([fmr34/reformulatee-reformulator-merged](https://huggingface.co/fmr34/reformulatee-reformulator-merged))
+downloaded automatically on first run.
+
+Alternatively, with [Ollama](https://ollama.com) installed:
+```bash
+ollama pull qwen2.5:7b   # or any other model
+# set INFERENCE_BACKEND=ollama and OLLAMA_MODEL=qwen2.5:7b in .env
+python app.py
 ```
 
 ### CLI
@@ -82,9 +108,13 @@ Copy `.env.example` to `.env` and set:
 # Required for tractability scoring
 ANTHROPIC_API_KEY=sk-ant-...
 
-# Generation backend
-INFERENCE_BACKEND=hf_inference   # hf_inference | claude | gguf | local
-HF_TOKEN=hf_...                  # HuggingFace token (Inference API)
+# Generation backend — choose one:
+# claude  = Claude API (default for public demo, most reliable)
+# local   = fine-tuned Qwen2.5-1.5B downloaded from HF Hub
+# ollama  = any local model via Ollama (e.g. qwen2.5:7b)
+INFERENCE_BACKEND=claude
+
+HF_TOKEN=hf_...                  # HuggingFace token (required for local backend)
 HF_MODEL=fmr34/reformulatee-reformulator-merged   # fine-tuned model
 
 # Optional

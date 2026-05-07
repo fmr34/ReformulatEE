@@ -25,10 +25,11 @@ from concurrent.futures import as_completed
 from pathlib import Path
 
 _SYSTEM = (
-    "You are an expert in philosophy of science. "
-    "Your task is to reformulate research questions to make them more epistemically tractable: "
-    "operationalizable, methodologically grounded, and answerable with existing tools. "
-    "Respond with ONLY the reformulated question — no explanation, no preamble."
+    "You are a research question reformulator. "
+    "Rules: (1) output exactly ONE sentence; (2) it must end with '?'; "
+    "(3) no preamble, no labels, no numbering, no explanation — only the question itself. "
+    "Bad output: 'Here is the reformulation: ...' "
+    "Good output: 'How does X affect Y under condition Z?'"
 )
 
 # Modelo padrão para HF Inference API
@@ -47,6 +48,69 @@ _GGUF_PATH = Path(
 )
 
 _gguf_model = None  # lazy-load
+
+# Prefixos que o modelo às vezes adiciona antes da pergunta
+_PREFIXES = (
+    "rephrased question:",
+    "reformulated question:",
+    "reformulation:",
+    "question:",
+    "rephrased:",
+    "reformulated:",
+    "new question:",
+    "answer:",
+    "answered question:",
+    "rewritten answer based on the given prompt:",
+    "rewritten question:",
+)
+
+# Palavras que indicam que uma frase é uma pergunta
+_QUESTION_STARTERS = (
+    "what", "how", "why", "when", "where", "who", "which", "does", "do",
+    "is", "are", "can", "could", "would", "will", "has", "have", "did",
+    "should", "might", "may", "was", "were", "in what", "to what",
+    "under what", "at what", "for what",
+)
+
+
+def _clean_output(raw: str) -> str:
+    """
+    Extrai apenas a pergunta reformulada de uma resposta bruta do modelo.
+
+    Estratégia:
+      1. Remove prefixos conhecidos ("Rephrased question:", etc.)
+      2. Procura a primeira frase que termina em '?' — descarta o resto
+      3. Se o texto não contiver '?', retorna string vazia (candidato descartado)
+    """
+    import re
+
+    text = raw.strip()
+
+    # 1. Remove prefixo comum (pode aparecer antes da pergunta real)
+    lower = text.lower()
+    for prefix in _PREFIXES:
+        if lower.startswith(prefix):
+            text = text[len(prefix):].strip()
+            lower = text.lower()
+            break
+
+    # 2. Tenta encontrar uma frase que termina em '?'
+    # Divide em sentenças usando pontuação como separador
+    sentences = re.split(r"(?<=[.!?])\s+", text)
+    for sent in sentences:
+        sent = sent.strip()
+        if sent.endswith("?") and len(sent) >= 15:
+            return sent
+
+    # 3. Extrai tudo até o primeiro '?' (cobre casos sem espaço após ponto)
+    idx = text.find("?")
+    if idx != -1:
+        candidate = text[: idx + 1].strip()
+        if len(candidate) >= 15:
+            return candidate
+
+    # 4. Sem '?' encontrado → descarta (não é uma pergunta)
+    return ""
 
 
 # ---------------------------------------------------------------------------
@@ -83,13 +147,15 @@ def _ollama_single_call(q_bad: str, seed: int = 0) -> str:
         "model": model,
         "messages": [
             {"role": "system", "content": _SYSTEM},
-            {"role": "user", "content": f"Original question: {q_bad}"},
+            {"role": "user", "content": f"Reformulate into one tractable research question: {q_bad}"},
+            {"role": "assistant", "content": ""},
         ],
         "stream": False,
         "options": {
-            "temperature": 1.1,
-            "num_predict": 100,
+            "temperature": 1.0,
+            "num_predict": 80,
             "seed": seed,
+            "stop": ["\n", "\n\n"],
         },
     }).encode()
 
@@ -100,7 +166,7 @@ def _ollama_single_call(q_bad: str, seed: int = 0) -> str:
     )
     with urllib.request.urlopen(req, timeout=120) as resp:
         data = json.loads(resp.read())
-    return data["message"]["content"].strip().split("\n")[0].strip()
+    return _clean_output(data["message"]["content"])
 
 
 def generate_ollama(q_bad: str, n: int) -> list[str]:
@@ -141,7 +207,7 @@ def _hf_single_call(q_bad: str) -> str:
         max_tokens=100,
         temperature=1.1,
     )
-    return resp.choices[0].message.content.strip().split("\n")[0].strip()
+    return _clean_output(resp.choices[0].message.content)
 
 
 def generate_hf_inference(q_bad: str, n: int) -> list[str]:
@@ -230,7 +296,7 @@ def generate_gguf(q_bad: str, n: int) -> list[str]:
                 temperature=1.1,
                 seed=i * 42,
             )
-            text = out["choices"][0]["message"]["content"].strip().split("\n")[0].strip()
+            text = _clean_output(out["choices"][0]["message"]["content"])
             if text:
                 candidates.append(text)
         except Exception as e:

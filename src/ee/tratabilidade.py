@@ -128,11 +128,12 @@ def tratabilidade(query: str, model: str = "claude-haiku-4-5-20251001") -> dict:
     raw = message.content[0].text
     result = _parse_response(raw)
 
-    # Sanitiza valores
+    # Sanitiza e valida todos os campos
     result["prob_tractable"] = max(0.0, min(1.0, float(result["prob_tractable"])))
     result["confidence"] = max(0.0, min(1.0, float(result["confidence"])))
-    if result["trajectory"] not in ("rising", "plateau", "declining", "absent"):
+    if result.get("trajectory") not in ("rising", "plateau", "declining", "absent"):
         result["trajectory"] = "absent"
+    result["nearest_resolved_question"] = str(result.get("nearest_resolved_question", ""))[:200]
 
     # Persiste em ambos os caches
     with _cache_lock:

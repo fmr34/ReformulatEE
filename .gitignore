@@ -55,6 +55,12 @@ data/historico.db-*
 logs/
 wandb/
 
+# ── Dependências externas ────────────────────────────────────────────────────
+llama.cpp/
+
+# ── Arquivos temporários de pesquisa ─────────────────────────────────────────
+Database.txt
+
 # ── Claude Code internals ────────────────────────────────────────────────────
 .claude/
 

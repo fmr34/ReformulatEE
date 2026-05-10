@@ -72,6 +72,7 @@ def salvar(
     stage1_pass: bool,
 ) -> int | None:
     """Persiste um resultado. Retorna o ID do registro inserido."""
+    ts = datetime.now(timezone.utc).isoformat()
     try:
         with _conn() as c:
             cur = c.execute(
@@ -82,7 +83,7 @@ def salvar(
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
                 (
-                    datetime.now(timezone.utc).isoformat(),
+                    ts,
                     idioma,
                     pergunta_orig,
                     pergunta_en,
@@ -94,10 +95,33 @@ def salvar(
                     int(stage1_pass),
                 ),
             )
-            return cur.lastrowid
+            record_id = cur.lastrowid
     except Exception as e:
         print(f"[historico] Erro ao salvar: {e}")
         return None
+
+    try:
+        from src.db.hf_logger import log_async
+
+        log_async({
+            "type": "record",
+            "id": record_id,
+            "ts": ts,
+            "idioma": idioma,
+            "pergunta_orig": pergunta_orig,
+            "pergunta_en": pergunta_en,
+            "melhor": melhor,
+            "melhor_pt": melhor_pt,
+            "ee_antes": float(ee_antes),
+            "ee_depois": float(ee_depois),
+            "stage1_pass": bool(stage1_pass),
+            "candidatos": candidatos,
+            "feedback": None,
+        })
+    except Exception:
+        pass
+
+    return record_id
 
 
 def registrar_feedback(record_id: int, valor: int) -> None:
@@ -107,6 +131,19 @@ def registrar_feedback(record_id: int, valor: int) -> None:
             c.execute("UPDATE historico SET feedback = ? WHERE id = ?", (valor, record_id))
     except Exception as e:
         print(f"[historico] Erro ao salvar feedback: {e}")
+        return
+
+    try:
+        from src.db.hf_logger import log_urgent
+
+        log_urgent({
+            "type": "feedback",
+            "id": record_id,
+            "feedback": valor,
+            "ts": datetime.now(timezone.utc).isoformat(),
+        })
+    except Exception:
+        pass
 
 
 def ultimas(n: int = 8) -> list[list[str]]:

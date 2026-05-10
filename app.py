@@ -44,6 +44,9 @@ def _init():
     _initialized = True
 
 
+_MAX_INPUT_CHARS = 500
+
+
 def reformular_ui(pergunta, idioma):
     """Processa a pergunta e retorna (html, dataset, record_id, feedback_row, btn+, btn-)."""
     _vazio = (
@@ -57,6 +60,8 @@ def reformular_ui(pergunta, idioma):
     if not pergunta.strip():
         return _vazio
 
+    pergunta = pergunta[:_MAX_INPUT_CHARS]
+
     _init()
 
     from src.rl.inference import reformular
@@ -67,8 +72,9 @@ def reformular_ui(pergunta, idioma):
     try:
         r = reformular_ptbr(pergunta, n=8) if ptbr else reformular(pergunta, n=8)
     except Exception as e:
+        print(f"[reformular_ui] erro: {e}")
         erro = (
-            f'<p style="color:red">Erro: {e}</p>',
+            '<p style="color:red">Ocorreu um erro ao processar a pergunta. Tente novamente.</p>',
             gr.update(),
             None,
             gr.update(visible=False),
@@ -222,6 +228,7 @@ with gr.Blocks(title="ReformulatEE", theme=gr.themes.Soft()) as app:
         fn=reformular_ui,
         inputs=[inp_q, inp_idioma],
         outputs=[out, historico, estado_id, feedback_row, btn_pos, btn_neg],
+        concurrency_limit=5,
     )
     historico.click(
         fn=lambda x: x,
@@ -255,7 +262,8 @@ if __name__ == "__main__":
                 for line in result.stdout.splitlines():
                     if f":{port} " in line and "LISTENING" in line:
                         pid = line.split()[-1]
-                        subprocess.run(["taskkill", "/PID", pid, "/F"], capture_output=True)
+                        if pid.isdigit():
+                            subprocess.run(["taskkill", "/PID", pid, "/F"], capture_output=True)
             except Exception:
                 pass
 

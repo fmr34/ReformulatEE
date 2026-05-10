@@ -164,8 +164,12 @@ def _ollama_single_call(q_bad: str, seed: int = 0) -> str:
         data=payload,
         headers={"Content-Type": "application/json"},
     )
-    with urllib.request.urlopen(req, timeout=120) as resp:
-        data = json.loads(resp.read())
+    try:
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            data = json.loads(resp.read())
+    except TimeoutError:
+        print(f"  [ollama] timeout após 30s — modelo={os.getenv('OLLAMA_MODEL', _OLLAMA_MODEL)}")
+        return ""
     return _clean_output(data["message"]["content"])
 
 

@@ -143,3 +143,21 @@ def log_urgent(record: dict) -> None:
     _ensure_started()
     _q.put(record)
     _q.put({"__flush__": True})
+
+
+def ultimas_hf(n: int = 8) -> list[list[str]]:
+    """Retorna as últimas n perguntas do HF Dataset (fallback cross-session)."""
+    lines = _download_lines()
+    records = []
+    for line in lines:
+        line = line.strip()
+        if not line:
+            continue
+        try:
+            row = json.loads(line)
+            if row.get("type") == "record":
+                records.append(row)
+        except json.JSONDecodeError:
+            continue
+    records.sort(key=lambda r: r.get("ts", ""), reverse=True)
+    return [[r.get("pergunta_orig", ""), r.get("idioma", "Português")] for r in records[:n]]

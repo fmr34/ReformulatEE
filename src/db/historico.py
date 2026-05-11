@@ -151,7 +151,11 @@ def registrar_feedback(record_id: int, valor: int) -> None:
 
 
 def ultimas(n: int = 8) -> list[list[str]]:
-    """Retorna as últimas n perguntas como [[pergunta_orig, idioma], ...]."""
+    """Retorna as últimas n perguntas como [[pergunta_orig, idioma], ...].
+
+    Fallback: quando o SQLite está vazio (ex: Space reiniciou), lê do HF Dataset
+    para preservar perguntas de qualquer usuário entre sessões.
+    """
     try:
         with _conn() as c:
             rows = c.execute(
@@ -163,7 +167,15 @@ def ultimas(n: int = 8) -> list[list[str]]:
             """,
                 (n,),
             ).fetchall()
-        return [list(r) for r in rows]
+        result = [list(r) for r in rows]
+        if result:
+            return result
+    except Exception:
+        pass
+    try:
+        from src.db.hf_logger import ultimas_hf
+
+        return ultimas_hf(n)
     except Exception:
         return []
 

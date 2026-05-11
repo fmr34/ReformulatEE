@@ -18,9 +18,12 @@ from dotenv import load_dotenv
 
 load_dotenv(override=True)
 
-# Backend padrão: auto-detecta (HF Inference API se não houver modelo local)
-# Pode ser sobrescrito no .env: INFERENCE_BACKEND=claude para usar Claude API
-os.environ.setdefault("INFERENCE_BACKEND", "auto")
+# Online (HF Space): usa Claude API — HF Inference API não suporta este modelo
+# Local: auto-detecta (Ollama se disponível, senão Claude)
+if os.getenv("SPACE_ID"):
+    os.environ["INFERENCE_BACKEND"] = "claude"
+else:
+    os.environ.setdefault("INFERENCE_BACKEND", "auto")
 
 import gradio as gr
 

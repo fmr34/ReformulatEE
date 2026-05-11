@@ -169,12 +169,11 @@ def _get_index():
     if _corpus_index is None:
         from src.corpus.index import build_index
 
-        index_pkl = CORPUS_DIR / "bm25_index.pkl"
-        if not index_pkl.exists():
-            pr("  [aviso] Corpus BM25 nao encontrado — respondibilidade sera 0.")
-            _corpus_index = _NullIndex()
-        else:
+        try:
             _corpus_index = build_index(CORPUS_DIR)
+        except FileNotFoundError:
+            pr("  [aviso] Corpus nao encontrado — respondibilidade sera 0.")
+            _corpus_index = _NullIndex()
     return _corpus_index
 
 

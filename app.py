@@ -49,8 +49,33 @@ def _init():
 
 _MAX_INPUT_CHARS = 500
 
+# Rate limiting: máx 10 requisições por sessão por janela de 60 segundos
+import collections
+import threading
+import time as _time
 
-def reformular_ui(pergunta, idioma):
+_rl_lock = threading.Lock()
+_rl_windows: dict[str, collections.deque] = {}
+_RL_MAX = 10
+_RL_WINDOW = 60
+
+
+def _check_rate_limit(session_id: str) -> bool:
+    """Retorna True se a requisição está dentro do limite, False se excedeu."""
+    now = _time.monotonic()
+    with _rl_lock:
+        if session_id not in _rl_windows:
+            _rl_windows[session_id] = collections.deque()
+        dq = _rl_windows[session_id]
+        while dq and now - dq[0] > _RL_WINDOW:
+            dq.popleft()
+        if len(dq) >= _RL_MAX:
+            return False
+        dq.append(now)
+        return True
+
+
+def reformular_ui(pergunta, idioma, request: gr.Request = None):
     """Processa a pergunta e retorna (html, dataset, record_id, feedback_row, btn+, btn-)."""
     _vazio = (
         '<p style="color:orange">Digite uma pergunta.</p>',
@@ -62,6 +87,17 @@ def reformular_ui(pergunta, idioma):
     )
     if not pergunta.strip():
         return _vazio
+
+    session_id = getattr(request, "session_hash", "anon") if request else "anon"
+    if not _check_rate_limit(session_id):
+        return (
+            '<p style="color:orange">Limite de requisições atingido. Aguarde 1 minuto e tente novamente.</p>',
+            gr.update(),
+            None,
+            gr.update(visible=False),
+            gr.update(interactive=True, value="👍  Boa reformulação"),
+            gr.update(interactive=True, value="👎  Pode melhorar"),
+        )
 
     pergunta = pergunta[:_MAX_INPUT_CHARS]
 
@@ -187,6 +223,12 @@ def dar_feedback(record_id, valor: int):
 
 with gr.Blocks(title="ReformulatEE", theme=gr.themes.Soft()) as app:
     gr.Markdown("## 🔬 ReformulatEE — Reformulação Epistêmica")
+    gr.Markdown(
+        "<p style='font-size:.8em;color:#888;margin:0 0 8px'>"
+        "As perguntas submetidas são registradas anonimamente para fins de pesquisa e melhoria do modelo. "
+        "Não submeta informações pessoais ou confidenciais."
+        "</p>"
+    )
 
     with gr.Row():
         with gr.Column(scale=3):

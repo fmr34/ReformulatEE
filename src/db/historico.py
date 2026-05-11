@@ -20,7 +20,12 @@ _DB = os.path.normpath(os.path.join(os.path.dirname(__file__), "..", "..", "data
 
 def _conn() -> sqlite3.Connection:
     os.makedirs(os.path.dirname(_DB), exist_ok=True)
-    return sqlite3.connect(_DB)
+    conn = sqlite3.connect(_DB)
+    try:
+        os.chmod(_DB, 0o600)
+    except Exception:
+        pass
+    return conn
 
 
 def init_db() -> None:

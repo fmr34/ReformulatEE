@@ -145,6 +145,19 @@ def log_urgent(record: dict) -> None:
     _q.put({"__flush__": True})
 
 
+def _valid_record(row: dict) -> bool:
+    """Valida que o registro tem os campos obrigatórios com tipos corretos."""
+    pergunta = row.get("pergunta_orig", "")
+    idioma = row.get("idioma", "")
+    if not isinstance(pergunta, str) or not isinstance(idioma, str):
+        return False
+    if not pergunta.strip() or len(pergunta) > 1000:
+        return False
+    if idioma not in ("Português", "English"):
+        return False
+    return True
+
+
 def ultimas_hf(n: int = 8) -> list[list[str]]:
     """Retorna as últimas n perguntas do HF Dataset (fallback cross-session)."""
     lines = _download_lines()
@@ -155,7 +168,7 @@ def ultimas_hf(n: int = 8) -> list[list[str]]:
             continue
         try:
             row = json.loads(line)
-            if row.get("type") == "record":
+            if row.get("type") == "record" and _valid_record(row):
                 records.append(row)
         except json.JSONDecodeError:
             continue

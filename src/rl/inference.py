@@ -276,7 +276,7 @@ def _load_local_pipeline():
         )
         pr("  Modelo completo carregado.")
     else:
-        pr(f"  [aviso] MODEL_DIR nao encontrado: {MODEL_DIR}")
+        pr(f"  [aviso] MODEL_DIR nao encontrado: {MODEL_DIR.name}")
         pr(f"  Usando modelo base: {BASE_MODEL}")
         tokenizer = AutoTokenizer.from_pretrained(BASE_MODEL)
         model = AutoModelForCausalLM.from_pretrained(BASE_MODEL)
@@ -635,7 +635,7 @@ def run_demo() -> None:
     pr(f"  N candid.: {N_CANDIDATES}")
     pr(f"  Alpha    : {ALPHA}")
     pr(f"  Temp     : {TEMPERATURE}")
-    pr(f"  Model dir: {MODEL_DIR}")
+    pr(f"  Model dir: {MODEL_DIR.name}")
 
     pr("\n  Carregando pipeline de scoring...")
     _get_index()  # pre-carrega o corpus index

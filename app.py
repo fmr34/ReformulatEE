@@ -6,11 +6,30 @@ Uso:
   .venv\\Scripts\\python app.py
 """
 
+import hashlib
+import json
+import logging
 import os
 import sys
 import warnings
 
 warnings.filterwarnings("ignore")
+
+# Audit logger — escreve JSON estruturado para stderr (capturado pelo HF Space logs)
+_audit = logging.getLogger("reformulatee.audit")
+_audit.setLevel(logging.INFO)
+_audit_handler = logging.StreamHandler(sys.stderr)
+_audit_handler.setFormatter(logging.Formatter("%(message)s"))
+_audit.addHandler(_audit_handler)
+_audit.propagate = False
+
+
+def _audit_log(action: str, **kwargs) -> None:
+    import time
+
+    record = {"action": action, "ts": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), **kwargs}
+    _audit.info(json.dumps(record, ensure_ascii=False))
+
 
 sys.path.insert(0, os.path.dirname(__file__))
 
@@ -33,6 +52,16 @@ from src.db.historico import salvar
 from src.db.historico import ultimas
 
 init_db()
+
+# Validação antecipada de variáveis obrigatórias — falha rápido com mensagem clara
+_on_spaces_early = bool(os.getenv("SPACE_ID"))
+if _on_spaces_early and not os.getenv("ANTHROPIC_API_KEY"):
+    raise EnvironmentError(
+        "[startup] ANTHROPIC_API_KEY não configurada. "
+        "Adicione o secret em Settings → Secrets do HF Space."
+    )
+if not os.getenv("HF_TOKEN"):
+    print("[startup] HF_TOKEN ausente — logging e histórico cross-session desativados.")
 
 _initialized = False
 
@@ -89,7 +118,11 @@ def reformular_ui(pergunta, idioma, request: gr.Request = None):
         return _vazio
 
     session_id = getattr(request, "session_hash", "anon") if request else "anon"
+    # Hash da sessão para não logar identificador direto
+    session_hash = hashlib.sha256(session_id.encode()).hexdigest()[:12]
+
     if not _check_rate_limit(session_id):
+        _audit_log("rate_limit_exceeded", session=session_hash, idioma=idioma)
         return (
             '<p style="color:orange">Limite de requisições atingido. Aguarde 1 minuto e tente novamente.</p>',
             gr.update(),
@@ -142,6 +175,16 @@ def reformular_ui(pergunta, idioma, request: gr.Request = None):
         melhor_pt=r.best_pt if ptbr else None,
         ee_antes=ee_bad,
         ee_depois=ee_best,
+        stage1_pass=passed,
+    )
+
+    _audit_log(
+        "reformulate",
+        session=session_hash,
+        idioma=idioma,
+        record_id=record_id,
+        ee_antes=round(ee_bad, 3),
+        ee_depois=round(ee_best, 3),
         stage1_pass=passed,
     )
 
@@ -214,6 +257,7 @@ def dar_feedback(record_id, valor: int):
     """Registra feedback e desativa os botões."""
     if record_id is not None:
         registrar_feedback(record_id, valor)
+        _audit_log("feedback", record_id=record_id, valor=valor)
     label = "✅ Obrigado!" if valor == 1 else "✅ Registrado!"
     return (
         gr.update(interactive=False, value=label if valor == 1 else "👍  Boa reformulação"),
@@ -316,4 +360,5 @@ if __name__ == "__main__":
 
     # HF Spaces requer 0.0.0.0; local usa 127.0.0.1
     host = "0.0.0.0" if _on_spaces else "127.0.0.1"
+    app.queue(max_size=20)
     app.launch(server_port=7860, server_name=host)

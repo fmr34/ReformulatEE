@@ -13,8 +13,12 @@ ee1 = [r["ee"] for r in pos]
 ee0 = [r["ee"] for r in neg]
 resp1 = [r["respondibilidade"] for r in pos]
 resp0 = [r["respondibilidade"] for r in neg]
-print(f"label=1 (alta EE)  | EE={np.mean(ee1):.3f} +/- {np.std(ee1):.3f} | resp={np.mean(resp1):.3f}")
-print(f"label=0 (baixa EE) | EE={np.mean(ee0):.3f} +/- {np.std(ee0):.3f} | resp={np.mean(resp0):.3f}")
+print(
+    f"label=1 (alta EE)  | EE={np.mean(ee1):.3f} +/- {np.std(ee1):.3f} | resp={np.mean(resp1):.3f}"
+)
+print(
+    f"label=0 (baixa EE) | EE={np.mean(ee0):.3f} +/- {np.std(ee0):.3f} | resp={np.mean(resp0):.3f}"
+)
 
 print()
 print("=== Top 5 falsos positivos (label=0 com EE alta) ===")

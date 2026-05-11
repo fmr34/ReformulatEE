@@ -23,11 +23,13 @@ import sys
 from pathlib import Path
 
 from dotenv import load_dotenv
+
 load_dotenv(override=True)
 
-DIVERGENTES  = Path("data/pairs/pairs_layer2_divergent.jsonl")
+DIVERGENTES = Path("data/pairs/pairs_layer2_divergent.jsonl")
 CONCORDANTES = Path("data/pairs/pairs_layer2.jsonl")
-LOG_HUMANO   = Path("data/pairs/layer3_decisoes_humanas.jsonl")
+LOG_HUMANO = Path("data/pairs/layer3_decisoes_humanas.jsonl")
+
 
 # Cores ANSI (desabilitadas automaticamente fora de terminal)
 def _cor(texto: str, codigo: str) -> str:
@@ -35,12 +37,13 @@ def _cor(texto: str, codigo: str) -> str:
         return texto
     return f"{codigo}{texto}\033[0m"
 
+
 AMARELO = "\033[93m"
-VERDE   = "\033[92m"
+VERDE = "\033[92m"
 VERMELHO = "\033[91m"
-CIANO   = "\033[96m"
+CIANO = "\033[96m"
 NEGRITO = "\033[1m"
-FRACO   = "\033[2m"
+FRACO = "\033[2m"
 
 
 def carregar_decididos() -> set[str]:
@@ -59,16 +62,16 @@ def salvar_decisao(par: dict, decisao: str) -> None:
     LOG_HUMANO.parent.mkdir(parents=True, exist_ok=True)
     registro = {
         "source_id": par.get("source_id", ""),
-        "q_bad":     par["q_bad"],
-        "q_good":    par["q_good"],
-        "dominio":   par.get("domain", ""),
-        "fonte":     par.get("source", ""),
-        "decisao":   decisao,  # "concordante" | "rejeitado" | "incerto"
+        "q_bad": par["q_bad"],
+        "q_good": par["q_good"],
+        "dominio": par.get("domain", ""),
+        "fonte": par.get("source", ""),
+        "decisao": decisao,  # "concordante" | "rejeitado" | "incerto"
         "n_anotadores": par.get("n_annotators", 0),
         "resumo_anotadores": [
             {
-                "modelo":    a["model"].split("-")[0],
-                "direcao":   a["direction"],
+                "modelo": a["model"].split("-")[0],
+                "direcao": a["direction"],
                 "magnitude": a["magnitude"],
             }
             for a in par.get("annotations", [])
@@ -91,9 +94,7 @@ def aplicar_decisoes() -> tuple[int, int]:
             decisoes[rec["source_id"]] = rec["decisao"]
 
     divergentes = [
-        json.loads(l)
-        for l in DIVERGENTES.read_text(encoding="utf-8").splitlines()
-        if l.strip()
+        json.loads(l) for l in DIVERGENTES.read_text(encoding="utf-8").splitlines() if l.strip()
     ]
 
     adicionados = rejeitados = 0
@@ -140,19 +141,20 @@ def traduzir_par(par: dict) -> dict:
         return _cache_traducao[sid]
 
     import anthropic
+
     client = anthropic.Anthropic()
 
     textos = {
         "contexto": (par.get("context") or "").strip()[:400],
-        "q_bad":    par["q_bad"],
-        "q_good":   par["q_good"],
+        "q_bad": par["q_bad"],
+        "q_good": par["q_good"],
     }
 
     prompt = (
         "Traduza os três campos abaixo para o português brasileiro. "
         "Preserve termos técnicos científicos entre parênteses em inglês quando necessário. "
         "Responda SOMENTE com JSON válido, sem markdown.\n\n"
-        f'{json.dumps(textos, ensure_ascii=False)}'
+        f"{json.dumps(textos, ensure_ascii=False)}"
     )
 
     try:
@@ -162,6 +164,7 @@ def traduzir_par(par: dict) -> dict:
             messages=[{"role": "user", "content": prompt}],
         )
         import re
+
         raw = re.sub(r"```[a-z]*\n?", "", msg.content[0].text).strip()
         resultado = json.loads(raw)
     except Exception:
@@ -178,9 +181,7 @@ def main() -> None:
         return
 
     divergentes = [
-        json.loads(l)
-        for l in DIVERGENTES.read_text(encoding="utf-8").splitlines()
-        if l.strip()
+        json.loads(l) for l in DIVERGENTES.read_text(encoding="utf-8").splitlines() if l.strip()
     ]
 
     decididos = carregar_decididos()
@@ -209,16 +210,21 @@ def main() -> None:
         limpar_tela()
 
         # Traduz antes de exibir
-        print(_cor(f"─── Par {idx} de {len(pendentes)}{status} ── traduzindo... ───", FRACO),
-              end="\r", flush=True)
+        print(
+            _cor(f"─── Par {idx} de {len(pendentes)}{status} ── traduzindo... ───", FRACO),
+            end="\r",
+            flush=True,
+        )
         trad = traduzir_par(par)
 
         limpar_tela()
 
         # Cabeçalho
         print(_cor(f"─── Par {idx} de {len(pendentes)}{status} ───", NEGRITO))
-        print(f"{_cor('Fonte:', FRACO)} {par.get('source','')}  "
-              f"{_cor('Domínio:', FRACO)} {par.get('domain','?')[:65]}")
+        print(
+            f"{_cor('Fonte:', FRACO)} {par.get('source','')}  "
+            f"{_cor('Domínio:', FRACO)} {par.get('domain','?')[:65]}"
+        )
 
         # Contexto traduzido
         contexto = trad.get("contexto", "").strip()
@@ -248,8 +254,10 @@ def main() -> None:
         print(formatar_anotadores(par))
 
         # Critério rápido
-        print(f"\n{_cor('Critério:', FRACO)} q_good tem metodologia mais clara e "
-              "avança em direção à resposta da q_bad?")
+        print(
+            f"\n{_cor('Critério:', FRACO)} q_good tem metodologia mais clara e "
+            "avança em direção à resposta da q_bad?"
+        )
         print()
 
         while True:
@@ -260,8 +268,7 @@ def main() -> None:
 
             if tecla == "Q":
                 adicionados, rej = aplicar_decisoes()
-                print(f"\n💾 Salvo. {adicionados} adicionados à Layer 2, "
-                      f"{rej} rejeitados.")
+                print(f"\n💾 Salvo. {adicionados} adicionados à Layer 2, " f"{rej} rejeitados.")
                 restantes = len(pendentes) - idx
                 if restantes > 0:
                     print(f"   {restantes} par(es) restante(s) — execute novamente para continuar.")

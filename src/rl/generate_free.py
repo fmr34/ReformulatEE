@@ -66,10 +66,34 @@ _PREFIXES = (
 
 # Palavras que indicam que uma frase é uma pergunta
 _QUESTION_STARTERS = (
-    "what", "how", "why", "when", "where", "who", "which", "does", "do",
-    "is", "are", "can", "could", "would", "will", "has", "have", "did",
-    "should", "might", "may", "was", "were", "in what", "to what",
-    "under what", "at what", "for what",
+    "what",
+    "how",
+    "why",
+    "when",
+    "where",
+    "who",
+    "which",
+    "does",
+    "do",
+    "is",
+    "are",
+    "can",
+    "could",
+    "would",
+    "will",
+    "has",
+    "have",
+    "did",
+    "should",
+    "might",
+    "may",
+    "was",
+    "were",
+    "in what",
+    "to what",
+    "under what",
+    "at what",
+    "for what",
 )
 
 
@@ -90,7 +114,7 @@ def _clean_output(raw: str) -> str:
     lower = text.lower()
     for prefix in _PREFIXES:
         if lower.startswith(prefix):
-            text = text[len(prefix):].strip()
+            text = text[len(prefix) :].strip()
             lower = text.lower()
             break
 
@@ -143,21 +167,26 @@ def _ollama_single_call(q_bad: str, seed: int = 0) -> str:
     base_url = os.getenv("OLLAMA_BASE_URL", _OLLAMA_BASE_URL)
     print(f"  [ollama] modelo={model}")
 
-    payload = json.dumps({
-        "model": model,
-        "messages": [
-            {"role": "system", "content": _SYSTEM},
-            {"role": "user", "content": f"Reformulate into one tractable research question: {q_bad}"},
-            {"role": "assistant", "content": ""},
-        ],
-        "stream": False,
-        "options": {
-            "temperature": 1.0,
-            "num_predict": 80,
-            "seed": seed,
-            "stop": ["\n", "\n\n"],
-        },
-    }).encode()
+    payload = json.dumps(
+        {
+            "model": model,
+            "messages": [
+                {"role": "system", "content": _SYSTEM},
+                {
+                    "role": "user",
+                    "content": f"Reformulate into one tractable research question: {q_bad}",
+                },
+                {"role": "assistant", "content": ""},
+            ],
+            "stream": False,
+            "options": {
+                "temperature": 1.0,
+                "num_predict": 80,
+                "seed": seed,
+                "stop": ["\n", "\n\n"],
+            },
+        }
+    ).encode()
 
     req = urllib.request.Request(
         f"{base_url}/api/chat",

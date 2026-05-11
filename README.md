@@ -34,7 +34,7 @@ Input question  →  Generate 8 candidates  →  Score each (EE)  →  Filter  �
 
 | Component | Description | Method |
 |-----------|-------------|--------|
-| **Respondibilidade** | Is there an active research corpus? | BM25 + semantic search over 30K+ papers |
+| **Respondibilidade** | Is there an active research corpus? | BM25 + semantic search over 919 papers |
 | **Tratabilidade** | Can it be answered with existing tools? | Local Ridge classifier on sentence embeddings |
 | **Não-trivialidade** | Is it meaningfully different from the original? | Semantic dissimilarity probe |
 
@@ -51,39 +51,39 @@ Input question  →  Generate 8 candidates  →  Score each (EE)  →  Filter  �
 
 There are two ways to use ReformulatEE:
 
-| | Public Demo | Local (fine-tuned model) |
+| | Public Demo (HF Space) | Local (Ollama fine-tuned) |
 |---|---|---|
-| **Setup** | None — open in browser | Clone repo + Python env |
-| **Generation** | Claude API | Fine-tuned Qwen2.5-1.5B or any Ollama model |
-| **EE Scoring** | ✅ Full | ✅ Full |
+| **Setup** | None — open in browser | Clone repo + Python env + Ollama |
+| **Generation** | Claude Haiku API | Fine-tuned GGUF model via Ollama |
+| **Translation** | MarianMT (local, free) | MarianMT (local, free) |
+| **EE Scoring** | Full | Full |
+| **Cost** | Free to use | $0 (fully local) |
 | **Link** | [HF Space](https://huggingface.co/spaces/fmr34/reformulatee) | See below |
 
 ### Option 1 — Public Demo
 
 **[→ Try it live on HuggingFace Spaces](https://huggingface.co/spaces/fmr34/reformulatee)**
 
-No installation required.
+No installation required. Questions are logged anonymously for research purposes.
 
-### Option 2 — Local with Fine-tuned Model
+### Option 2 — Local with Fine-tuned Model (zero cost)
 
 ```bash
 git clone https://github.com/fmr34/ReformulatEE.git
 cd ReformulatEE
 pip install -e .
 cp .env.example .env   # add your API keys
+```
+
+With [Ollama](https://ollama.com) and the fine-tuned model:
+```bash
+# Download the Modelfile and GGUF from HF Hub, then:
+ollama create reformulatee -f Modelfile
+# Set INFERENCE_BACKEND=ollama and OLLAMA_MODEL=reformulatee in .env
 python app.py          # opens http://localhost:7860
 ```
 
-Set `INFERENCE_BACKEND=local` in `.env` to use the DPO fine-tuned model
-([fmr34/reformulatee-reformulator-merged](https://huggingface.co/fmr34/reformulatee-reformulator-merged))
-downloaded automatically on first run.
-
-Alternatively, with [Ollama](https://ollama.com) installed:
-```bash
-ollama pull qwen2.5:7b   # or any other model
-# set INFERENCE_BACKEND=ollama and OLLAMA_MODEL=qwen2.5:7b in .env
-python app.py
-```
+The local setup uses Ollama for generation, MarianMT for translation, and the Ridge classifier for tractability — **zero API cost per request**.
 
 ### CLI
 
@@ -105,20 +105,22 @@ python -m src.rl.inference --pt --batch questions.txt
 Copy `.env.example` to `.env` and set:
 
 ```bash
-# Required for tractability scoring
+# Required for tractability scoring (fallback) and generation on HF Space
 ANTHROPIC_API_KEY=sk-ant-...
 
-# Generation backend — choose one:
-# claude  = Claude API (default for public demo, most reliable)
-# local   = fine-tuned Qwen2.5-1.5B downloaded from HF Hub
-# ollama  = any local model via Ollama (e.g. qwen2.5:7b)
-INFERENCE_BACKEND=claude
+# Generation backend:
+# ollama       = local fine-tuned model via Ollama (recommended for local, zero cost)
+# claude       = Claude Haiku API (used automatically on HF Space)
+# hf_inference = HuggingFace Inference API (public models, free)
+INFERENCE_BACKEND=ollama
+OLLAMA_MODEL=reformulatee
+OLLAMA_BASE_URL=http://localhost:11434
 
-HF_TOKEN=hf_...                  # HuggingFace token (required for local backend)
-HF_MODEL=fmr34/reformulatee-reformulator-merged   # fine-tuned model
+# HuggingFace token — for cross-session history logging (optional locally)
+HF_TOKEN=hf_...
 
 # Optional
-CORPUS_DIR=data/corpus           # path to paper corpus
+CORPUS_DIR=data/corpus   # path to paper corpus
 ```
 
 ---
@@ -126,23 +128,25 @@ CORPUS_DIR=data/corpus           # path to paper corpus
 ## Architecture
 
 ```
-Gradio Web Interface
+Gradio Web Interface (rate-limited: 10 req/min/session)
         │
-   Translation (MarianMT pt ↔ en)
+   Translation (MarianMT pt ↔ en — local, free)
         │
    Generation — 8 parallel candidates
-   ├─ hf_inference  HF Inference API (default, free)
-   ├─ claude        Claude Haiku (fallback)
-   └─ gguf          Local quantized model
+   ├─ ollama        Fine-tuned GGUF model (local, zero cost) ← recommended locally
+   ├─ claude        Claude Haiku (used on HF Space)
+   └─ hf_inference  HF Inference API (public models, free)
         │
    EE Scoring
-   ├─ Respondibilidade  BM25 + cosine re-ranking
-   ├─ Tratabilidade     Ridge(α=50) on MiniLM embeddings
-   └─ Não-trivialidade  Semantic dissimilarity
+   ├─ Respondibilidade  BM25 + cosine re-ranking over 919 papers
+   ├─ Tratabilidade     Ridge classifier on MiniLM embeddings (local)
+   └─ Não-trivialidade  Semantic dissimilarity probe
         │
    Stage 1 Filter  EE(candidate) > EE(original) + ε
         │
-   Best candidate → Database (SQLite) → User feedback
+   Best candidate → SQLite (local) + HF Dataset (cross-session log)
+        │
+   User feedback (👍/👎) → DPO training pipeline
 ```
 
 ---
@@ -178,13 +182,20 @@ pip install -e ".[dev]"              # + development tools
 
 ## Fine-tuning
 
-The generator was fine-tuned using **DPO (Direct Preference Optimization)** on ~700 chosen/rejected pairs of research question reformulations.
+The generator was fine-tuned using **DPO (Direct Preference Optimization)** on curated chosen/rejected pairs from multiple sources: adversarial probes, cross-domain pairs, Batch API expansion, and user feedback (👍).
 
-To replicate:
-1. `python -m src.dataset.prepare_dpo` — consolidate dataset
+To replicate or extend the dataset:
+1. `python -m src.dataset.prepare_dpo` — consolidate all sources into `data/rl/dpo_final.jsonl`
 2. Open `notebooks/dpo_finetune_colab.ipynb` in Google Colab (free T4 GPU)
 3. Upload `data/rl/dpo_final.jsonl`, run training (~45 min)
-4. Publish to HF Hub and update `HF_MODEL` in `.env`
+4. Publish to HF Hub and update `OLLAMA_MODEL` / `HF_MODEL` in `.env`
+
+**DPO data sources (in priority order):**
+- `dpo_tier3.jsonl` — adversarial cross-domain pairs
+- `dpo_tier2.jsonl` — adversarial validated pairs
+- `dpo_tier1.jsonl` — curated base pairs
+- `batch_pairs.jsonl` / `batch_domains.jsonl` / `batch_large.jsonl` — API-expanded pairs
+- `historico.db` + HF Dataset — user feedback (👍 = chosen, worst candidate = rejected)
 
 ---
 

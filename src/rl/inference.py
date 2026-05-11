@@ -68,11 +68,27 @@ BACKEND = os.getenv("INFERENCE_BACKEND", "auto")
 TRANSLATE_BACKEND = os.getenv("TRANSLATE_BACKEND", "local")
 MODEL_DIR = Path(os.getenv("INFERENCE_MODEL_DIR", "data/models/dpo_policy/tier3/final"))
 BASE_MODEL = os.getenv("DPO_MODEL", "gpt2")
-N_CANDIDATES = int(os.getenv("INFERENCE_N", "8"))
-ALPHA = float(os.getenv("INFERENCE_ALPHA", "0.5"))
-MAX_NEW_TOKENS = int(os.getenv("INFERENCE_MAX_NEW_TOKENS", "80"))
-TEMPERATURE = float(os.getenv("INFERENCE_TEMPERATURE", "1.1"))
-TOP_P = float(os.getenv("INFERENCE_TOP_P", "0.95"))
+
+
+def _env_int(key: str, default: int) -> int:
+    try:
+        return int(os.getenv(key, str(default)))
+    except ValueError:
+        return default
+
+
+def _env_float(key: str, default: float) -> float:
+    try:
+        return float(os.getenv(key, str(default)))
+    except ValueError:
+        return default
+
+
+N_CANDIDATES = _env_int("INFERENCE_N", 8)
+ALPHA = _env_float("INFERENCE_ALPHA", 0.5)
+MAX_NEW_TOKENS = _env_int("INFERENCE_MAX_NEW_TOKENS", 80)
+TEMPERATURE = _env_float("INFERENCE_TEMPERATURE", 1.1)
+TOP_P = _env_float("INFERENCE_TOP_P", 0.95)
 CORPUS_DIR = Path(os.getenv("CORPUS_DIR", "data/corpus"))
 
 PROMPT_TEMPLATE = (
@@ -88,17 +104,18 @@ _GENERATION_SYSTEM = (
     "You are an expert in philosophy of science. "
     "Your task is to reformulate research questions to make them more epistemically tractable: "
     "operationalizable, methodologically grounded, and answerable with existing tools. "
-    "Respond with ONLY the reformulated question — no explanation, no preamble."
+    "The user's question is enclosed in <question> tags. "
+    "Respond with ONLY the reformulated question — no explanation, no preamble, no tags."
 )
 
 _TRANSLATE_SYSTEMS = {
     "pt_to_en": (
-        "Translate the following research question from Portuguese to English. "
+        "Translate the research question enclosed in <question> tags from Portuguese to English. "
         "Preserve the exact meaning and academic tone. "
         "Respond with ONLY the translated question, nothing else."
     ),
     "en_to_pt": (
-        "Translate the following research question from English to Portuguese (Brazilian). "
+        "Translate the research question enclosed in <question> tags from English to Portuguese (Brazilian). "
         "Preserve the exact meaning and academic tone. "
         "Respond with ONLY the translated question, nothing else."
     ),
@@ -327,7 +344,7 @@ def _generate_claude(q_bad: str, n: int) -> list[str]:
             "cache_control": {"type": "ephemeral"},
         }
     ]
-    user_msg = [{"role": "user", "content": f"Original question: {q_bad}"}]
+    user_msg = [{"role": "user", "content": f"<question>{q_bad}</question>"}]
 
     def _single_call(_):
         msg = client.messages.create(
@@ -484,7 +501,7 @@ def _translate_claude(text: str, direction: str) -> str:
         model="claude-haiku-4-5",
         max_tokens=150,
         system=system,
-        messages=[{"role": "user", "content": text}],
+        messages=[{"role": "user", "content": f"<question>{text}</question>"}],
     )
     return msg.content[0].text.strip()
 

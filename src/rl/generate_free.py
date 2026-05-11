@@ -26,6 +26,7 @@ from pathlib import Path
 
 _SYSTEM = (
     "You are a research question reformulator. "
+    "The user's question is enclosed in <question> tags. "
     "Rules: (1) output exactly ONE sentence; (2) it must end with '?'; "
     "(3) no preamble, no labels, no numbering, no explanation — only the question itself. "
     "Bad output: 'Here is the reformulation: ...' "
@@ -174,7 +175,7 @@ def _ollama_single_call(q_bad: str, seed: int = 0) -> str:
                 {"role": "system", "content": _SYSTEM},
                 {
                     "role": "user",
-                    "content": f"Reformulate into one tractable research question: {q_bad}",
+                    "content": f"<question>{q_bad}</question>",
                 },
                 {"role": "assistant", "content": ""},
             ],
@@ -235,7 +236,7 @@ def _hf_single_call(q_bad: str) -> str:
     resp = client.chat_completion(
         messages=[
             {"role": "system", "content": _SYSTEM},
-            {"role": "user", "content": f"Original question: {q_bad}"},
+            {"role": "user", "content": f"<question>{q_bad}</question>"},
         ],
         max_tokens=100,
         temperature=1.1,

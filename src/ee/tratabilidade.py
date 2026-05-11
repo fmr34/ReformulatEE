@@ -69,7 +69,15 @@ def _get_client() -> anthropic.Anthropic:
 
 def _parse_response(text: str) -> dict:
     text = re.sub(r"```[a-z]*\n?", "", text).strip()
-    return json.loads(text)
+    try:
+        return json.loads(text)
+    except json.JSONDecodeError:
+        return {
+            "prob_tractable": 0.5,
+            "confidence": 0.0,
+            "nearest_resolved_question": "",
+            "explanation": "",
+        }
 
 
 def tratabilidade(query: str, model: str = "claude-haiku-4-5-20251001") -> dict:

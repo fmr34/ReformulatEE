@@ -103,21 +103,23 @@ def salvar(
     try:
         from src.db.hf_logger import log_async
 
-        log_async({
-            "type": "record",
-            "id": record_id,
-            "ts": ts,
-            "idioma": idioma,
-            "pergunta_orig": pergunta_orig,
-            "pergunta_en": pergunta_en,
-            "melhor": melhor,
-            "melhor_pt": melhor_pt,
-            "ee_antes": float(ee_antes),
-            "ee_depois": float(ee_depois),
-            "stage1_pass": bool(stage1_pass),
-            "candidatos": candidatos,
-            "feedback": None,
-        })
+        log_async(
+            {
+                "type": "record",
+                "id": record_id,
+                "ts": ts,
+                "idioma": idioma,
+                "pergunta_orig": pergunta_orig,
+                "pergunta_en": pergunta_en,
+                "melhor": melhor,
+                "melhor_pt": melhor_pt,
+                "ee_antes": float(ee_antes),
+                "ee_depois": float(ee_depois),
+                "stage1_pass": bool(stage1_pass),
+                "candidatos": candidatos,
+                "feedback": None,
+            }
+        )
     except Exception:
         pass
 
@@ -136,12 +138,14 @@ def registrar_feedback(record_id: int, valor: int) -> None:
     try:
         from src.db.hf_logger import log_urgent
 
-        log_urgent({
-            "type": "feedback",
-            "id": record_id,
-            "feedback": valor,
-            "ts": datetime.now(timezone.utc).isoformat(),
-        })
+        log_urgent(
+            {
+                "type": "feedback",
+                "id": record_id,
+                "feedback": valor,
+                "ts": datetime.now(timezone.utc).isoformat(),
+            }
+        )
     except Exception:
         pass
 

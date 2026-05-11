@@ -189,13 +189,15 @@ def _load_hf_logs_pairs() -> list[dict]:
         if chosen == rejected:
             continue
 
-        pairs.append({
-            "prompt": _make_prompt(q_bad),
-            "chosen": chosen,
-            "rejected": rejected,
-            "source": "hf_logs_feedback",
-            "domain": "",
-        })
+        pairs.append(
+            {
+                "prompt": _make_prompt(q_bad),
+                "chosen": chosen,
+                "rejected": rejected,
+                "source": "hf_logs_feedback",
+                "domain": "",
+            }
+        )
     return pairs
 
 

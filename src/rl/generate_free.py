@@ -160,8 +160,8 @@ def _ollama_available() -> bool:
 
 
 def _ollama_single_call(q_bad: str, seed: int = 0) -> str:
-    import urllib.request
     import json
+    import urllib.request
 
     model = os.getenv("OLLAMA_MODEL", _OLLAMA_MODEL)
     base_url = os.getenv("OLLAMA_BASE_URL", _OLLAMA_BASE_URL)
